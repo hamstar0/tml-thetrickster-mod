@@ -1,13 +1,16 @@
 ﻿using HamstarHelpers.Classes.Tiles.TilePattern;
 using HamstarHelpers.Helpers.FX;
+using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
 using HamstarHelpers.Helpers.World;
 using Microsoft.Xna.Framework;
 using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using TheTrickster.Buffs;
+
 
 namespace TheTrickster.NPCs {
 	partial class TricksterNPC : ModNPC {
@@ -85,14 +88,37 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public void Flee() {
+			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 
+			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 32, this.npc.width, this.npc.height );
+
+			for( int i=0; i<3; i++ ) {
+				var dir = new Vector2( (rand.NextFloat() - 0.5f), (rand.NextFloat() - 0.5f) );
+				Projectile.NewProjectile( this.npc.position, dir * 4f, ProjectileID.HappyBomb, 9999, 40f );
+			}
+
+			Main.npc[this.npc.whoAmI] = new NPC();
+			this.npc.active = false;
 		}
 
 
 		////////////////
 
 		public void Defeat() {
+			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
 
+			Main.PlaySound( (int)SoundType.Custom, (int)this.npc.Center.X, (int)this.npc.Center.Y, soundSlot );
+			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 32, this.npc.width, this.npc.height );
+
+			if( Main.netMode != 1 ) {
+				int itemType = TheTricksterMod.Config.DropsOnDefeat?.Type ?? -1;
+				if( itemType != -1 ) {
+					ItemHelpers.CreateItem( this.npc.position, itemType, 1, 24, 24 );
+				}
+			}
+
+			//Main.npc[this.npc.whoAmI] = new NPC();
+			//this.npc.active = false;
 		}
 	}
 }

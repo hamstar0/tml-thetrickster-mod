@@ -1,5 +1,5 @@
-# Adventure Mode
+# The Trickster
 
-Adventure Mode transforms the standard sandbox experience into an fast-paced, flowing, progressing adventure.
+A malicious imp occasionally spawns to unleash havoc. It may not be as it appears...
 
 https://forums.terraria.org/index.php?threads/intrinsics.80322/

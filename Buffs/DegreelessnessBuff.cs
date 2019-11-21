@@ -4,6 +4,7 @@ using Terraria;
 using Terraria.ModLoader;
 using TheTrickster.NPCs;
 
+
 namespace TheTrickster.Buffs {
 	class DegreelessnessBuff : ModBuff {
 		public override void SetDefaults() {

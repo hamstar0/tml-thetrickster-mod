@@ -53,11 +53,15 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		private void RunAI() {
-			if( this.ElapsedStateTicks++ < this.GetCurrentStateTickDuration() ) {
+			int fleeTicks = TheTricksterMod.Config.TicksUntilFlee;
+			if( fleeTicks > 0 && this.ElapsedTicksAlive > fleeTicks ) {
+				this.Flee();
 				return;
 			}
 
-			bool actionPerformed = false;
+			if( this.ElapsedStateTicks++ < this.GetCurrentStateTickDuration() ) {
+				return;
+			}
 
 			switch( this.State ) {
 			case TricksterStates.Idle:
@@ -69,22 +73,15 @@ namespace TheTrickster.NPCs {
 
 					if( Vector2.DistanceSquared( player.Center, this.npc.Center ) < distSqr ) {
 						this.SetState( TricksterStates.Attack );
-						actionPerformed = true;
 					}
 				}
 				break;
 			case TricksterStates.Attack:
 				this.SetState( TricksterStates.Cooldown );
-				actionPerformed = true;
 				break;
 			case TricksterStates.Cooldown:
 				this.SetState( TricksterStates.Attack );
-				actionPerformed = true;
 				break;
-			}
-
-			if( actionPerformed ) {
-				this.ElapsedStateTicks = 0;
 			}
 		}
 	}

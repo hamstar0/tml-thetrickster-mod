@@ -21,6 +21,7 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		private bool IsEncountered = false;
+		private int ElapsedTicksAlive = 0;
 
 
 		////////////////
@@ -48,15 +49,15 @@ namespace TheTrickster.NPCs {
 			this.DisplayName.SetDefault( "Trickster" );
 			Main.npcFrameCount[ this.npc.type ] = 10;
 		}
-
+		
 		public override void SetDefaults() {
-			this.npc.lifeMax = 5;
-			this.npc.defense = 9999;
+			this.npc.lifeMax = TheTricksterMod.Config.TricksterStatInitialLife;
+			this.npc.defense = TheTricksterMod.Config.TricksterStatDefense;
 			this.npc.width = 18;
 			this.npc.height = 40;
 			this.npc.damage = 14;
 			this.npc.HitSound = SoundID.NPCHit1;
-			this.npc.DeathSound = SoundID.NPCDeath2;
+			//this.npc.DeathSound = SoundID.NPCDeath2;
 			this.npc.value = 60f;
 			this.npc.knockBackResist = 0.1f;
 			this.npc.aiStyle = -1;//8
@@ -98,6 +99,13 @@ return 0f;
 			return npcWho;
 		}
 
+		////////////////
+
+		public override bool CheckDead() {
+			this.Defeat();
+			return base.CheckDead();
+		}
+
 
 		////////////////
 
@@ -116,6 +124,8 @@ return 0f;
 			if( !this.IsEncountered ) {
 				this.Encounter();
 			}
+
+			this.ElapsedTicksAlive++;
 
 			Player targPlr = this.TargetPlayer;
 			if( targPlr == null || targPlr.dead || Vector2.DistanceSquared(targPlr.Center, this.npc.Center) > 10240000 ) {  // 200 tiles
