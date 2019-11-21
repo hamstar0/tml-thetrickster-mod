@@ -75,13 +75,13 @@ namespace TheTrickster.NPCs {
 			} while( !isOnGround || !TilePattern.NonSolid.CheckArea( new Rectangle(tileX-1, tileY-3, 3, 3) ) );
 
 			// Before
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 16, this.npc.width, this.npc.height );
+			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 
 			this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
 			this.npc.netUpdate = true;
 
 			// After
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 16, this.npc.width, this.npc.height );
+			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 		}
 
 
@@ -89,14 +89,26 @@ namespace TheTrickster.NPCs {
 
 		public void Flee() {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
+			Vector2 pos = this.npc.position;
 
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 32, this.npc.width, this.npc.height );
+			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
 			for( int i=0; i<3; i++ ) {
-				var dir = new Vector2( (rand.NextFloat() - 0.5f), (rand.NextFloat() - 0.5f) );
-				Projectile.NewProjectile( this.npc.position, dir * 4f, ProjectileID.HappyBomb, 9999, 40f );
-			}
+				float dirX = 6f * (rand.NextFloat() - 0.5f);
 
+				Projectile proj = Main.projectile[ Projectile.NewProjectile(
+					X: pos.X,
+					Y: pos.Y,
+					SpeedX: dirX,
+					SpeedY: -2f,
+					Type: ProjectileID.HappyBomb,
+					Damage: 0,
+					KnockBack: 0f,
+					Owner: Main.myPlayer
+				) ];
+				proj.timeLeft = 150;
+			}
+			
 			Main.npc[this.npc.whoAmI] = new NPC();
 			this.npc.active = false;
 		}
@@ -108,7 +120,7 @@ namespace TheTrickster.NPCs {
 			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
 
 			Main.PlaySound( (int)SoundType.Custom, (int)this.npc.Center.X, (int)this.npc.Center.Y, soundSlot );
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 32, this.npc.width, this.npc.height );
+			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
 			if( Main.netMode != 1 ) {
 				int itemType = TheTricksterMod.Config.DropsOnDefeat?.Type ?? -1;

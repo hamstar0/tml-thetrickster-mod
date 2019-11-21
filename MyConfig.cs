@@ -38,6 +38,7 @@ namespace TheTrickster {
 		public ItemDefinition DropsOnDefeat { get; set; } = new ItemDefinition( ItemID.TeleportationPotion );
 
 		[Range( 0, 60 * 60 * 60 )]
+		[DefaultValue( 60 * 40 )]
 		public int TicksUntilFlee { get; set; } = 60 * 40;
 
 

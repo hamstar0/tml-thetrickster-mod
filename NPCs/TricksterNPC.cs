@@ -21,11 +21,11 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		private bool IsEncountered = false;
-		private int ElapsedTicksAlive = 0;
 
 
 		////////////////
 
+		public int ElapsedTicksAlive { get; private set; } = 0;
 		public int ElapsedStateTicks { get; private set; } = 0;
 
 		public TricksterStates State { get; private set; } = TricksterStates.Idle;
@@ -77,7 +77,7 @@ namespace TheTrickster.NPCs {
 
 		public override float SpawnChance( NPCSpawnInfo spawnInfo ) {
 if( NPC.AnyNPCs(this.npc.type) ) { return 0f; }
-return 0f;
+return 5f;
 			if( spawnInfo.spawnTileY < WorldHelpers.UnderworldLayerTopTileY ) {
 				return 0f;
 			}
@@ -124,8 +124,6 @@ return 0f;
 			if( !this.IsEncountered ) {
 				this.Encounter();
 			}
-
-			this.ElapsedTicksAlive++;
 
 			Player targPlr = this.TargetPlayer;
 			if( targPlr == null || targPlr.dead || Vector2.DistanceSquared(targPlr.Center, this.npc.Center) > 10240000 ) {  // 200 tiles
