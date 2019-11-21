@@ -93,20 +93,22 @@ namespace TheTrickster.NPCs {
 
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
-			for( int i=0; i<3; i++ ) {
-				float dirX = 6f * (rand.NextFloat() - 0.5f);
+			if( this.TargetPlayer != null && this.State != TricksterStates.Idle ) {
+				for( int i = 0; i < 3; i++ ) {
+					float dirX = 6f * ( rand.NextFloat() - 0.5f );
 
-				Projectile proj = Main.projectile[ Projectile.NewProjectile(
-					X: pos.X,
-					Y: pos.Y,
-					SpeedX: dirX,
-					SpeedY: -2f,
-					Type: ProjectileID.HappyBomb,
-					Damage: 0,
-					KnockBack: 0f,
-					Owner: Main.myPlayer
-				) ];
-				proj.timeLeft = 150;
+					Projectile proj = Main.projectile[Projectile.NewProjectile(
+						X: pos.X,
+						Y: pos.Y,
+						SpeedX: dirX,
+						SpeedY: -2f,
+						Type: ProjectileID.HappyBomb,
+						Damage: 0,
+						KnockBack: 0f,
+						Owner: Main.myPlayer
+					)];
+					proj.timeLeft = 150;
+				}
 			}
 			
 			Main.npc[this.npc.whoAmI] = new NPC();
@@ -117,10 +119,33 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public void Defeat() {
+			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
 
 			Main.PlaySound( (int)SoundType.Custom, (int)this.npc.Center.X, (int)this.npc.Center.Y, soundSlot );
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
+			if( this.npc.target == Main.myPlayer ) {
+				switch( rand.Next(6) ) {
+				case 0:
+					Main.NewText( "I'll be back!", Color.DarkMagenta );
+					break;
+				case 1:
+					Main.NewText( "Ta ta!", Color.DarkMagenta );
+					break;
+				case 2:
+					Main.NewText( "This isn't over!", Color.DarkMagenta );
+					break;
+				case 3:
+					Main.NewText( "Hahahaha!", Color.DarkMagenta );
+					break;
+				case 4:
+					Main.NewText( "Nice try!", Color.DarkMagenta );
+					break;
+				case 5:
+					Main.NewText( "Whoops!", Color.DarkMagenta );
+					break;
+				}
+			}
 
 			if( Main.netMode != 1 ) {
 				int itemType = TheTricksterMod.Config.DropsOnDefeat?.Type ?? -1;
@@ -131,6 +156,9 @@ namespace TheTrickster.NPCs {
 
 			//Main.npc[this.npc.whoAmI] = new NPC();
 			//this.npc.active = false;
+
+			var myworld = ModContent.GetInstance<TheTricksterWorld>();
+			myworld.AddTricksterDefeat();
 		}
 	}
 }

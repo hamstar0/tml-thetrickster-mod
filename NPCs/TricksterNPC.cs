@@ -10,7 +10,7 @@ namespace TheTrickster.NPCs {
 	partial class TricksterNPC : ModNPC {
 		public static readonly int IdleDurationTicks = 60 * 2;
 		public static readonly int AttackDurationTicks = 60 * 5;
-		public static readonly int CooldownDurationTicks = 60 * 1;
+		public static readonly int CooldownDurationTicks = (int)(60f * 1.5f);
 
 		public static readonly int AttackRadius = 48 * 16;
 		public static readonly int DodgeRadius = 36 * 16;
@@ -20,14 +20,15 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		private bool IsEncountered = false;
+		private bool IsAlerted = false;
+		private bool IsDefeated = false;
 
 
 		////////////////
 
 		public int ElapsedTicksAlive { get; private set; } = 0;
 		public int ElapsedStateTicks { get; private set; } = 0;
-
+		
 		public TricksterStates State { get; private set; } = TricksterStates.Idle;
 
 
@@ -51,7 +52,7 @@ namespace TheTrickster.NPCs {
 		}
 		
 		public override void SetDefaults() {
-			this.npc.lifeMax = TheTricksterMod.Config.TricksterStatInitialLife;
+			this.SetDefaultMaxLife();
 			this.npc.defense = TheTricksterMod.Config.TricksterStatDefense;
 			this.npc.width = 18;
 			this.npc.height = 40;
@@ -73,11 +74,23 @@ namespace TheTrickster.NPCs {
 			}
 		}
 
+		public override void ScaleExpertStats( int numPlayers, float bossLifeScale ) {
+			this.SetDefaultMaxLife();
+		}
+
+		private void SetDefaultMaxLife() {
+			int addedHp = 0;
+			var myworld = ModContent.GetInstance<TheTricksterWorld>();
+			if( myworld != null ) {
+				addedHp = myworld.TricksterDefeats * TheTricksterMod.Config.TricksterStatLifeAddedEachDefeat;
+			}
+
+			this.npc.lifeMax = TheTricksterMod.Config.TricksterStatInitialLife + addedHp;
+		}
+
 		////////////////
 
 		public override float SpawnChance( NPCSpawnInfo spawnInfo ) {
-if( NPC.AnyNPCs(this.npc.type) ) { return 0f; }
-return 5f;
 			if( spawnInfo.spawnTileY < WorldHelpers.UnderworldLayerTopTileY ) {
 				return 0f;
 			}
@@ -102,7 +115,10 @@ return 5f;
 		////////////////
 
 		public override bool CheckDead() {
-			this.Defeat();
+			if( !this.IsDefeated ) {
+				this.IsDefeated = true;
+				this.Defeat();
+			}
 			return base.CheckDead();
 		}
 
@@ -121,7 +137,7 @@ return 5f;
 		////////////////
 
 		public override void AI() {
-			if( !this.IsEncountered ) {
+			if( !this.IsAlerted ) {
 				this.Encounter();
 			}
 
@@ -150,7 +166,7 @@ return 5f;
 			float distSqr = Vector2.DistanceSquared( scrMid, this.npc.Center );
 
 			if( distSqr < 409600 ) {
-				this.IsEncountered = true;
+				this.IsAlerted = true;
 
 				Vector2 diff = this.npc.Center - scrMid;
 				Vector2 pos = scrMid + ( diff * 0.5f );
