@@ -40,7 +40,13 @@ namespace TheTrickster.NPCs {
 			int plrWho = this.npc.HasPlayerTarget
 					? this.npc.target
 					: this.npc.FindClosestPlayer();
+			if( plrWho == -1 ) {
+				return;
+			}
 			Player player = Main.player[ plrWho ];
+			if( player == null || !player.active ) {
+				return;
+			}
 
 			Vector2 dir, testPos, groundPos;
 			bool isOnGround;

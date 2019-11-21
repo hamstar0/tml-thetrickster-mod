@@ -57,33 +57,34 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			this.ElapsedStateTicks = 0;
+			bool actionPerformed = false;
 
 			switch( this.State ) {
 			case TricksterStates.Idle:
-Main.NewText("1");
-				if( this.npc.HasPlayerTarget ) {
-Main.NewText("2");
-					Player player = Main.player[this.npc.target];
+				Player player = this.TargetPlayer;
 
-					if( player.active && !player.dead ) {
-Main.NewText("3");
-						float distSqr = TricksterNPC.AttackRadius;
-						distSqr *= distSqr;
+				if( player != null && player.active && !player.dead ) {
+					float distSqr = TricksterNPC.AttackRadius;
+					distSqr *= distSqr;
 
-						if( Vector2.DistanceSquared( player.Center, this.npc.Center ) < distSqr ) {
-Main.NewText("4");
-							this.SetState( TricksterStates.Attack );
-						}
+					if( Vector2.DistanceSquared( player.Center, this.npc.Center ) < distSqr ) {
+						this.SetState( TricksterStates.Attack );
+						actionPerformed = true;
 					}
 				}
 				break;
 			case TricksterStates.Attack:
 				this.SetState( TricksterStates.Cooldown );
+				actionPerformed = true;
 				break;
 			case TricksterStates.Cooldown:
 				this.SetState( TricksterStates.Attack );
+				actionPerformed = true;
 				break;
+			}
+
+			if( actionPerformed ) {
+				this.ElapsedStateTicks = 0;
 			}
 		}
 	}

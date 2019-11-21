@@ -32,6 +32,12 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
+		public Player TargetPlayer => this.npc.HasPlayerTarget
+			? Main.player[this.npc.target]
+			: null;
+
+		////
+
 		public override bool CloneNewInstances => false;
 
 
@@ -87,9 +93,7 @@ return 0f;
 			NPC npc = Main.npc[npcWho];
 
 			int nearPlrWho = npc.FindClosestPlayer();
-			if( nearPlrWho != -1 ) {
-				npc.target = nearPlrWho;
-			}
+			npc.target = nearPlrWho;
 
 			return npcWho;
 		}
@@ -111,6 +115,11 @@ return 0f;
 		public override void AI() {
 			if( !this.IsEncountered ) {
 				this.Encounter();
+			}
+
+			Player targPlr = this.TargetPlayer;
+			if( targPlr == null || targPlr.dead || Vector2.DistanceSquared(targPlr.Center, this.npc.Center) > 10240000 ) {  // 200 tiles
+				this.npc.target = this.npc.FindClosestPlayer();
 			}
 
 			if( this.npc.velocity.X != 0 && this.npc.velocity.Y == 0 ) {
