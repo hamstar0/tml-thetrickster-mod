@@ -1,3 +1,4 @@
+using HamstarHelpers.Services.Configs;
 using Terraria.ModLoader;
 
 
@@ -11,7 +12,7 @@ namespace TheTrickster {
 
 		public static TheTricksterMod Instance { get; private set; }
 
-		public static TheTricksterConfig Config => ModContent.GetInstance<TheTricksterConfig>();
+		//public static TheTricksterConfig Config => ModContent.GetInstance<TheTricksterConfig>();
 
 
 

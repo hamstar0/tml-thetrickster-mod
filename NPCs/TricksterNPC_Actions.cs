@@ -148,7 +148,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( Main.netMode != 1 ) {
-				int itemType = TheTricksterMod.Config.DropsOnDefeat?.Type ?? -1;
+				int itemType = TheTricksterConfig.Instance.DropsOnDefeat?.Type ?? -1;
 				if( itemType != -1 ) {
 					ItemHelpers.CreateItem( this.npc.position, itemType, 1, 24, 24 );
 				}

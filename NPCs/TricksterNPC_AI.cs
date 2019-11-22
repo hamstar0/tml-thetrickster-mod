@@ -53,7 +53,7 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		private void RunAI() {
-			int fleeTicks = TheTricksterMod.Config.TicksUntilFlee;
+			int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
 			if( fleeTicks > 0 && this.ElapsedTicksAlive++ > fleeTicks ) {
 				this.Flee();
 				return;

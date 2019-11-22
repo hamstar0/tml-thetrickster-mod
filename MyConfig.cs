@@ -1,4 +1,6 @@
 ﻿using HamstarHelpers.Classes.UI.ModConfig;
+using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Services.Configs;
 using System;
 using System.ComponentModel;
 using Terraria.ID;
@@ -10,13 +12,18 @@ namespace TheTrickster {
 
 
 
+	
+	public partial class TheTricksterConfig : StackableModConfig {
+		public static TheTricksterConfig Instance => ModConfigStack.GetMergedConfigs<TheTricksterConfig>();
 
-	public partial class TheTricksterConfig : ModConfig {
+
+
+		////////////////
+
 		public override ConfigScope Mode => ConfigScope.ServerSide;
 
 
-
-		////
+		////////////////
 
 		[Range( 0f, 100f )]
 		[DefaultValue( 0.01f )]
@@ -45,9 +52,10 @@ namespace TheTrickster {
 
 		////////////////
 
-		/*public override ModConfig Clone() {
-			var clone = (AdventureModeConfig)base.Clone();
+		public override ModConfig Clone() {
+			var clone = (TheTricksterConfig)this.MemberwiseClone();
+			clone.DropsOnDefeat = this.DropsOnDefeat;
 			return clone;
-		}*/
+		}
 	}
 }

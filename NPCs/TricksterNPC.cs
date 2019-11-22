@@ -53,7 +53,7 @@ namespace TheTrickster.NPCs {
 		
 		public override void SetDefaults() {
 			this.SetDefaultMaxLife();
-			this.npc.defense = TheTricksterMod.Config.TricksterStatDefense;
+			this.npc.defense = TheTricksterConfig.Instance.TricksterStatDefense;
 			this.npc.width = 18;
 			this.npc.height = 40;
 			this.npc.damage = 14;
@@ -79,13 +79,18 @@ namespace TheTrickster.NPCs {
 		}
 
 		private void SetDefaultMaxLife() {
-			int addedHp = 0;
-			var myworld = ModContent.GetInstance<TheTricksterWorld>();
-			if( myworld != null ) {
-				addedHp = myworld.TricksterDefeats * TheTricksterMod.Config.TricksterStatLifeAddedEachDefeat;
+			int baseHp = 5, addedHp = 0;
+
+			if( TheTricksterConfig.Instance != null ) {
+				baseHp = TheTricksterConfig.Instance.TricksterStatInitialLife;
+				var myworld = ModContent.GetInstance<TheTricksterWorld>();
+
+				if( myworld != null ) {
+					addedHp = myworld.TricksterDefeats * TheTricksterConfig.Instance.TricksterStatLifeAddedEachDefeat;
+				}
 			}
 
-			this.npc.lifeMax = TheTricksterMod.Config.TricksterStatInitialLife + addedHp;
+			this.npc.lifeMax = baseHp + addedHp;
 		}
 
 		////////////////
@@ -99,7 +104,7 @@ namespace TheTrickster.NPCs {
 			if( NPC.AnyNPCs(this.npc.type) ) {
 				return 0f;
 			}
-			return TheTricksterMod.Config.TricksterSpawnChance;
+			return TheTricksterConfig.Instance.TricksterSpawnChance;
 		}
 
 		public override int SpawnNPC( int tileX, int tileY ) {
