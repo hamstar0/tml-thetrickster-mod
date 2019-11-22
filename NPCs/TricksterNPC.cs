@@ -96,13 +96,17 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public override float SpawnChance( NPCSpawnInfo spawnInfo ) {
-			if( spawnInfo.spawnTileY < WorldHelpers.UnderworldLayerTopTileY ) {
+			// Underground only
+			if( spawnInfo.spawnTileY < WorldHelpers.RockLayerTopTileY ) {
 				return 0f;
 			}
-
 			// Only one at a time
 			if( NPC.AnyNPCs(this.npc.type) ) {
 				return 0f;
+			}
+			// Should have nearby NPCs
+			if( spawnInfo.player.activeNPCs < 6f ) {
+				return 0;
 			}
 			return TheTricksterConfig.Instance.TricksterSpawnChance;
 		}

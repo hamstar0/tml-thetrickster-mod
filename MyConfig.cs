@@ -14,7 +14,7 @@ namespace TheTrickster {
 
 	
 	public partial class TheTricksterConfig : StackableModConfig {
-		public static TheTricksterConfig Instance => StackableModConfig.GetMergedConfigs<TheTricksterConfig>();
+		public static TheTricksterConfig Instance => ModConfigStack.GetMergedConfigs<TheTricksterConfig>();
 
 
 
@@ -26,9 +26,9 @@ namespace TheTrickster {
 		////////////////
 
 		[Range( 0f, 100f )]
-		[DefaultValue( 0.01f )]
+		[DefaultValue( 0.1f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float TricksterSpawnChance { get; set; } = 0.01f;
+		public float TricksterSpawnChance { get; set; } = 0.1f;
 
 		[Range( 1, 100000 )]
 		[DefaultValue( 5 )]
@@ -48,7 +48,7 @@ namespace TheTrickster {
 		[DefaultValue( 60 * 40 )]
 		public int TicksUntilFlee { get; set; } = 60 * 40;
 
-
+		
 
 		////////////////
 
