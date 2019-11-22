@@ -14,7 +14,7 @@ namespace TheTrickster {
 
 	
 	public partial class TheTricksterConfig : StackableModConfig {
-		public static TheTricksterConfig Instance => ModConfigStack.GetMergedConfigs<TheTricksterConfig>();
+		public static TheTricksterConfig Instance => StackableModConfig.GetMergedConfigs<TheTricksterConfig>();
 
 
 
