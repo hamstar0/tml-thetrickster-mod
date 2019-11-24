@@ -1,6 +1,6 @@
 ﻿using HamstarHelpers.Helpers.Debug;
 using HamstarHelpers.Helpers.Draw;
-using HamstarHelpers.Helpers.FX;
+using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.TModLoader;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
