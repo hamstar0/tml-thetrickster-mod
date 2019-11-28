@@ -22,7 +22,7 @@ namespace TheTrickster.Buffs {
 
 			player.immune = true;
 
-			Timers.SetTimer( "AdventureModeDGLN_P_" + player.whoAmI, 2, false, () => {
+			Timers.SetTimer( "TricksterGodMode_P_" + player.whoAmI, 2, false, () => {
 				player.immune = false;
 				return true;
 			} );
@@ -35,7 +35,7 @@ namespace TheTrickster.Buffs {
 			//npc.immortal = true;
 			npc.dontTakeDamage = true;
 
-			Timers.SetTimer( "AdventureModeDGLN_N_" + npc.whoAmI, 2, false, () => {
+			Timers.SetTimer( "TricksterGodMode_N_" + npc.whoAmI, 2, false, () => {
 				//npc.immortal = false;
 				npc.dontTakeDamage = false;
 				return true;
