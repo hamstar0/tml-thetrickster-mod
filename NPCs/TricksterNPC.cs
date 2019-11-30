@@ -135,7 +135,7 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public override bool StrikeNPC( ref double damage, int defense, ref float knockback, int hitDirection, ref bool crit ) {
-			if( damage > 0 ) {
+			if( damage > 0 && this.npc.life > damage ) {
 				this.RunOnHitAI();
 			}
 			return true;
