@@ -2,6 +2,7 @@
 using HamstarHelpers.Helpers.Draw;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.TModLoader;
+using HamstarHelpers.Services.Hooks.Draw;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using System;
@@ -71,7 +72,7 @@ namespace TheTrickster.NPCs {
 					willDrawLightning = false;
 
 					int duration = 3;
-					DrawHelpers.AddPostDrawTilesAction( () => {
+					DrawHooks.AddPostDrawTilesHook( () => {
 						float scaleBase = rand.NextFloat();
 						float scale = 0.01f + ( scaleBase * 0.1f );
 						Color color = Color.White * ( 0.5f + ( scaleBase * 0.5f ) );
