@@ -33,6 +33,7 @@ namespace TheTrickster.NPCs {
 			TricksterStates oldState = this.State;
 			this.State = newState;
 
+			this.IdleHits = 0;
 			this.ElapsedStateTicks = 0;
 		}
 
@@ -101,7 +102,9 @@ namespace TheTrickster.NPCs {
 
 		private void RunOnHitAI() {
 			if( this.State == TricksterStates.Idle ) {
-				return;
+				if( this.IdleHits++ < 3 ) {
+					return;
+				}
 			}
 
 			this.Dodge( TricksterNPC.DodgeRadius );

@@ -25,10 +25,10 @@ namespace TheTrickster {
 
 		////////////////
 
-		[Range( 0f, 100f )]
-		[DefaultValue( 0.01f )]
+		[Range( 0f, 20f )]
+		[DefaultValue( 0.005f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float TricksterSpawnChance { get; set; } = 0.01f;
+		public float TricksterSpawnChance { get; set; } = 0.005f;
 
 		[Range( 1, 100000 )]
 		[DefaultValue( 5 )]

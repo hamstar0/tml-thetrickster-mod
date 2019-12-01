@@ -28,6 +28,7 @@ namespace TheTrickster.NPCs {
 
 		public int ElapsedTicksAlive { get; private set; } = 0;
 		public int ElapsedStateTicks { get; private set; } = 0;
+		public int IdleHits { get; private set; } = 0;
 		
 		public TricksterStates State { get; private set; } = TricksterStates.Idle;
 
