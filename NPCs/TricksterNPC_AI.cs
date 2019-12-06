@@ -19,11 +19,11 @@ namespace TheTrickster.NPCs {
 			switch( this.State ) {
 			default:
 			case TricksterStates.Idle:
-				return TricksterNPC.IdleDurationTicks;
+				return TheTricksterConfig.Instance.IdleDurationTicks;
 			case TricksterStates.Attack:
-				return TricksterNPC.AttackDurationTicks;
+				return TheTricksterConfig.Instance.AttackDurationTicks;
 			case TricksterStates.Cooldown:
-				return TricksterNPC.CooldownDurationTicks;
+				return TheTricksterConfig.Instance.CooldownDurationTicks;
 			}
 		}
 
@@ -79,12 +79,12 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			float distSqr = TricksterNPC.AttackRadius * TricksterNPC.AttackRadius;
+			float distSqr = TheTricksterConfig.Instance.AttackRadius * TheTricksterConfig.Instance.AttackRadius;
 			if( Vector2.DistanceSquared( player.Center, this.npc.Center ) >= distSqr ) {
 				return;
 			}
 
-			this.Dodge( TricksterNPC.DodgeRadius );
+			this.Dodge( TheTricksterConfig.Instance.DodgeRadius );
 			this.SetState( TricksterStates.Attack );
 		}
 
@@ -94,7 +94,7 @@ namespace TheTrickster.NPCs {
 		}
 
 		private void RunCooldownFinishAI() {
-			this.Dodge( TricksterNPC.DodgeRadius );
+			this.Dodge( TheTricksterConfig.Instance.DodgeRadius );
 			this.SetState( TricksterStates.Attack );
 		}
 
@@ -107,7 +107,7 @@ namespace TheTrickster.NPCs {
 				}
 			}
 
-			this.Dodge( TricksterNPC.DodgeRadius );
+			this.Dodge( TheTricksterConfig.Instance.DodgeRadius );
 			this.SetState( TricksterStates.Idle );
 		}
 	}

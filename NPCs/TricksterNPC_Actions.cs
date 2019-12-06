@@ -15,9 +15,9 @@ using TheTrickster.Buffs;
 namespace TheTrickster.NPCs {
 	partial class TricksterNPC : ModNPC {
 		public void LaunchAttack() {
-			this.CreateLaunchedAttackFX( TricksterNPC.AttackRadius );
+			this.CreateLaunchedAttackFX( TheTricksterConfig.Instance.AttackRadius );
 
-			int radiusSqr = TricksterNPC.AttackRadius * TricksterNPC.AttackRadius;
+			int radiusSqr = TheTricksterConfig.Instance.AttackRadius * TheTricksterConfig.Instance.AttackRadius;
 			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
 
 			for( int i=0; i<Main.npc.Length; i++ ) {
@@ -27,7 +27,7 @@ namespace TheTrickster.NPCs {
 				}
 
 				if( Vector2.DistanceSquared(otherNpc.Center, this.npc.Center) < radiusSqr ) {
-					otherNpc.AddBuff( invulnBuffType, TricksterNPC.InvulnTickDuration );
+					otherNpc.AddBuff( invulnBuffType, TheTricksterConfig.Instance.InvulnTickDuration );
 				}
 			}
 		}

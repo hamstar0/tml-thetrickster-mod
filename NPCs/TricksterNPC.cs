@@ -8,18 +8,6 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	partial class TricksterNPC : ModNPC {
-		public static readonly int IdleDurationTicks = 60 * 2;
-		public static readonly int AttackDurationTicks = 60 * 5;
-		public static readonly int CooldownDurationTicks = (int)(60f * 1.5f);
-
-		public static readonly int AttackRadius = 48 * 16;
-		public static readonly int DodgeRadius = 36 * 16;
-		public static readonly int InvulnTickDuration = 60 * 15;
-
-
-
-		////////////////
-
 		private bool IsAlerted = false;
 		private bool IsDefeated = false;
 

@@ -25,10 +25,10 @@ namespace TheTrickster {
 
 		////////////////
 
-		[Range( 0f, 20f )]
-		[DefaultValue( 0.005f )]
+		[Range( 0f, 10f )]
+		[DefaultValue( 0.0005f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float TricksterSpawnChance { get; set; } = 0.005f;
+		public float TricksterSpawnChance { get; set; } = 0.0005f;
 
 		[Range( 1, 100000 )]
 		[DefaultValue( 5 )]
@@ -48,7 +48,33 @@ namespace TheTrickster {
 		[DefaultValue( 60 * 60 )]
 		public int TicksUntilFlee { get; set; } = 60 * 60;
 
-		
+
+		[Range( 1, 60 * 60 * 60 )]
+		[DefaultValue( 60 * 2 )]
+		public int IdleDurationTicks { get; set; } = 60 * 2;
+
+		[Range( 1, 60 * 60 * 60 )]
+		[DefaultValue( (int)(60f * 6.5f) )]
+		public int AttackDurationTicks { get; set; } = (int)(60f * 6.5f);
+
+		[Range( 0, 60 * 60 * 60 )]
+		[DefaultValue( (int)( 60f * 1.5f ) )]
+		public int CooldownDurationTicks { get; set; } = (int)( 60f * 1.5f );
+
+
+		[Range( 4 * 16, 1000 * 16 )]
+		[DefaultValue( 48 * 16 )]
+		public int AttackRadius { get; set; } = 48 * 16;
+
+		[Range( 4 * 16, 1000 * 16 )]
+		[DefaultValue( 36 * 16 )]
+		public int DodgeRadius { get; set; } = 36 * 16;
+
+		[Range( 60, 60 * 60 * 60 )]
+		[DefaultValue( 60 * 15 )]
+		public int InvulnTickDuration { get; set; } = 60 * 15;
+
+
 
 		////////////////
 
