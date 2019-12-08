@@ -1,6 +1,7 @@
 ﻿using HamstarHelpers.Helpers.World;
 using Microsoft.Xna.Framework;
 using System;
+using System.Linq;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
@@ -90,15 +91,17 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 			// Only one at a time
-			if( NPC.AnyNPCs(this.npc.type) ) {
+			if( Main.npc.Any(n => n?.active == true && n.netID == this.npc.netID) ) {
 				return 0f;
 			}
 			// Should have nearby NPCs
-			if( spawnInfo.player.activeNPCs < 6f ) {
+			if( spawnInfo.player.activeNPCs < 4f ) {
 				return 0;
 			}
 			return TheTricksterConfig.Instance.TricksterSpawnChance;
 		}
+
+		////
 
 		public override int SpawnNPC( int tileX, int tileY ) {
 			int npcWho = base.SpawnNPC( tileX, tileY );

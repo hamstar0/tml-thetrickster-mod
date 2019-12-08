@@ -44,9 +44,9 @@ namespace TheTrickster.NPCs {
 			this.ElapsedTicksAlive++;
 			this.ElapsedStateTicks++;
 
-			int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
-			if( fleeTicks > 0 ) {
-				if( this.State != TricksterStates.Attack ) {
+			if( this.State != TricksterStates.Attack ) {
+				int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
+				if( fleeTicks > 0 ) {
 					if( this.ElapsedTicksAlive > fleeTicks ) {
 						this.Flee();
 						return;

@@ -26,9 +26,9 @@ namespace TheTrickster {
 		////////////////
 
 		[Range( 0f, 10f )]
-		[DefaultValue( 0.0005f )]
+		[DefaultValue( 0.01f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float TricksterSpawnChance { get; set; } = 0.0005f;
+		public float TricksterSpawnChance { get; set; } = 0.01f;
 
 		[Range( 1, 100000 )]
 		[DefaultValue( 5 )]
@@ -45,8 +45,8 @@ namespace TheTrickster {
 		public ItemDefinition DropsOnDefeat { get; set; } = new ItemDefinition( ItemID.TeleportationPotion );
 
 		[Range( 0, 60 * 60 * 60 )]
-		[DefaultValue( 60 * 60 )]
-		public int TicksUntilFlee { get; set; } = 60 * 60;
+		[DefaultValue( 60 * 90 )]
+		public int TicksUntilFlee { get; set; } = 60 * 90;
 
 
 		[Range( 1, 60 * 60 * 60 )]
