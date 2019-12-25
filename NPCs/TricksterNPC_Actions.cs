@@ -13,8 +13,10 @@ using TheTrickster.Buffs;
 
 
 namespace TheTrickster.NPCs {
-	partial class TricksterNPC : ModNPC {
+	public partial class TricksterNPC : ModNPC {
 		public void LaunchAttack() {
+			this.HasAttacked = true;
+
 			this.CreateLaunchedAttackFX( TheTricksterConfig.Instance.AttackRadius );
 
 			int radiusSqr = TheTricksterConfig.Instance.AttackRadius * TheTricksterConfig.Instance.AttackRadius;
@@ -113,6 +115,7 @@ namespace TheTrickster.NPCs {
 			
 			Main.npc[this.npc.whoAmI] = new NPC();
 			this.npc.active = false;
+			this.npc.netUpdate = true;
 		}
 
 

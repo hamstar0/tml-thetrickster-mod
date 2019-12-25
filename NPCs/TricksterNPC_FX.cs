@@ -14,7 +14,7 @@ using Terraria.Utilities;
 
 
 namespace TheTrickster.NPCs {
-	partial class TricksterNPC : ModNPC {
+	public partial class TricksterNPC : ModNPC {
 		public static void AnimateAttackBurstFX( Vector2 position, float radius, int particles ) {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 

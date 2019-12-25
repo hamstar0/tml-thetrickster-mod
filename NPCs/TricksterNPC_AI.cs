@@ -14,7 +14,7 @@ namespace TheTrickster.NPCs {
 
 
 
-	partial class TricksterNPC : ModNPC {
+	public partial class TricksterNPC : ModNPC {
 		public int GetCurrentStateTickDuration() {
 			switch( this.State ) {
 			default:
