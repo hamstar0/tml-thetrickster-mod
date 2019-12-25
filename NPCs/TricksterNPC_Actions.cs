@@ -79,8 +79,14 @@ namespace TheTrickster.NPCs {
 			// Before
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 
-			this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
-			this.npc.netUpdate = true;
+			if( Main.netMode != 1 ) {
+				this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
+				this.npc.netUpdate = true;
+
+				if( Main.netMode == 2 ) {
+					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
+				}
+			}
 
 			// After
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );

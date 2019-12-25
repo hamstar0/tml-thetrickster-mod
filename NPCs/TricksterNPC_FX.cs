@@ -1,5 +1,4 @@
 ﻿using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Draw;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.TModLoader;
 using HamstarHelpers.Services.Hooks.Draw;
