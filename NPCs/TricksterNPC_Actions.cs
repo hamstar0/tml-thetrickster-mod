@@ -37,10 +37,9 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void Dodge( int dodgeRadius ) {
+		public void Dodge( int minDodgeRadius, int maxDodgeRadius ) {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
-			int minDist = 18 * 16;
-			int minDistSqr = minDist * minDist;
+			int minDistSqr = minDodgeRadius * minDodgeRadius;
 
 			int plrWho = this.npc.HasPlayerTarget
 					? this.npc.target
@@ -59,10 +58,10 @@ namespace TheTrickster.NPCs {
 			do {
 				dir = new Vector2( rand.NextFloat() - 0.5f, rand.NextFloat() - 0.5f );
 				dir.Normalize();
-				dir *= minDist + ( rand.NextFloat() * (dodgeRadius - minDist) );
+				dir *= minDodgeRadius + ( rand.NextFloat() * (maxDodgeRadius - minDodgeRadius ) );
 
 				testPos = player.Center + dir;
-				dodgeRadius += 1;
+				maxDodgeRadius += 1;
 
 				isOnGround = WorldHelpers.DropToGround( testPos, false, TilePattern.CommonSolid, out groundPos );
 				if( !isOnGround ) { continue; }

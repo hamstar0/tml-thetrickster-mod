@@ -19,7 +19,7 @@ namespace TheTrickster.NPCs {
 
 		public int ElapsedTicksAlive { get; private set; } = 0;
 		public int ElapsedStateTicks { get; private set; } = 0;
-		public int IdleHits { get; private set; } = 0;
+		public int HitsDuringCurrentStage { get; private set; } = 0;
 		
 		public TricksterStates State { get; private set; } = TricksterStates.Idle;
 
@@ -27,7 +27,7 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public Player TargetPlayer => this.npc.HasPlayerTarget
-			? Main.player[this.npc.target]
+			? (Main.player[this.npc.target]?.active == true ? Main.player[this.npc.target] : null)
 			: null;
 
 		////
@@ -93,11 +93,11 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 			// Only one at a time
-			if( Main.npc.Any(n => n?.active == true && n.netID == this.npc.netID) ) {
+			if( Main.npc.Any(n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>()) ) {
 				return 0f;
 			}
 			// Should have nearby NPCs
-			if( spawnInfo.player.activeNPCs < 4f ) {
+			if( spawnInfo.player.activeNPCs < 3f ) {
 				return 0;
 			}
 			return TheTricksterConfig.Instance.TricksterSpawnChance;
@@ -140,6 +140,7 @@ namespace TheTrickster.NPCs {
 
 		public override void AI() {
 			if( !this.IsAlerted ) {
+				this.IsAlerted = true;
 				this.Encounter();
 			}
 
@@ -168,8 +169,6 @@ namespace TheTrickster.NPCs {
 			float distSqr = Vector2.DistanceSquared( scrMid, this.npc.Center );
 
 			if( distSqr < 409600 ) {
-				this.IsAlerted = true;
-
 				Vector2 diff = this.npc.Center - scrMid;
 				Vector2 pos = scrMid + ( diff * 0.5f );
 

@@ -41,7 +41,9 @@ namespace TheTrickster.NPCs {
 		public static void AnimateAttackChargeAreaFX( Vector2 position, float percent, int particles ) {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			float radius = 80f;
-			bool willDrawLightning = ( rand.NextFloat() * 3f ) < ( percent * percent );
+			bool willDrawLightning = (rand.NextFloat() * 3f) < (percent * percent);
+
+			particles = (particles / 2) + (int)(percent * (float)(particles / 2));
 
 			for( int i = 0; i < particles; i++ ) {
 				if( rand.NextFloat() >= percent ) { continue; }
@@ -76,7 +78,7 @@ namespace TheTrickster.NPCs {
 						float scale = 0.01f + ( scaleBase * 0.1f );
 						Color color = Color.White * ( 0.5f + ( scaleBase * 0.5f ) );
 
-						LightningFxHelpers.DrawLightning( position, position + (dir * offset * 3f), scale, color );
+						LightningFxHelpers.DrawLightning( position, position + (dir * offset * 4f), scale, color );
 						return duration-- > 0;
 					} );
 				}
@@ -95,11 +97,19 @@ namespace TheTrickster.NPCs {
 
 		private void RunFX() {
 			if( this.State == TricksterStates.Attack ) {
-				if( this.AttackChargeSoundInstance == null || this.AttackChargeSoundInstance.State != SoundState.Playing ) {
-					this.AttackChargeSoundInstance = Main.PlaySound( SoundID.Item93, this.npc.Center );
-				}
-
 				float percent = this.ElapsedStateTicks / (float)this.GetCurrentStateTickDuration();
+
+				if( this.AttackChargeSoundInstance == null || this.AttackChargeSoundInstance.State != SoundState.Playing ) {
+					/*float distScale = 1f - (Vector2.Distance( Main.LocalPlayer.Center, this.npc.Center ) / 1600f);
+					distScale = Math.Max( 0f, distScale );
+
+					if( distScale > 0 ) {
+						this.AttackChargeSoundInstance = Main.PlaySound( SoundID.Item93, this.npc.Center );
+						this.AttackChargeSoundInstance.Volume = 0.25f + ((percent * 0.75f) * distScale);
+					}*/
+					this.AttackChargeSoundInstance = Main.PlaySound( SoundID.Item93, this.npc.Center );
+					this.AttackChargeSoundInstance.Volume *= 0.25f + ( percent * 0.75f );
+				}
 
 				TricksterNPC.AnimateAttackChargeAreaFX( this.npc.Center, percent, 12 );
 			} else {
