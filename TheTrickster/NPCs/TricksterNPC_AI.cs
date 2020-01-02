@@ -27,7 +27,11 @@ namespace TheTrickster.NPCs {
 			case TricksterStates.PreAttack:
 				return TheTricksterConfig.Instance.IdleDurationTicks;
 			case TricksterStates.Attack:
-				return TheTricksterConfig.Instance.AttackDurationTicks;
+				var myworld = ModContent.GetInstance<TheTricksterWorld>();
+				int reducedChargeTime = myworld.TricksterDefeats * TheTricksterConfig.Instance.AttackDurationTicksReducedPerDefeat;
+				int chargeTime = TheTricksterConfig.Instance.AttackDurationTicks - reducedChargeTime;
+				
+				return Math.Max( chargeTime, TheTricksterConfig.Instance.AttackDurationTicksMinimum );
 			case TricksterStates.Cooldown:
 				return TheTricksterConfig.Instance.CooldownDurationTicks;
 			}

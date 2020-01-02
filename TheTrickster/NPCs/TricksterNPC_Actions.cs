@@ -1,4 +1,5 @@
-﻿using HamstarHelpers.Classes.Tiles.TilePattern;
+﻿using HamstarHelpers.Buffs;
+using HamstarHelpers.Classes.Tiles.TilePattern;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
@@ -9,7 +10,6 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using TheTrickster.Buffs;
 
 
 namespace TheTrickster.NPCs {

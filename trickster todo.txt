@@ -1,0 +1,41 @@
+Future
+-	After 3 spawns or a defeat, delay additional spawns by 2 days
+
+
+
+v1.1
+-	Add steal ability
+-	Buff Trickster + add defense
+	-	Add repulsion effect during attack charge-up (projectiles decelerate)
+	-	On hit dodge, set Trickster to release weak bats with short term Degreelessness mode + transparency
+	-	Add max hp cap
+	-	Increase dodge range
+	-	Reduce charge time
+	-	Set Trickster to flee if too few NPCs exist nearby
+	-	Set Trickster to dodge on no more than 2 hits
+-	Fix Degreelessness Buff sync (do all AI behaviors on the server)
+
+v1
+-	Increase hp on each spawn after each defeat
+-	Implement flee behavior (40s and then flees)
+-	Implement "defeat" behavior (hp limit); drops a Dark Heart + laughs
+-	Re-target player if player tries to flee
+-	Implement teleport behavior
+-	Implement attack effects
+	-	Apply buff to NPCs within a radius
+	-	Create buff
+-	Implement charge attack release fx
+-	Implement charge attack sounds (Build: Item_93, Release: Item_113)
+-	Implement charge attack fx
+-	Implement AI logic
+-	Add laughter
+-	Create graphic
+-	Define NPC
+-	@Plan
+	-	Has 5 hp (8 hp expert mode), double in hard mode, 9999 armor
+	-	Spawns every now and then, emits a laugh
+	-	Emits a gold light to indicate its presence
+	-	Charges up an attack that makes nearby mobs invincible for a short while
+	-	Teleports on hit, interrupting its attack
+	-	Upon attack, it vanishes
+	-	Vanishes after 30s elapsed, regardless (unless building up an attack)
