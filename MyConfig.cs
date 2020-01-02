@@ -58,6 +58,14 @@ namespace TheTrickster {
 		public int AttackDurationTicks { get; set; } = (int)( 60f * 6.5f );
 
 		[Range( 0, 60 * 60 * 60 )]
+		[DefaultValue( 15 )]
+		public int AttackDurationTicksReducedPerDefeat { get; set; } = 15;
+
+		[Range( 1, 60 * 60 * 60 )]
+		[DefaultValue( 60 * 2 )]
+		public int AttackDurationTicksMinimum { get; set; } = 60 * 2;
+
+		[Range( 0, 60 * 60 * 60 )]
 		[DefaultValue( (int)( 60f * 1.5f ) )]
 		public int CooldownDurationTicks { get; set; } = (int)( 60f * 1.5f );
 
