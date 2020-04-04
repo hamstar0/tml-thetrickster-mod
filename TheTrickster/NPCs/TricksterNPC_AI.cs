@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using HamstarHelpers.Helpers.Collisions;
+using TheTrickster.Protocols;
 
 
 namespace TheTrickster.NPCs {
