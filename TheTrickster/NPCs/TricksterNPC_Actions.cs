@@ -37,7 +37,7 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void Dodge( int minDodgeRadius, int maxDodgeRadius ) {
+		public void DodgeAction( int minDodgeRadius, int maxDodgeRadius ) {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			int minDistSqr = minDodgeRadius * minDodgeRadius;
 
@@ -80,10 +80,9 @@ namespace TheTrickster.NPCs {
 
 			if( Main.netMode != 1 ) {
 				this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
-				this.npc.netUpdate = true;
 
 				if( Main.netMode == 2 ) {
-					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
+					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
 				}
 			}
 
@@ -92,9 +91,9 @@ namespace TheTrickster.NPCs {
 		}
 
 
-		////////////////
+		////
 
-		public void Flee() {
+		public void FleeAction() {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			Vector2 pos = this.npc.position;
 
@@ -120,18 +119,22 @@ namespace TheTrickster.NPCs {
 			
 			Main.npc[this.npc.whoAmI] = new NPC();
 			this.npc.active = false;
-			this.npc.netUpdate = true;
+
+			if( Main.netMode == 2 ) {	// is this needed?
+				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
+			}
 		}
 
 
 		////////////////
 
-		public void Defeat() {
+		public void DefeatEffects() {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
 
 			Main.PlaySound( (int)SoundType.Custom, (int)this.npc.Center.X, (int)this.npc.Center.Y, soundSlot );
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
+
 			if( this.npc.target == Main.myPlayer ) {
 				switch( rand.Next(6) ) {
 				case 0:

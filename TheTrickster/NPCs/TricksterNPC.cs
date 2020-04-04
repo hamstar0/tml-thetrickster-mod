@@ -1,10 +1,10 @@
-﻿using HamstarHelpers.Helpers.World;
-using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using HamstarHelpers.Helpers.World;
 
 
 namespace TheTrickster.NPCs {
@@ -120,7 +120,7 @@ namespace TheTrickster.NPCs {
 		public override bool CheckDead() {
 			if( !this.IsDefeated ) {
 				this.IsDefeated = true;
-				this.Defeat();
+				this.DefeatEffects();
 			}
 			return base.CheckDead();
 		}
@@ -145,10 +145,13 @@ namespace TheTrickster.NPCs {
 			}
 
 			Player targPlr = this.TargetPlayer;
-			if( targPlr == null || targPlr.dead || Vector2.DistanceSquared(targPlr.Center, this.npc.Center) > 10240000 ) {  // 200 tiles
-				this.npc.target = this.npc.FindClosestPlayer();
+			if( targPlr == null || targPlr.dead ) {
+				if( Vector2.DistanceSquared( targPlr.Center, this.npc.Center ) > 10240000 ) {  // 200 tiles
+					this.npc.target = this.npc.FindClosestPlayer();
+				}
 			}
 
+			// Resist being knocked around when on the ground
 			if( this.npc.velocity.X != 0 && this.npc.velocity.Y == 0 ) {
 				this.npc.velocity.X *= 0.9f;
 			}

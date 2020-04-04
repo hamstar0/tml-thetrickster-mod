@@ -1,15 +1,15 @@
-﻿using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Fx;
-using HamstarHelpers.Helpers.TModLoader;
-using HamstarHelpers.Services.Hooks.Draw;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using System;
-using System.Threading.Tasks;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
+using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Helpers.Fx;
+using HamstarHelpers.Helpers.TModLoader;
+using HamstarHelpers.Services.Hooks.Draw;
 
 
 namespace TheTrickster.NPCs {
