@@ -28,19 +28,23 @@ namespace TheTrickster {
 		[Range( 0f, 10f )]
 		[DefaultValue( 0.05f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float TricksterSpawnChance { get; set; } = 0.05f;	//0.02?
+		public float SpawnChance { get; set; } = 0.05f;	//0.02?
 
 		[Range( 1, 10000 )]
 		[DefaultValue( 4 )]
-		public int TricksterStatInitialLife { get; set; } = 4;
+		public int StatInitialLife { get; set; } = 4;
 
 		[Range( 0, 100000 )]
 		[DefaultValue( 1 )]
-		public int TricksterStatLifeAddedEachDefeat { get; set; } = 1;
+		public int StatLifeAddedEachDefeat { get; set; } = 1;
+
+		[Range( 0, 100000 )]
+		[DefaultValue( 15 )]
+		public int StatLifeMax { get; set; } = 15;
 
 		[Range( 0, 999999 )]
 		[DefaultValue( 999999 )]
-		public int TricksterStatDefense { get; set; } = 999999;
+		public int StatDefense { get; set; } = 999999;
 
 		public ItemDefinition DropsOnDefeat { get; set; } = new ItemDefinition( ItemID.TeleportationPotion );
 
@@ -54,8 +58,8 @@ namespace TheTrickster {
 		public int IdleDurationTicks { get; set; } = 60 * 2;
 
 		[Range( 1, 60 * 60 * 60 )]
-		[DefaultValue( (int)(60f * 6.5f) )]
-		public int AttackDurationTicks { get; set; } = (int)( 60f * 6.5f );
+		[DefaultValue( (int)(60f * 5.5f) )]
+		public int AttackDurationTicks { get; set; } = (int)( 60f * 5.5f );
 
 		[Range( 0, 60 * 60 * 60 )]
 		[DefaultValue( 15 )]
@@ -75,12 +79,12 @@ namespace TheTrickster {
 		public int AttackRadius { get; set; } = 48 * 16;
 
 		[Range( 4 * 16, 1000 * 16 )]
-		[DefaultValue( 14 * 16 )]
-		public int MinDodgeRadius { get; set; } = 14 * 16;
+		[DefaultValue( 16 * 16 )]
+		public int MinDodgeRadius { get; set; } = 16 * 16;
 
 		[Range( 4 * 16, 1000 * 16 )]
-		[DefaultValue( 36 * 16 )]
-		public int MaxDodgeRadius { get; set; } = 36 * 16;
+		[DefaultValue( 44 * 16 )]
+		public int MaxDodgeRadius { get; set; } = 44 * 16;
 
 		[Range( 60, 60 * 60 * 60 )]
 		[DefaultValue( 60 * 15 )]
@@ -88,8 +92,12 @@ namespace TheTrickster {
 
 
 		[Range( 1, 100 )]
+		[DefaultValue( 1 )]
+		public int HitsBeforeBlink { get; set; } = 1;
+
+		[Range( 0, 100 )]
 		[DefaultValue( 2 )]
-		public int HitsBeforeBlink { get; set; } = 2;
+		public int MaximumNearbyMobsBeforeFleeing { get; set; } = 2;
 
 
 

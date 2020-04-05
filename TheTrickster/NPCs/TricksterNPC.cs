@@ -45,7 +45,7 @@ namespace TheTrickster.NPCs {
 		
 		public override void SetDefaults() {
 			this.SetDefaultMaxLife();
-			this.npc.defense = TheTricksterConfig.Instance.TricksterStatDefense;
+			this.npc.defense = TheTricksterConfig.Instance.StatDefense;
 			this.npc.width = 18;
 			this.npc.height = 40;
 			this.npc.damage = 14;
@@ -74,15 +74,15 @@ namespace TheTrickster.NPCs {
 			int baseHp = 5, addedHp = 0;
 
 			if( TheTricksterConfig.Instance != null ) {
-				baseHp = TheTricksterConfig.Instance.TricksterStatInitialLife;
+				baseHp = TheTricksterConfig.Instance.StatInitialLife;
 				var myworld = ModContent.GetInstance<TheTricksterWorld>();
 
 				if( myworld != null ) {
-					addedHp = myworld.TricksterDefeats * TheTricksterConfig.Instance.TricksterStatLifeAddedEachDefeat;
+					addedHp = myworld.TricksterDefeats * TheTricksterConfig.Instance.StatLifeAddedEachDefeat;
 				}
 			}
 
-			this.npc.lifeMax = baseHp + addedHp;
+			this.npc.lifeMax = Math.Min( baseHp + addedHp, TheTricksterConfig.Instance.StatLifeMax );
 		}
 
 		////////////////
@@ -100,7 +100,7 @@ namespace TheTrickster.NPCs {
 			if( spawnInfo.player.activeNPCs < 3f ) {
 				return 0;
 			}
-			return TheTricksterConfig.Instance.TricksterSpawnChance;
+			return TheTricksterConfig.Instance.SpawnChance;
 		}
 
 		////

@@ -4,6 +4,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using HamstarHelpers.Helpers.Collisions;
+using HamstarHelpers.Helpers.NPCs;
+using HamstarHelpers.Services.Timers;
 using TheTrickster.Protocols;
 
 
@@ -80,31 +82,18 @@ namespace TheTrickster.NPCs {
 			this.ElapsedTicksAlive++;
 			this.ElapsedStateTicks++;
 
-			if( this.RunAI_0() ) {
-				this.RunAI_1();
+			bool mustFlee;
+
+			if( !this.CanAIContinue(out mustFlee) ) {
+				if( mustFlee ) {
+					this.FleeAction();
+				}
+				return;
 			}
-		}
-
-		private bool RunAI_0() {
-			if( this.State == TricksterStates.Attack ) {
-				return true;
-			}
-
-			int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
-			if( fleeTicks <= 0 ) {
-				return true;
-			}
-
-			if( this.ElapsedTicksAlive <= fleeTicks ) {
-				return true;
-			}
-
-			this.FleeAction();
-			return false;
-		}
-
-		private void RunAI_1() {
-			if( this.ElapsedStateTicks < this.GetCurrentStateTickDuration() ) {
+			if( !this.CanAIAct(out mustFlee) ) {
+				if( mustFlee ) {
+					this.FleeAction();
+				}
 				return;
 			}
 
@@ -124,8 +113,55 @@ namespace TheTrickster.NPCs {
 			}
 		}
 
-
 		////
+
+		private bool CanAIContinue( out bool mustFlee ) {
+			if( this.State == TricksterStates.Attack ) {
+				mustFlee = false;
+				return true;
+			}
+
+			int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
+			if( fleeTicks <= 0 ) {
+				mustFlee = false;
+				return true;
+			}
+
+			if( this.ElapsedTicksAlive <= fleeTicks ) {
+				mustFlee = false;
+				return true;
+			}
+
+			mustFlee = true;
+			return false;
+		}
+
+		private bool CanAIAct( out bool mustFlee ) {
+			if( this.ElapsedStateTicks < this.GetCurrentStateTickDuration() ) {
+				mustFlee = false;
+				return false;
+			}
+
+			string timerName = "TricksterProximityScan_" + this.npc.whoAmI;
+			int time = Timers.GetTimerTickDuration( timerName );
+
+			if( time > 0 ) {
+				Timers.SetTimer( timerName, 30, false, () => false );
+
+				IList<int> npcWhos = NPCFinderHelpers.FindNPCsNearby( this.npc.Center, 0, 16 * 64, false );
+
+				if( npcWhos.Count < TheTricksterConfig.Instance.MaximumNearbyMobsBeforeFleeing ) {
+					mustFlee = true;
+					return false;
+				}
+			}
+
+			mustFlee = false;
+			return true;
+		}
+
+
+		////////////////
 
 		private void RunIdleFinishAI() {
 			Player player = this.TargetPlayer;
@@ -133,12 +169,13 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			float distSqr = TheTricksterConfig.Instance.AttackRadius * TheTricksterConfig.Instance.AttackRadius;
+			TheTricksterConfig config = TheTricksterConfig.Instance;
+			float distSqr = config.AttackRadius * config.AttackRadius;
 			if( Vector2.DistanceSquared( player.Center, this.npc.Center ) >= distSqr ) {
 				return;
 			}
 
-			this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
+			this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
 			this.SetState( TricksterStates.PreAttack );
 		}
 
