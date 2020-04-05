@@ -4,8 +4,6 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using HamstarHelpers.Helpers.Collisions;
-using HamstarHelpers.Helpers.NPCs;
-using HamstarHelpers.Services.Timers;
 using TheTrickster.Protocols;
 
 
@@ -15,6 +13,13 @@ namespace TheTrickster.NPCs {
 		PreAttack = 1,
 		Attack = 2,
 		Cooldown = 3
+	}
+
+
+	public enum TricksterAction : int {
+		None = 0,
+		Attack = 1,
+		Flee = 2
 	}
 
 
@@ -82,18 +87,14 @@ namespace TheTrickster.NPCs {
 			this.ElapsedTicksAlive++;
 			this.ElapsedStateTicks++;
 
-			bool mustFlee;
+			TricksterAction action;
 
-			if( !this.CanAIContinue(out mustFlee) ) {
-				if( mustFlee ) {
-					this.FleeAction();
-				}
+			if( !this.CanAIContinue(out action) ) {
+				this.RunAIAction( action );
 				return;
 			}
-			if( !this.CanAIAct(out mustFlee) ) {
-				if( mustFlee ) {
-					this.FleeAction();
-				}
+			if( !this.CanAIAct(out action) ) {
+				this.RunAIAction( action );
 				return;
 			}
 
@@ -115,34 +116,34 @@ namespace TheTrickster.NPCs {
 
 		////
 
-		private bool CanAIContinue( out bool mustFlee ) {
+		private bool CanAIContinue( out TricksterAction action ) {
 			if( this.State == TricksterStates.Attack ) {
-				mustFlee = false;
+				action = TricksterAction.None;
 				return true;
 			}
 
 			int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
 			if( fleeTicks <= 0 ) {
-				mustFlee = false;
+				action = TricksterAction.None;
 				return true;
 			}
 
 			if( this.ElapsedTicksAlive <= fleeTicks ) {
-				mustFlee = false;
+				action = TricksterAction.None;
 				return true;
 			}
 
-			mustFlee = true;
+			action = TricksterAction.Flee;
 			return false;
 		}
 
-		private bool CanAIAct( out bool mustFlee ) {
+		private bool CanAIAct( out TricksterAction action ) {
 			if( this.ElapsedStateTicks < this.GetCurrentStateTickDuration() ) {
-				mustFlee = false;
+				action = TricksterAction.None;
 				return false;
 			}
 
-			string timerName = "TricksterProximityScan_" + this.npc.whoAmI;
+			/*string timerName = "TricksterProximityScan_" + this.npc.whoAmI;
 			int time = Timers.GetTimerTickDuration( timerName );
 
 			if( time > 0 ) {
@@ -151,13 +152,27 @@ namespace TheTrickster.NPCs {
 				IList<int> npcWhos = NPCFinderHelpers.FindNPCsNearby( this.npc.Center, 0, 16 * 64, false );
 
 				if( npcWhos.Count < TheTricksterConfig.Instance.MaximumNearbyMobsBeforeFleeing ) {
-					mustFlee = true;
+					action = TricksterAction.Flee;
 					return false;
 				}
-			}
+			}*/
 
-			mustFlee = false;
+			action = TricksterAction.None;
 			return true;
+		}
+
+
+		////////////////
+		
+		private void RunAIAction( TricksterAction action ) {
+			switch( action ) {
+			case TricksterAction.Attack:
+				this.AttackChargeSideBehaviors();
+				break;
+			case TricksterAction.Flee:
+				this.FleeAction();
+				break;
+			}
 		}
 
 

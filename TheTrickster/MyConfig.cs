@@ -95,9 +95,9 @@ namespace TheTrickster {
 		[DefaultValue( 1 )]
 		public int HitsBeforeBlink { get; set; } = 1;
 
-		[Range( 0, 100 )]
-		[DefaultValue( 2 )]
-		public int MaximumNearbyMobsBeforeFleeing { get; set; } = 2;
+		//[Range( 0, 100 )]
+		//[DefaultValue( 2 )]
+		//public int MaximumNearbyMobsBeforeFleeing { get; set; } = 2;
 
 
 

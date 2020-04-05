@@ -1,15 +1,15 @@
-﻿using HamstarHelpers.Buffs;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+using Terraria.Utilities;
+using HamstarHelpers.Buffs;
 using HamstarHelpers.Classes.Tiles.TilePattern;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
 using HamstarHelpers.Helpers.World;
-using Microsoft.Xna.Framework;
-using System;
-using Terraria;
-using Terraria.ID;
-using Terraria.ModLoader;
-using Terraria.Utilities;
 
 
 namespace TheTrickster.NPCs {
@@ -116,7 +116,7 @@ namespace TheTrickster.NPCs {
 					proj.timeLeft = 150;
 				}
 			}
-			
+
 			Main.npc[this.npc.whoAmI] = new NPC();
 			this.npc.active = false;
 
@@ -128,7 +128,43 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void DefeatEffects() {
+		private int AttackChargeSideEffectCooldown = 0;
+
+		public void AttackChargeSideBehaviors() {
+			if( this.AttackChargeSideEffectCooldown-- > 0 ) {
+				return;
+			}
+			this.AttackChargeSideEffectCooldown = 10;
+
+			float attackRangeSqr = TheTricksterConfig.Instance.AttackRadius * TheTricksterConfig.Instance.AttackRadius;
+			int maxProjs = Main.projectile.Length;
+			int maxPlrs = Main.player.Length;
+
+			for( int i=0; i<maxProjs; i++ ) {
+				Projectile proj = Main.projectile[i];
+				if( proj?.active != true ) {
+					continue;
+				}
+
+				if( (proj.Center - this.npc.Center).LengthSquared() < attackRangeSqr ) {
+					proj.velocity *= 0.95f;
+				}
+			}
+
+			for( int i=0; i<maxPlrs; i++ ) {
+				Player plr = Main.player[i];
+				if( plr?.active != true ) {
+					continue;
+				}
+
+				if( (plr.Center - this.npc.Center).LengthSquared() < attackRangeSqr ) {
+					plr.velocity *= 0.95f;
+				}
+			}
+		}
+
+
+		public void DefeatSideBehaviors() {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
 
