@@ -10,6 +10,7 @@ using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
 using HamstarHelpers.Helpers.World;
+using TheTrickster.Protocols;
 
 
 namespace TheTrickster.NPCs {
@@ -119,6 +120,7 @@ namespace TheTrickster.NPCs {
 
 			if( Main.netMode == 2 ) {
 				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
+				TricksterBatProtocol.Broadcast( npcWho );
 			}
 		}
 

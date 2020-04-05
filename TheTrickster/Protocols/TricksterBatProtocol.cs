@@ -1,20 +1,19 @@
 ﻿using System;
 using Terraria;
-using Terraria.ModLoader;
+using Terraria.ID;
 using HamstarHelpers.Classes.Errors;
 using HamstarHelpers.Classes.Protocols.Packet.Interfaces;
 using HamstarHelpers.Helpers.Debug;
-using TheTrickster.NPCs;
 
 
 namespace TheTrickster.Protocols {
-	class TricksterStateProtocol : PacketProtocolBroadcast {
-		public static void Broadcast( int npcWho, TricksterState state ) {
+	class TricksterBatProtocol : PacketProtocolBroadcast {
+		public static void Broadcast( int npcWho ) {
 			if( Main.netMode != 2 ) {
 				throw new ModHelpersException("Not server");
 			}
 
-			var protocol = new TricksterStateProtocol( npcWho, (int)state );
+			var protocol = new TricksterBatProtocol( npcWho );
 			protocol.SendToClient( -1, -1 );
 		}
 
@@ -23,17 +22,15 @@ namespace TheTrickster.Protocols {
 		////////////////
 
 		public int NpcWho;
-		public int State;
 
 
 
 		////////////////
 
-		private TricksterStateProtocol() { }
+		private TricksterBatProtocol() { }
 
-		private TricksterStateProtocol( int npcWho, int state ) {
+		private TricksterBatProtocol( int npcWho ) {
 			this.NpcWho = npcWho;
-			this.State = state;
 		}
 
 
@@ -44,18 +41,13 @@ namespace TheTrickster.Protocols {
 			if( !npc.active ) {
 				return;
 			}
-			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
+			if( npc.type != NPCID.CaveBat ) {
 				LogHelpers.AlertOnce( "Mismatched NPC type." );
 				return;
 			}
 
-			var mynpc = npc.modNPC as TricksterNPC;
-			if( mynpc == null ) {
-				LogHelpers.WarnOnce( "Trickster is not a Trickster...?" );
-				return;
-			}
-
-			mynpc.SetState( (TricksterState)this.State );
+			var mynpc = npc.GetGlobalNPC<TheTricksterGlobalNPC>();
+			mynpc.IsTricksterBat = true;
 		}
 
 		protected override void ReceiveOnServer( int fromWho ) {
