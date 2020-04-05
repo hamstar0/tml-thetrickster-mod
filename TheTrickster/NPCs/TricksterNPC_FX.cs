@@ -96,7 +96,7 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		private void RunFX() {
-			if( this.State == TricksterStates.Attack ) {
+			if( this.State == TricksterState.Attack ) {
 				float percent = this.ElapsedStateTicks / (float)this.GetCurrentStateTickDuration();
 
 				if( this.AttackChargeSoundInstance == null || this.AttackChargeSoundInstance.State != SoundState.Playing ) {

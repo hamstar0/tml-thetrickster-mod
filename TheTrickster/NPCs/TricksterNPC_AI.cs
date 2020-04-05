@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using HamstarHelpers.Helpers.Collisions;
@@ -8,7 +7,7 @@ using TheTrickster.Protocols;
 
 
 namespace TheTrickster.NPCs {
-	public enum TricksterStates : int {
+	public enum TricksterState : int {
 		Idle = 0,
 		PreAttack = 1,
 		Attack = 2,
@@ -29,31 +28,31 @@ namespace TheTrickster.NPCs {
 		public int GetCurrentStateTickDuration() {
 			switch( this.State ) {
 			default:
-			case TricksterStates.Idle:
+			case TricksterState.Idle:
 				return TheTricksterConfig.Instance.IdleDurationTicks;
-			case TricksterStates.PreAttack:
+			case TricksterState.PreAttack:
 				return TheTricksterConfig.Instance.IdleDurationTicks;
-			case TricksterStates.Attack:
+			case TricksterState.Attack:
 				var myworld = ModContent.GetInstance<TheTricksterWorld>();
 				int reducedChargeTime = myworld.TricksterDefeats * TheTricksterConfig.Instance.AttackDurationTicksReducedPerDefeat;
 				int chargeTime = TheTricksterConfig.Instance.AttackDurationTicks - reducedChargeTime;
 				
 				return Math.Max( chargeTime, TheTricksterConfig.Instance.AttackDurationTicksMinimum );
-			case TricksterStates.Cooldown:
+			case TricksterState.Cooldown:
 				return TheTricksterConfig.Instance.CooldownDurationTicks;
 			}
 		}
 
 		////////////////
 
-		public void SetState( TricksterStates newState, bool syncs=true ) {
+		public void SetState( TricksterState newState, bool syncs=true ) {
 			this.State = newState;
 
 			this.HitsDuringCurrentStage = 0;
 			this.ElapsedStateTicks = 0;
 
 			switch( newState ) {
-			case TricksterStates.PreAttack:
+			case TricksterState.PreAttack:
 				this.ApplyPreAttackState();
 				break;
 			}
@@ -76,7 +75,7 @@ namespace TheTrickster.NPCs {
 			IList<(int, int)> path;
 
 			if( TileCollisionHelpers.FindPathSimple(plrTile, npcTile, 2000, out path) ) {
-				this.SetState( TricksterStates.Attack, false );
+				this.SetState( TricksterState.Attack, false );
 			}
 		}
 
@@ -99,16 +98,16 @@ namespace TheTrickster.NPCs {
 			}
 
 			switch( this.State ) {
-			case TricksterStates.Idle:
+			case TricksterState.Idle:
 				this.RunIdleFinishAI();
 				break;
-			case TricksterStates.PreAttack:
+			case TricksterState.PreAttack:
 				this.RunPreAttackFinishAI();
 				break;
-			case TricksterStates.Attack:
+			case TricksterState.Attack:
 				this.RunAttackFinishAI();
 				break;
-			case TricksterStates.Cooldown:
+			case TricksterState.Cooldown:
 				this.RunCooldownFinishAI();
 				break;
 			}
@@ -117,7 +116,7 @@ namespace TheTrickster.NPCs {
 		////
 
 		private bool CanAIContinue( out TricksterAction action ) {
-			if( this.State == TricksterStates.Attack ) {
+			if( this.State == TricksterState.Attack ) {
 				action = TricksterAction.None;
 				return true;
 			}
@@ -159,79 +158,6 @@ namespace TheTrickster.NPCs {
 
 			action = TricksterAction.None;
 			return true;
-		}
-
-
-		////////////////
-		
-		private void RunAIAction( TricksterAction action ) {
-			switch( action ) {
-			case TricksterAction.Attack:
-				this.AttackChargeSideBehaviors();
-				break;
-			case TricksterAction.Flee:
-				this.FleeAction();
-				break;
-			}
-		}
-
-
-		////////////////
-
-		private void RunIdleFinishAI() {
-			Player player = this.TargetPlayer;
-			if( player == null && !player.active && player.dead ) {
-				return;
-			}
-
-			TheTricksterConfig config = TheTricksterConfig.Instance;
-			float distSqr = config.AttackRadius * config.AttackRadius;
-			if( Vector2.DistanceSquared( player.Center, this.npc.Center ) >= distSqr ) {
-				return;
-			}
-
-			this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
-			this.SetState( TricksterStates.PreAttack );
-		}
-
-		private void RunPreAttackFinishAI() {
-			this.RunIdleFinishAI();
-		}
-
-		private void RunAttackFinishAI() {
-			this.LaunchAttack();
-			this.SetState( TricksterStates.Cooldown );
-		}
-
-		private void RunCooldownFinishAI() {
-			this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
-			this.SetState( TricksterStates.PreAttack );
-		}
-
-		////
-
-		private bool RunOnHitAI() {
-			switch( this.State ) {
-			case TricksterStates.Idle:
-				break;
-			case TricksterStates.PreAttack:
-			case TricksterStates.Attack:
-				this.SetState( TricksterStates.Idle );
-				break;
-			case TricksterStates.Cooldown:
-				break;
-			}
-
-			bool tooManyHits = this.HitsDuringCurrentStage++ >= TheTricksterConfig.Instance.HitsBeforeBlink;
-
-			if( tooManyHits ) {
-				this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
-				this.SetState( TricksterStates.Idle );
-			} else {
-				this.ElapsedStateTicks = 1;
-			}
-
-			return tooManyHits;
 		}
 	}
 }

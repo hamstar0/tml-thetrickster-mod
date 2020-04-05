@@ -90,6 +90,38 @@ namespace TheTrickster.NPCs {
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 		}
 
+		////
+
+		public void DeployDefenseBats() {
+			if( Main.netMode != 1 ) {
+				int bats = 2 + Main.rand.Next( 3 );
+
+				for( int i=0; i<bats; i++ ) {
+					this.DeployDefenseBat();
+				}
+			}
+		}
+
+		private void DeployDefenseBat() {
+			int npcWho = NPC.NewNPC( (int)this.npc.position.X, (int)this.npc.position.Y, NPCID.CaveBat, 0, 0f, 0f, 0f, 0f, this.npc.target );
+			NPC npc = Main.npc[npcWho];
+			if( !npc.active ) {
+				return;
+			}
+
+			npc.scale = 0.5f;
+			npc.life = 2;
+			npc.defense = 999999;
+			npc.color *= 0.5f;
+
+			var mynpc = npc.GetGlobalNPC<TheTricksterGlobalNPC>();
+			mynpc.IsTricksterBat = true;
+
+			if( Main.netMode == 2 ) {
+				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
+			}
+		}
+
 
 		////
 
@@ -99,7 +131,7 @@ namespace TheTrickster.NPCs {
 
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
-			if( this.TargetPlayer != null && this.State != TricksterStates.Idle ) {
+			if( this.TargetPlayer != null && this.State != TricksterState.Idle ) {
 				for( int i = 0; i < 3; i++ ) {
 					float dirX = 6f * ( rand.NextFloat() - 0.5f );
 

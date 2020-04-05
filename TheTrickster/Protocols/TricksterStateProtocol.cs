@@ -9,7 +9,7 @@ using TheTrickster.NPCs;
 
 namespace TheTrickster.Protocols {
 	class TricksterStateProtocol : PacketProtocolBroadcast {
-		public static void Broadcast( int npcWho, TricksterStates state ) {
+		public static void Broadcast( int npcWho, TricksterState state ) {
 			if( Main.netMode != 2 ) {
 				throw new ModHelpersException("Not server");
 			}
@@ -55,7 +55,7 @@ namespace TheTrickster.Protocols {
 				return;
 			}
 
-			mynpc.SetState( (TricksterStates)this.State );
+			mynpc.SetState( (TricksterState)this.State );
 		}
 
 		protected override void ReceiveOnServer( int fromWho ) {
