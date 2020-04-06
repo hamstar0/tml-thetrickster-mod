@@ -6,6 +6,11 @@ using Terraria.ModLoader;
 
 namespace TheTrickster {
 	class TheTricksterGlobalNPC : GlobalNPC {
+		public override bool InstancePerEntity => true;
+
+
+		////////////////
+
 		public bool IsTricksterBat = false;
 
 
@@ -16,7 +21,9 @@ namespace TheTrickster {
 			if( this.IsTricksterBat ) {
 				damage = 1;
 				crit = false;
-				target.AddBuff( BuffID.Confused, 60 * 3 );
+				target.AddBuff( BuffID.Confused, 60 * 2 );
+
+				npc.active = false;
 			}
 		}
 	}

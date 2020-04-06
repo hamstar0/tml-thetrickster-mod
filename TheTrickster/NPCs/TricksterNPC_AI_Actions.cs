@@ -9,7 +9,7 @@ namespace TheTrickster.NPCs {
 		private void RunAIAction( TricksterAction action ) {
 			switch( action ) {
 			case TricksterAction.Attack:
-				this.AttackChargeSideBehaviors();
+				this.AttackChargingSideBehaviors();
 				break;
 			case TricksterAction.Flee:
 				this.FleeAction();
@@ -67,8 +67,8 @@ namespace TheTrickster.NPCs {
 			bool tooManyHits = this.HitsDuringCurrentStage++ >= TheTricksterConfig.Instance.HitsBeforeBlink;
 
 			if( tooManyHits ) {
-				this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
 				this.DeployDefenseBats();
+				this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
 				this.SetState( TricksterState.Idle );
 			} else {
 				this.ElapsedStateTicks = 1;

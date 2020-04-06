@@ -6,10 +6,12 @@ using Terraria.ModLoader;
 using Terraria.Utilities;
 using HamstarHelpers.Buffs;
 using HamstarHelpers.Classes.Tiles.TilePattern;
+using HamstarHelpers.Helpers.DotNET.Extensions;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
 using HamstarHelpers.Helpers.World;
+using HamstarHelpers.Helpers.XNA;
 using TheTrickster.Protocols;
 
 
@@ -95,11 +97,13 @@ namespace TheTrickster.NPCs {
 
 		public void DeployDefenseBats() {
 			if( Main.netMode != 1 ) {
-				int bats = 2 + Main.rand.Next( 3 );
-
-				for( int i=0; i<bats; i++ ) {
+				for( int i=0; i<2; i++ ) {
 					this.DeployDefenseBat();
 				}
+			}
+
+			if( Main.netMode != 2 ) {
+				ParticleFxHelpers.MakeDustCloud( this.npc.Center, 3, 0.3f, 2f );
 			}
 		}
 
@@ -111,17 +115,26 @@ namespace TheTrickster.NPCs {
 			}
 
 			npc.scale = 0.5f;
-			npc.life = 2;
+			npc.life = 1;
+			npc.lifeMax = 1;
 			npc.defense = 999999;
-			npc.color *= 0.5f;
+			npc.color = XNAColorHelpers.Mul( npc.color, Color.Red );
+			npc.value = 0;
+			npc.SpawnedFromStatue = true;	// no loot abuse?
+			npc.velocity = new Vector2(
+				Main.rand.NextFloat() - 0.5f,
+				Main.rand.NextFloat() - 0.5f
+			) * 8f;
 
 			var mynpc = npc.GetGlobalNPC<TheTricksterGlobalNPC>();
 			mynpc.IsTricksterBat = true;
 
 			if( Main.netMode == 2 ) {
-				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
+				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
 				TricksterBatProtocol.Broadcast( npcWho );
 			}
+
+			npc.AddBuff( ModContent.BuffType<DegreelessnessBuff>(), 60 );
 		}
 
 
@@ -162,17 +175,17 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		private int AttackChargeSideEffectCooldown = 0;
+		private int AttackChargingSideEffectCooldown = 0;
 
-		public void AttackChargeSideBehaviors() {
-			if( this.AttackChargeSideEffectCooldown-- > 0 ) {
+		public void AttackChargingSideBehaviors() {
+			if( this.AttackChargingSideEffectCooldown-- > 0 ) {
 				return;
 			}
-			this.AttackChargeSideEffectCooldown = 10;
+			this.AttackChargingSideEffectCooldown = 10;
 
 			float attackRangeSqr = TheTricksterConfig.Instance.AttackRadius * TheTricksterConfig.Instance.AttackRadius;
 			int maxProjs = Main.projectile.Length;
-			int maxPlrs = Main.player.Length;
+			//int maxPlrs = Main.player.Length;
 
 			for( int i=0; i<maxProjs; i++ ) {
 				Projectile proj = Main.projectile[i];
@@ -181,20 +194,21 @@ namespace TheTrickster.NPCs {
 				}
 
 				if( (proj.Center - this.npc.Center).LengthSquared() < attackRangeSqr ) {
-					proj.velocity *= 0.95f;
+Main.NewText( proj.Name+" - was "+proj.velocity.ToShortString()+", is: "+(proj.velocity*0.8f).ToShortString());
+					proj.velocity *= 0.8f;
 				}
 			}
 
-			for( int i=0; i<maxPlrs; i++ ) {
+			/*for( int i=0; i<maxPlrs; i++ ) {
 				Player plr = Main.player[i];
 				if( plr?.active != true ) {
 					continue;
 				}
 
 				if( (plr.Center - this.npc.Center).LengthSquared() < attackRangeSqr ) {
-					plr.velocity *= 0.95f;
+					plr.velocity *= 0.9f;
 				}
-			}
+			}*/
 		}
 
 
