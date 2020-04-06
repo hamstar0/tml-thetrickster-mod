@@ -26,11 +26,19 @@ namespace TheTrickster.NPCs {
 
 			for( int i=0; i<Main.npc.Length; i++ ) {
 				NPC otherNpc = Main.npc[i];
-				if( otherNpc == null || !otherNpc.active || otherNpc.friendly || otherNpc.immortal || otherNpc.whoAmI == this.npc.whoAmI ) {
+				if( otherNpc?.active != true || otherNpc.friendly || otherNpc.immortal ) {
+					continue;
+				}
+				if( otherNpc.whoAmI == this.npc.whoAmI || otherNpc.type == this.npc.type ) {
 					continue;
 				}
 
 				if( Vector2.DistanceSquared(otherNpc.Center, this.npc.Center) < radiusSqr ) {
+					var mynpc = otherNpc.GetGlobalNPC<TheTricksterGlobalNPC>();
+					if( mynpc.IsTricksterBat ) {
+						continue;
+					}
+
 					otherNpc.AddBuff( invulnBuffType, TheTricksterConfig.Instance.InvulnTickDuration );
 				}
 			}
@@ -114,10 +122,11 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			npc.scale = 0.5f;
+			npc.scale = 0.65f;
 			npc.life = 1;
 			npc.lifeMax = 1;
 			npc.defense = 999999;
+			npc.damage = 1;
 			//npc.color = XNAColorHelpers.Mul( npc.color, Color.Red );
 			npc.value = 0;
 			npc.SpawnedFromStatue = true;	// no loot abuse?

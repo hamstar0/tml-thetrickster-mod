@@ -32,6 +32,13 @@ namespace TheTrickster {
 
 		////////////////
 
+		public override bool PreNPCLoot( NPC npc ) {
+			return !this.IsTricksterBat;
+		}
+
+
+		////////////////
+
 		public override Color? GetAlpha( NPC npc, Color drawColor ) {
 			if( this.IsTricksterBat ) {
 				return XNAColorHelpers.Mul( drawColor, Color.Red );

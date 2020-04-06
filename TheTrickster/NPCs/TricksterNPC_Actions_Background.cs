@@ -2,13 +2,15 @@
 using Terraria;
 using Terraria.ModLoader;
 using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.DotNET.Extensions;
 
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		private int AttackChargingSideEffectCooldown = 0;
 
+
+
+		////////////////
 
 		public void AttackChargingSideEffects() {
 			if( this.AttackChargingSideEffectCooldown-- > 0 ) {
@@ -27,9 +29,7 @@ namespace TheTrickster.NPCs {
 					continue;
 				}
 
-				DebugHelpers.Print( "proj_range_" + proj.whoAmI, "lenSqr: " + (int)( proj.Center - this.npc.Center ).LengthSquared() + " vs " + (int)attackRangeSqr );
 				if( ( proj.Center - this.npc.Center ).LengthSquared() < attackRangeSqr ) {
-					Main.NewText( proj.Name + " - was " + proj.velocity.ToShortString() + ", is: " + ( proj.velocity * 0.8f ).ToShortString() );
 					proj.velocity *= 0.8f;
 				}
 			}
