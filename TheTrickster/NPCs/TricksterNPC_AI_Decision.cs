@@ -35,19 +35,39 @@ namespace TheTrickster.NPCs {
 			this.SetState( TricksterState.PreAttack );
 		}
 
+
+		private void RunLurkFinishAI() {
+			Player player = this.TargetPlayer;
+			if( player == null && !player.active && player.dead ) {
+				return;
+			}
+
+			TheTricksterConfig config = TheTricksterConfig.Instance;
+			float distSqr = config.AttackRadius * config.AttackRadius;
+			if( Vector2.DistanceSquared( player.Center, this.npc.Center ) >= distSqr ) {
+				return;
+			}
+
+			this.SetState( TricksterState.PreAttack );
+		}
+
+
 		private void RunPreAttackFinishAI() {
 			this.RunIdleFinishAI();
 		}
+
 
 		private void RunAttackFinishAI() {
 			this.LaunchAttack();
 			this.SetState( TricksterState.Cooldown );
 		}
 
+
 		private void RunCooldownFinishAI() {
 			this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
 			this.SetState( TricksterState.PreAttack );
 		}
+
 
 		////
 

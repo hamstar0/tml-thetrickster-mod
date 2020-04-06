@@ -56,6 +56,10 @@ namespace TheTrickster {
 		[Range( 1, 60 * 60 * 60 )]
 		[DefaultValue( 60 * 2 )]
 		public int IdleDurationTicks { get; set; } = 60 * 2;
+		
+		[Range( 1, 60 * 60 * 60 )]
+		[DefaultValue( 60 * 20 )]
+		public int LurkDurationTicks { get; set; } = 60 * 20;
 
 		[Range( 1, 60 * 60 * 60 )]
 		[DefaultValue( (int)(60f * 5.5f) )]

@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Helpers.World;
 
 
 namespace TheTrickster.NPCs {
@@ -85,35 +83,6 @@ namespace TheTrickster.NPCs {
 			this.npc.lifeMax = Math.Min( baseHp + addedHp, TheTricksterConfig.Instance.StatLifeMax );
 		}
 
-		////////////////
-
-		public override float SpawnChance( NPCSpawnInfo spawnInfo ) {
-			// Underground only
-			if( spawnInfo.spawnTileY < WorldHelpers.RockLayerTopTileY ) {
-				return 0f;
-			}
-			// Only one at a time
-			if( Main.npc.Any(n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>()) ) {
-				return 0f;
-			}
-			// Should have nearby NPCs
-			if( spawnInfo.player.activeNPCs < 3f ) {
-				return 0;
-			}
-			return TheTricksterConfig.Instance.SpawnChance;
-		}
-
-		////
-
-		public override int SpawnNPC( int tileX, int tileY ) {
-			int npcWho = base.SpawnNPC( tileX, tileY );
-			NPC npc = Main.npc[npcWho];
-
-			int nearPlrWho = npc.FindClosestPlayer();
-			npc.target = nearPlrWho;
-
-			return npcWho;
-		}
 
 		////////////////
 
@@ -139,9 +108,11 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public override void AI() {
+			bool isNewlyAlerted = false;
+
 			if( !this.IsAlerted ) {
 				this.IsAlerted = true;
-				this.Encounter();
+				isNewlyAlerted = true;
 			}
 
 			Player targPlr = this.TargetPlayer;
@@ -156,7 +127,7 @@ namespace TheTrickster.NPCs {
 				this.npc.velocity.X *= 0.9f;
 			}
 
-			this.RunFX();
+			this.RunFX( isNewlyAlerted );
 			this.RunAI();
 
 			base.AI();
@@ -165,19 +136,11 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void Encounter() {
-			Vector2 scrMid = Main.screenPosition;
-			scrMid.X += Main.screenWidth / 2;
-			scrMid.Y += Main.screenHeight / 2;
-			float distSqr = Vector2.DistanceSquared( scrMid, this.npc.Center );
-
-			if( distSqr < 409600 ) {
-				Vector2 diff = this.npc.Center - scrMid;
-				Vector2 pos = scrMid + ( diff * 0.5f );
-
-				int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
-				Main.PlaySound( (int)SoundType.Custom, (int)pos.X, (int)pos.Y, soundSlot );
+		public override Color? GetAlpha( Color drawColor ) {
+			if( this.State == TricksterState.Lurk ) {
+				return drawColor * 0.15f;
 			}
+			return base.GetAlpha( drawColor );
 		}
 	}
 }

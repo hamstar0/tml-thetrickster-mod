@@ -95,7 +95,11 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		private void RunFX() {
+		private void RunFX( bool isNewlyAlerted ) {
+			if( isNewlyAlerted ) {
+				this.EncounterFX();
+			}
+
 			if( this.State == TricksterState.Attack ) {
 				float percent = this.ElapsedStateTicks / (float)this.GetCurrentStateTickDuration();
 
@@ -135,6 +139,24 @@ namespace TheTrickster.NPCs {
 				TricksterNPC.AnimateAttackBurstFX( pos, 64, 64 );
 				TricksterNPC.AnimateAttackBurstFX( pos, 32, 32 );
 			} );
+		}
+
+
+		////////////////
+
+		public void EncounterFX() {
+			Vector2 scrMid = Main.screenPosition;
+			scrMid.X += Main.screenWidth / 2;
+			scrMid.Y += Main.screenHeight / 2;
+			float distSqr = Vector2.DistanceSquared( scrMid, this.npc.Center );
+
+			if( distSqr < 409600 ) {
+				Vector2 diff = this.npc.Center - scrMid;
+				Vector2 pos = scrMid + ( diff * 0.5f );
+
+				int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
+				Main.PlaySound( (int)SoundType.Custom, (int)pos.X, (int)pos.Y, soundSlot );
+			}
 		}
 	}
 }
