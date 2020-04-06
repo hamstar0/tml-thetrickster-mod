@@ -109,6 +109,9 @@ namespace TheTrickster.NPCs {
 
 		private void RunAIPassive() {
 			switch( this.State ) {
+			case TricksterState.Lurk:
+				this.RunLurkPassiveAI();
+				break;
 			case TricksterState.Attack:
 				this.AttackChargingSideEffects();
 				break;

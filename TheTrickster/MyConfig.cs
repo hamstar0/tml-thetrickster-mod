@@ -104,6 +104,11 @@ namespace TheTrickster {
 		//public int MaximumNearbyMobsBeforeFleeing { get; set; } = 2;
 
 
+		[Range( 0, 64 * 16 )]
+		[DefaultValue( 8 * 16 )]
+		public int LurkStealRange { get; set; } = 8 * 16;
+
+
 
 		////////////////
 

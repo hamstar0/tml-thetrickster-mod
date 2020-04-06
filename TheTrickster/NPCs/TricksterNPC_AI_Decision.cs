@@ -6,6 +6,36 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
+		private void RunLurkPassiveAI() {
+			var config = TheTricksterConfig.Instance;
+			int plrs = Main.player.Length;
+			float stealRangeSqr = config.LurkStealRange * config.LurkStealRange;
+
+			bool isThief = false;
+
+			for( int i=0; i<plrs; i++ ) {
+				Player plr = Main.player[i];
+				if( plr?.active != true || plr.dead ) {
+					continue;
+				}
+
+				if( (plr.Center - this.npc.Center).LengthSquared() >= stealRangeSqr ) {
+					continue;
+				}
+
+				isThief = this.StealFromPlayer( plr );
+				break;
+			}
+
+			if( isThief ) {
+				this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
+				this.SetState( TricksterState.PreAttack );
+			}
+		}
+
+
+		////////////////
+
 		private bool RunAIDecision( TricksterDecision action ) {
 			switch( action ) {
 			case TricksterDecision.Flee:
@@ -18,7 +48,7 @@ namespace TheTrickster.NPCs {
 
 
 		////////////////
-
+		
 		private void RunIdleFinishAI() {
 			Player player = this.TargetPlayer;
 			if( player == null && !player.active && player.dead ) {
@@ -64,7 +94,9 @@ namespace TheTrickster.NPCs {
 
 
 		private void RunCooldownFinishAI() {
-			this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
+			var config = TheTricksterConfig.Instance;
+
+			this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
 			this.SetState( TricksterState.PreAttack );
 		}
 
@@ -72,6 +104,8 @@ namespace TheTrickster.NPCs {
 		////
 
 		private bool RunOnHitAI() {
+			var config = TheTricksterConfig.Instance;
+
 			switch( this.State ) {
 			case TricksterState.Idle:
 			case TricksterState.Lurk:
@@ -84,11 +118,11 @@ namespace TheTrickster.NPCs {
 				break;
 			}
 
-			bool tooManyHits = this.HitsDuringCurrentStage++ >= TheTricksterConfig.Instance.HitsBeforeBlink;
+			bool tooManyHits = this.HitsDuringCurrentStage++ >= config.HitsBeforeBlink;
 
 			if( tooManyHits ) {
 				this.DeployDefenseBats();
-				this.DodgeAction( TheTricksterConfig.Instance.MinDodgeRadius, TheTricksterConfig.Instance.MaxDodgeRadius );
+				this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
 				this.SetState( TricksterState.Idle );
 			} else {
 				this.ElapsedStateTicks = 1;
