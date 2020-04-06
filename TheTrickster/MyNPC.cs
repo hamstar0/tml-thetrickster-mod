@@ -1,7 +1,9 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
+using HamstarHelpers.Helpers.XNA;
 
 
 namespace TheTrickster {
@@ -16,7 +18,7 @@ namespace TheTrickster {
 
 
 		////////////////
-
+		
 		public override void ModifyHitPlayer( NPC npc, Player target, ref int damage, ref bool crit ) {
 			if( this.IsTricksterBat ) {
 				damage = 1;
@@ -25,6 +27,16 @@ namespace TheTrickster {
 
 				npc.active = false;
 			}
+		}
+
+
+		////////////////
+
+		public override Color? GetAlpha( NPC npc, Color drawColor ) {
+			if( this.IsTricksterBat ) {
+				return XNAColorHelpers.Mul( drawColor, Color.Red );
+			}
+			return base.GetAlpha( npc, drawColor );
 		}
 	}
 }

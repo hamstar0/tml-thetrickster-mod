@@ -6,14 +6,13 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		private void RunAIAction( TricksterAction action ) {
+		private bool RunAIDecision( TricksterDecision action ) {
 			switch( action ) {
-			case TricksterAction.Attack:
-				this.AttackChargingSideBehaviors();
-				break;
-			case TricksterAction.Flee:
+			case TricksterDecision.Flee:
 				this.FleeAction();
-				break;
+				return true;
+			default:
+				return false;
 			}
 		}
 

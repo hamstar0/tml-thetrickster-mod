@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Terraria;
 using Terraria.ModLoader;
-using HamstarHelpers.Helpers.Collisions;
-using TheTrickster.Protocols;
 
 
 namespace TheTrickster.NPCs {
@@ -15,85 +11,29 @@ namespace TheTrickster.NPCs {
 	}
 
 
-	public enum TricksterAction : int {
+	public enum TricksterDecision : int {
 		None = 0,
-		Attack = 1,
-		Flee = 2
+		Flee = 1
 	}
 
 
 
 
 	public partial class TricksterNPC : ModNPC {
-		public int GetCurrentStateTickDuration() {
-			switch( this.State ) {
-			default:
-			case TricksterState.Idle:
-				return TheTricksterConfig.Instance.IdleDurationTicks;
-			case TricksterState.PreAttack:
-				return TheTricksterConfig.Instance.IdleDurationTicks;
-			case TricksterState.Attack:
-				var myworld = ModContent.GetInstance<TheTricksterWorld>();
-				int reducedChargeTime = myworld.TricksterDefeats * TheTricksterConfig.Instance.AttackDurationTicksReducedPerDefeat;
-				int chargeTime = TheTricksterConfig.Instance.AttackDurationTicks - reducedChargeTime;
-				
-				return Math.Max( chargeTime, TheTricksterConfig.Instance.AttackDurationTicksMinimum );
-			case TricksterState.Cooldown:
-				return TheTricksterConfig.Instance.CooldownDurationTicks;
-			}
-		}
-
-		////////////////
-
-		public void SetState( TricksterState newState, bool syncs=true ) {
-			this.State = newState;
-
-			this.HitsDuringCurrentStage = 0;
-			this.ElapsedStateTicks = 0;
-
-			switch( newState ) {
-			case TricksterState.PreAttack:
-				this.ApplyPreAttackState();
-				break;
-			}
-
-			if( syncs && Main.netMode == 2 ) {
-				TricksterStateProtocol.Broadcast( this.npc.whoAmI, newState );
-			}
-		}
-
-		////
-
-		private void ApplyPreAttackState() {
-			Player plr = this.TargetPlayer;
-			if( plr == null ) {
-				return;
-			}
-
-			(int x, int y) plrTile = ((int)plr.Center.X >> 4, (int)plr.Center.Y >> 4);
-			(int x, int y) npcTile = ((int)this.npc.Center.X >> 4, (int)this.npc.Center.Y >> 4);
-			IList<(int, int)> path;
-
-			if( TileCollisionHelpers.FindPathSimple(plrTile, npcTile, 2000, out path) ) {
-				this.SetState( TricksterState.Attack, false );
-			}
-		}
-
-
-		////////////////
-
 		private void RunAI() {
 			this.ElapsedTicksAlive++;
 			this.ElapsedStateTicks++;
 
-			TricksterAction action;
+			TricksterDecision decision;
 
-			if( !this.CanAIContinue(out action) ) {
-				this.RunAIAction( action );
+			if( !this.CanAIContinue(out decision) ) {
+				this.RunAIDecision( decision );
 				return;
 			}
-			if( !this.CanAIAct(out action) ) {
-				this.RunAIAction( action );
+			if( !this.CanAIAct(out decision) ) {
+				if( !this.RunAIDecision(decision) ) {
+					this.RunAIPassive();
+				}
 				return;
 			}
 
@@ -115,30 +55,30 @@ namespace TheTrickster.NPCs {
 
 		////
 
-		private bool CanAIContinue( out TricksterAction action ) {
+		private bool CanAIContinue( out TricksterDecision decision ) {
 			if( this.State == TricksterState.Attack ) {
-				action = TricksterAction.None;
+				decision = TricksterDecision.None;
 				return true;
 			}
 
 			int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
 			if( fleeTicks <= 0 ) {
-				action = TricksterAction.None;
+				decision = TricksterDecision.None;
 				return true;
 			}
 
 			if( this.ElapsedTicksAlive <= fleeTicks ) {
-				action = TricksterAction.None;
+				decision = TricksterDecision.None;
 				return true;
 			}
 
-			action = TricksterAction.Flee;
+			decision = TricksterDecision.Flee;
 			return false;
 		}
 
-		private bool CanAIAct( out TricksterAction action ) {
+		private bool CanAIAct( out TricksterDecision action ) {
 			if( this.ElapsedStateTicks < this.GetCurrentStateTickDuration() ) {
-				action = TricksterAction.None;
+				action = TricksterDecision.None;
 				return false;
 			}
 
@@ -156,8 +96,19 @@ namespace TheTrickster.NPCs {
 				}
 			}*/
 
-			action = TricksterAction.None;
+			action = TricksterDecision.None;
 			return true;
+		}
+
+
+		////////////////
+
+		private void RunAIPassive() {
+			switch( this.State ) {
+			case TricksterState.Attack:
+				this.AttackChargingSideEffects();
+				break;
+			}
 		}
 	}
 }
