@@ -13,6 +13,8 @@ namespace TheTrickster.NPCs {
 			default:
 			case TricksterState.Idle:
 				return TheTricksterConfig.Instance.IdleDurationTicks;
+			case TricksterState.Lurk:
+				return TheTricksterConfig.Instance.LurkDurationTicks;
 			case TricksterState.PreAttack:
 				return TheTricksterConfig.Instance.IdleDurationTicks;
 			case TricksterState.Attack:

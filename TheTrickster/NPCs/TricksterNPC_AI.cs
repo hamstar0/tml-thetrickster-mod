@@ -5,9 +5,10 @@ using Terraria.ModLoader;
 namespace TheTrickster.NPCs {
 	public enum TricksterState : int {
 		Idle = 0,
-		PreAttack = 1,
-		Attack = 2,
-		Cooldown = 3
+		Lurk = 1,
+		PreAttack = 2,
+		Attack = 3,
+		Cooldown = 4
 	}
 
 
@@ -40,6 +41,9 @@ namespace TheTrickster.NPCs {
 			switch( this.State ) {
 			case TricksterState.Idle:
 				this.RunIdleFinishAI();
+				break;
+			case TricksterState.Lurk:
+				this.RunLurkFinishAI();
 				break;
 			case TricksterState.PreAttack:
 				this.RunPreAttackFinishAI();

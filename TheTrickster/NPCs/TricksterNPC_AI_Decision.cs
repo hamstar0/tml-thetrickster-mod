@@ -54,6 +54,7 @@ namespace TheTrickster.NPCs {
 		private bool RunOnHitAI() {
 			switch( this.State ) {
 			case TricksterState.Idle:
+			case TricksterState.Lurk:
 				break;
 			case TricksterState.PreAttack:
 			case TricksterState.Attack:
