@@ -96,9 +96,9 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		private void RunFX( bool isNewlyAlerted ) {
-			if( isNewlyAlerted ) {
+			/*if( isNewlyAlerted ) {
 				this.EncounterFX();
-			}
+			}*/
 
 			if( this.State == TricksterState.Attack ) {
 				float percent = this.ElapsedStateTicks / (float)this.GetCurrentStateTickDuration();
@@ -110,7 +110,7 @@ namespace TheTrickster.NPCs {
 					if( distScale > 0 ) {
 						this.AttackChargeSoundInstance = Main.PlaySound( SoundID.Item93, this.npc.Center );
 						this.AttackChargeSoundInstance.Volume = 0.25f + ((percent * 0.75f) * distScale);
-					}*/
+					}	//<- volume doesnt work?*/
 					this.AttackChargeSoundInstance = Main.PlaySound( SoundID.Item93, this.npc.Center );
 					this.AttackChargeSoundInstance.Volume *= 0.25f + ( percent * 0.75f );
 				}

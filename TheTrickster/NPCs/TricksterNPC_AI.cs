@@ -14,7 +14,8 @@ namespace TheTrickster.NPCs {
 
 	public enum TricksterDecision : int {
 		None = 0,
-		Flee = 1
+		Flee = 1,
+		//Laugh = 2
 	}
 
 
@@ -38,23 +39,7 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			switch( this.State ) {
-			case TricksterState.Idle:
-				this.RunIdleFinishAI();
-				break;
-			case TricksterState.Lurk:
-				this.RunLurkFinishAI();
-				break;
-			case TricksterState.PreAttack:
-				this.RunPreAttackFinishAI();
-				break;
-			case TricksterState.Attack:
-				this.RunAttackFinishAI();
-				break;
-			case TricksterState.Cooldown:
-				this.RunCooldownFinishAI();
-				break;
-			}
+			this.RunAIStateFinish();
 		}
 
 		////
@@ -114,6 +99,31 @@ namespace TheTrickster.NPCs {
 				break;
 			case TricksterState.Attack:
 				this.AttackChargingSideEffects();
+				break;
+			}
+		}
+
+
+		////////////////
+
+		private void RunAIStateFinish() {
+			switch( this.State ) {
+			case TricksterState.Idle:
+				this.RunIdleFinishAI();
+				break;
+			case TricksterState.Lurk:
+				this.RunLurkFinishAI();
+				break;
+			case TricksterState.PreAttack:
+				this.RunPreAttackFinishAI();
+				break;
+			case TricksterState.Attack:
+				this.RunAttackFinishAI();
+				break;
+			case TricksterState.Cooldown:
+				this.RunCooldownFinishAI();
+				break;
+			default:
 				break;
 			}
 		}

@@ -1,10 +1,10 @@
-﻿using HamstarHelpers.Classes.UI.ModConfig;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Services.Configs;
-using System;
+﻿using System;
 using System.ComponentModel;
 using Terraria.ID;
 using Terraria.ModLoader.Config;
+using HamstarHelpers.Classes.UI.ModConfig;
+using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Services.Configs;
 
 
 namespace TheTrickster {

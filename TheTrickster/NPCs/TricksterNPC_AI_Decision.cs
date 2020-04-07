@@ -6,6 +6,21 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
+		private bool RunAIDecision( TricksterDecision decision ) {
+			switch( decision ) {
+			case TricksterDecision.Flee:
+				this.FleeAction();
+				return true;
+			//case TricksterDecision.Laugh:
+			//	this.EncounterFX();
+			//	return true;
+			}
+			return false;
+		}
+
+
+		////////////////
+
 		private void RunLurkPassiveAI() {
 			var config = TheTricksterConfig.Instance;
 			int plrs = Main.player.Length;
@@ -29,6 +44,7 @@ namespace TheTrickster.NPCs {
 
 			if( isThief ) {
 				this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
+				this.EncounterFormal();
 				this.SetState( TricksterState.PreAttack );
 			}
 		}
@@ -36,19 +52,6 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		private bool RunAIDecision( TricksterDecision action ) {
-			switch( action ) {
-			case TricksterDecision.Flee:
-				this.FleeAction();
-				return true;
-			default:
-				return false;
-			}
-		}
-
-
-		////////////////
-		
 		private void RunIdleFinishAI() {
 			Player player = this.TargetPlayer;
 			if( player == null && !player.active && player.dead ) {
@@ -78,6 +81,7 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
+			this.EncounterFormal();
 			this.SetState( TricksterState.PreAttack );
 		}
 

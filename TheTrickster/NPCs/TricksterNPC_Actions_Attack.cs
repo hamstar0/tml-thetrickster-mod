@@ -9,12 +9,13 @@ using HamstarHelpers.Helpers.Debug;
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public void LaunchAttack() {
+			var config = TheTricksterConfig.Instance;
+			int radiusSqr = config.AttackRadius * config.AttackRadius;
+			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
+
 			this.HasAttacked = true;
 
-			this.CreateLaunchedAttackFX( TheTricksterConfig.Instance.AttackRadius );
-
-			int radiusSqr = TheTricksterConfig.Instance.AttackRadius * TheTricksterConfig.Instance.AttackRadius;
-			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
+			this.CreateLaunchedAttackFX( config.AttackRadius );
 
 			for( int i=0; i<Main.npc.Length; i++ ) {
 				NPC otherNpc = Main.npc[i];
@@ -31,7 +32,7 @@ namespace TheTrickster.NPCs {
 						continue;
 					}
 
-					otherNpc.AddBuff( invulnBuffType, TheTricksterConfig.Instance.InvulnTickDuration );
+					otherNpc.AddBuff( invulnBuffType, config.InvulnTickDuration );
 				}
 			}
 		}
