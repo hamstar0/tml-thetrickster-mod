@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using Terraria.ID;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using HamstarHelpers.Classes.UI.ModConfig;
 using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Services.Configs;
 
 
 namespace TheTrickster {
@@ -13,8 +13,8 @@ namespace TheTrickster {
 
 
 	
-	public partial class TheTricksterConfig : StackableModConfig {
-		public static TheTricksterConfig Instance => ModConfigStack.GetMergedConfigs<TheTricksterConfig>();
+	public partial class TheTricksterConfig : ModConfig {
+		public static TheTricksterConfig Instance => ModContent.GetInstance<TheTricksterConfig>();
 
 
 

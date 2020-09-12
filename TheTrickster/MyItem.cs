@@ -1,5 +1,5 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
 using TheTrickster.NPCs;
@@ -14,6 +14,15 @@ namespace TheTrickster {
 
 		public override bool InstancePerEntity => true;
 
+
+
+		////////////////
+
+		public override GlobalItem NewInstance( Item item ) {
+			var myitem = (TheTricksterGlobalItem)base.NewInstance( item );
+			myitem.IsStolenBy = this.IsStolenBy;
+			return myitem;
+		}
 
 
 		////////////////
