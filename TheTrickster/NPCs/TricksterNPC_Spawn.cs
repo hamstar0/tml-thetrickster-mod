@@ -23,7 +23,7 @@ namespace TheTrickster.NPCs {
 				return 0;
 			}
 
-			return TheTricksterConfig.Instance.SpawnChance;
+			return TheTricksterConfig.Instance.Get<float>( nameof(TheTricksterConfig.SpawnChance) );
 		}
 
 

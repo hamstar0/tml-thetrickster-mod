@@ -1,14 +1,13 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using HamstarHelpers.Helpers.Debug;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
-
+using Terraria.ModLoader.Config;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
@@ -43,7 +42,8 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( Main.netMode != 1 ) {
-				int itemType = TheTricksterConfig.Instance.DropsOnDefeat?.Type ?? -1;
+				var drops = TheTricksterConfig.Instance.Get<ItemDefinition>( nameof(TheTricksterConfig.DropsOnDefeat) );
+				int itemType = drops?.Type ?? -1;
 				if( itemType != -1 ) {
 					ItemHelpers.CreateItem( this.npc.position, itemType, 1, 24, 24 );
 				}

@@ -23,11 +23,12 @@ namespace TheTrickster.NPCs {
 
 		private void RunLurkPassiveAI() {
 			var config = TheTricksterConfig.Instance;
-			int plrs = Main.player.Length;
-			float stealRangeSqr = config.LurkStealRange * config.LurkStealRange;
+			int lurkStealRange = config.Get<int>( nameof(TheTricksterConfig.LurkStealRange) );
+			float stealRangeSqr = lurkStealRange * lurkStealRange;
 
 			bool isThief = false;
 
+			int plrs = Main.player.Length;
 			for( int i=0; i<plrs; i++ ) {
 				Player plr = Main.player[i];
 				if( plr?.active != true || plr.dead ) {
@@ -43,7 +44,8 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( isThief ) {
-				this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
+				int minDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MinDodgeRadius) );
+				this.DodgeAction( minDodgeRad, minDodgeRad );
 				this.EncounterFormal();
 				this.SetState( TricksterState.PreAttack );
 			}
@@ -58,13 +60,18 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			TheTricksterConfig config = TheTricksterConfig.Instance;
-			float distSqr = config.AttackRadius * config.AttackRadius;
-			if( Vector2.DistanceSquared( player.Center, this.npc.Center ) >= distSqr ) {
+			var config = TheTricksterConfig.Instance;
+			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
+			float distSqr = atkRad * atkRad;
+
+			if( Vector2.DistanceSquared(player.Center, this.npc.Center) >= distSqr ) {
 				return;
 			}
 
-			this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
+			int minDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MinDodgeRadius) );
+			int maxDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MaxDodgeRadius) );
+
+			this.DodgeAction( minDodgeRad, maxDodgeRad );
 			this.SetState( TricksterState.PreAttack );
 		}
 
@@ -75,9 +82,10 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			TheTricksterConfig config = TheTricksterConfig.Instance;
-			float distSqr = config.AttackRadius * config.AttackRadius;
-			if( Vector2.DistanceSquared( player.Center, this.npc.Center ) >= distSqr ) {
+			var config = TheTricksterConfig.Instance;
+			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
+			float distSqr = atkRad * atkRad;
+			if( Vector2.DistanceSquared(player.Center, this.npc.Center) >= distSqr ) {
 				return;
 			}
 
@@ -99,8 +107,10 @@ namespace TheTrickster.NPCs {
 
 		private void RunCooldownFinishAI() {
 			var config = TheTricksterConfig.Instance;
+			int minDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MinDodgeRadius) );
+			int maxDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MaxDodgeRadius) );
 
-			this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
+			this.DodgeAction( minDodgeRad, maxDodgeRad );
 			this.SetState( TricksterState.PreAttack );
 		}
 
@@ -122,11 +132,15 @@ namespace TheTrickster.NPCs {
 				break;
 			}
 
-			bool tooManyHits = this.HitsDuringCurrentStage++ >= config.HitsBeforeBlink;
+			int hitsBeforeBlink = config.Get<int>( nameof(TheTricksterConfig.HitsBeforeBlink) );
+			bool tooManyHits = this.HitsDuringCurrentStage++ >= hitsBeforeBlink;
 
 			if( tooManyHits ) {
+				int minDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MinDodgeRadius) );
+				int maxDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MaxDodgeRadius) );
+
 				this.DeployDefenseBats();
-				this.DodgeAction( config.MinDodgeRadius, config.MaxDodgeRadius );
+				this.DodgeAction( minDodgeRad, maxDodgeRad );
 				this.SetState( TricksterState.Idle );
 			} else {
 				this.ElapsedStateTicks = 1;

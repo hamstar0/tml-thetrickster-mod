@@ -10,12 +10,13 @@ namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public void LaunchAttack() {
 			var config = TheTricksterConfig.Instance;
-			int radiusSqr = config.AttackRadius * config.AttackRadius;
+			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
+			int radiusSqr = atkRad * atkRad;
 			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
 
 			this.HasAttacked = true;
 
-			this.CreateLaunchedAttackFX( config.AttackRadius );
+			this.CreateLaunchedAttackFX( atkRad );
 
 			for( int i=0; i<Main.npc.Length; i++ ) {
 				NPC otherNpc = Main.npc[i];
@@ -32,7 +33,8 @@ namespace TheTrickster.NPCs {
 						continue;
 					}
 
-					otherNpc.AddBuff( invulnBuffType, config.InvulnTickDuration );
+					int invulDur = config.Get<int>( nameof(TheTricksterConfig.InvulnTickDuration) );
+					otherNpc.AddBuff( invulnBuffType, invulDur );
 				}
 			}
 		}

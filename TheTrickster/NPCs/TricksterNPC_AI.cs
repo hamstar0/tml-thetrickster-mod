@@ -50,7 +50,7 @@ namespace TheTrickster.NPCs {
 				return true;
 			}
 
-			int fleeTicks = TheTricksterConfig.Instance.TicksUntilFlee;
+			int fleeTicks = TheTricksterConfig.Instance.Get<int>( nameof(TheTricksterConfig.TicksUntilFlee) );
 			if( fleeTicks <= 0 ) {
 				decision = TricksterDecision.None;
 				return true;

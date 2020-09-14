@@ -9,22 +9,26 @@ using TheTrickster.Protocols;
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public int GetCurrentStateTickDuration() {
+			var config = TheTricksterConfig.Instance;
+
 			switch( this.State ) {
 			default:
 			case TricksterState.Idle:
-				return TheTricksterConfig.Instance.IdleDurationTicks;
+				return config.Get<int>( nameof(TheTricksterConfig.IdleDurationTicks) );
 			case TricksterState.Lurk:
-				return TheTricksterConfig.Instance.LurkDurationTicks;
+				return config.Get<int>( nameof(TheTricksterConfig.LurkDurationTicks) );
 			case TricksterState.PreAttack:
-				return TheTricksterConfig.Instance.IdleDurationTicks;
+				return config.Get<int>( nameof(TheTricksterConfig.IdleDurationTicks) );
 			case TricksterState.Attack:
 				var myworld = ModContent.GetInstance<TheTricksterWorld>();
-				int reducedChargeTime = myworld.TricksterDefeats * TheTricksterConfig.Instance.AttackDurationTicksReducedPerDefeat;
-				int chargeTime = TheTricksterConfig.Instance.AttackDurationTicks - reducedChargeTime;
+				int attackTicksLessPer = config.Get<int>( nameof(TheTricksterConfig.AttackDurationTicksReducedPerDefeat) );
+				int reducedChargeTime = myworld.TricksterDefeats * attackTicksLessPer;
+				int attackDuration = config.Get<int>( nameof(TheTricksterConfig.AttackDurationTicks) );
+				int chargeTime = attackDuration - reducedChargeTime;
 				
-				return Math.Max( chargeTime, TheTricksterConfig.Instance.AttackDurationTicksMinimum );
+				return Math.Max( chargeTime, config.Get<int>( nameof(TheTricksterConfig.AttackDurationTicksMinimum) ) );
 			case TricksterState.Cooldown:
-				return TheTricksterConfig.Instance.CooldownDurationTicks;
+				return config.Get<int>( nameof(TheTricksterConfig.CooldownDurationTicks) );
 			}
 		}
 

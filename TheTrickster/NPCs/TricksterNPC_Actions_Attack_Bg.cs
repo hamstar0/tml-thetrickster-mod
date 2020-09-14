@@ -19,7 +19,8 @@ namespace TheTrickster.NPCs {
 			this.AttackChargingSideEffectCooldown = 10;
 
 			var config = TheTricksterConfig.Instance;
-			float attackRangeSqr = config.AttackRadius * config.AttackRadius;
+			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
+			float attackRangeSqr = atkRad * atkRad;
 			int maxProjs = Main.projectile.Length;
 			//int maxPlrs = Main.player.Length;
 
