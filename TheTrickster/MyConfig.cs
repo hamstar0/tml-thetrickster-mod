@@ -109,6 +109,11 @@ namespace TheTrickster {
 		public int LurkStealRange { get; set; } = 8 * 16;
 
 
+		[Range( 0, 4096 )]
+		[DefaultValue( 96 )]
+		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 96;
+
+
 
 		////////////////
 

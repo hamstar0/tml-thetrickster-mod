@@ -20,7 +20,11 @@ namespace TheTrickster.NPCs {
 
 			// Should have nearby NPCs
 			if( spawnInfo.player.activeNPCs < 3f ) {
-				return 0;
+				return 0f;
+			}
+
+			if( TricksterNPC.IsNearbyOtherTricksterDefeats(spawnInfo.spawnTileX, spawnInfo.spawnTileY) ) {
+				return 0f;
 			}
 
 			return TheTricksterConfig.Instance.Get<float>( nameof(TheTricksterConfig.SpawnChance) );

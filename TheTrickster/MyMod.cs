@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -15,7 +16,11 @@ namespace TheTrickster {
 
 		public static TheTricksterMod Instance { get; private set; }
 
-		//public static TheTricksterConfig Config => ModContent.GetInstance<TheTricksterConfig>();
+
+
+		////////////////
+
+		public Texture2D MapIcon { get; private set; }
 
 
 		////////////////
@@ -28,6 +33,10 @@ namespace TheTrickster {
 
 		public TheTricksterMod() {
 			TheTricksterMod.Instance = this;
+
+			if( Main.netMode != NetmodeID.Server && !Main.dedServ ) {
+				this.MapIcon = ModContent.GetTexture( "TheTrickster/NPCs/TricksterIcon" );
+			}
 		}
 
 		////

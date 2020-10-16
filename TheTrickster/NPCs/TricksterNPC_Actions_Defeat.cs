@@ -1,16 +1,41 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ModLoader;
 using Terraria.Utilities;
+using Terraria.ModLoader;
+using Terraria.ModLoader.Config;
 using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Helpers.DotNET.Extensions;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
-using Terraria.ModLoader.Config;
+
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
+		public static bool IsNearbyOtherTricksterDefeats( int tileX, int tileY ) {
+			var config = TheTricksterConfig.Instance;
+			var myworld = ModContent.GetInstance<TheTricksterWorld>();
+			int minDistSqr = config.Get<int>( nameof(config.MinTileSpawnDistanceAwayFromAnyPreviousDefeat) );
+			minDistSqr *= minDistSqr;
+
+			foreach( (int dTileX, int dTileY) in myworld.TricksterDefeatLocations ) {
+				int diffX = tileX - dTileX;
+				int diffY = tileY - dTileY;
+				int diffSqr = (diffX * diffX) + (diffY * diffY);
+
+				if( diffSqr < minDistSqr ) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+
+
+		////////////////
+
 		public void DefeatEffects() {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
@@ -53,7 +78,7 @@ namespace TheTrickster.NPCs {
 			//this.npc.active = false;
 
 			var myworld = ModContent.GetInstance<TheTricksterWorld>();
-			myworld.AddTricksterDefeat();
+			myworld.AddTricksterDefeat( this.npc );
 		}
 	}
 }
