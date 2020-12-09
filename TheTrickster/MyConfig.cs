@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
 using Terraria.ID;
-using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using HamstarHelpers.Classes.UI.ModConfig;
 using HamstarHelpers.Helpers.Debug;
@@ -14,7 +13,7 @@ namespace TheTrickster {
 
 	
 	public partial class TheTricksterConfig : ModConfig {
-		public static TheTricksterConfig Instance => ModContent.GetInstance<TheTricksterConfig>();
+		public static TheTricksterConfig Instance { get; internal set; }
 
 
 
@@ -112,6 +111,12 @@ namespace TheTrickster {
 		[Range( 0, 4096 )]
 		[DefaultValue( 96 )]
 		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 96;
+
+		////
+
+		[Range( -1, 4048 )]
+		[DefaultValue( 64 )]
+		public int TricksterPKEDetectionTileRangeMax { get; set; } = 64;
 
 
 

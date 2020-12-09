@@ -7,9 +7,17 @@ using HamstarHelpers.Helpers.World;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
+		public static bool IsWithinSpawnRange( int tileX, int tileY ) {
+			// Underground and underworld only
+			return tileY >= WorldHelpers.RockLayerTopTileY;
+		}
+
+
+
+		////////////////
+
 		public override float SpawnChance( NPCSpawnInfo spawnInfo ) {
-			// Underground only
-			if( spawnInfo.spawnTileY < WorldHelpers.RockLayerTopTileY ) {
+			if( TricksterNPC.IsWithinSpawnRange(spawnInfo.spawnTileX, spawnInfo.spawnTileY) ) {
 				return 0f;
 			}
 

@@ -1,32 +1,31 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using HamstarHelpers.Helpers.DotNET.Extensions;
 using HamstarHelpers.Services.Maps;
-using Terraria.ID;
+using HamstarHelpers.Classes.DataStructures;
+
 
 namespace TheTrickster {
 	class TheTricksterWorld : ModWorld {
-		private IDictionary<int, int> _TricksterDefeatLocations = new ConcurrentDictionary<int, int>();
+		private ISet<(int, int)> _TricksterDefeatLocations = new HashSet<(int, int)>();
 
 
 		////////////////
 
 		public int TricksterDefeats { get; private set; } = 0;
 
-		public IReadOnlyDictionary<int, int> TricksterDefeatLocations { get; private set; }
+		public ISet<(int, int)> TricksterDefeatLocations { get; private set; }
 
 
 
 		////////////////
 
 		public TheTricksterWorld() : base() {
-			this.TricksterDefeatLocations = new ReadOnlyDictionary<int, int>( this._TricksterDefeatLocations );
+			this.TricksterDefeatLocations = new ReadOnlySet<(int, int)>( this._TricksterDefeatLocations );
 		}
 
 
@@ -49,7 +48,8 @@ namespace TheTrickster {
 				for( int i=0; i<this.TricksterDefeats; i++ ) {
 					int x = tag.GetInt( "trickster_defeat_x_" + i );
 					int y = tag.GetInt( "trickster_defeat_y_" + i );
-					this._TricksterDefeatLocations[ x ] = y;
+
+					this._TricksterDefeatLocations.Add( (x, y) );
 				}
 			}
 		}
@@ -83,7 +83,7 @@ namespace TheTrickster {
 					int x = reader.ReadInt32();
 					int y = reader.ReadInt32();
 
-					this._TricksterDefeatLocations[x] = y;
+					this._TricksterDefeatLocations.Add( (x, y) );
 				}
 			} catch { }
 		}
@@ -111,7 +111,7 @@ namespace TheTrickster {
 			int tileX = (int)( tricksterNpc.position.X / 16f );
 			int tileY = (int)( tricksterNpc.position.Y / 16f );
 
-			this._TricksterDefeatLocations[ tileX ] = tileY;
+			this._TricksterDefeatLocations.Add( (tileX, tileY) );
 
 			if( Main.netMode != NetmodeID.Server ) {
 				MapMarkers.AddFullScreenMapMarker(

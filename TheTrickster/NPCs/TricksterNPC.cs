@@ -7,11 +7,12 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		private bool IsAlerted = false;
 		private bool IsDefeated = false;
 
 
 		////////////////
+		
+		public bool IsAlerted { get; private set; }
 
 		public bool HasAttacked { get; private set; } = false;
 

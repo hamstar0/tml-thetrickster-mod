@@ -7,7 +7,7 @@ using Terraria.ModLoader;
 
 
 namespace TheTrickster {
-	public class TheTricksterMod : Mod {
+	public partial class TheTricksterMod : Mod {
 		public static string GithubUserName => "hamstar0";
 		public static string GithubProjectName => "tml-thetrickster-mod";
 
@@ -33,15 +33,28 @@ namespace TheTrickster {
 
 		public TheTricksterMod() {
 			TheTricksterMod.Instance = this;
+		}
+
+		////
+
+		public override void Load() {
+			TheTricksterConfig.Instance = ModContent.GetInstance<TheTricksterConfig>();
 
 			if( Main.netMode != NetmodeID.Server && !Main.dedServ ) {
 				this.MapIcon = ModContent.GetTexture( "TheTrickster/NPCs/TricksterIcon" );
 			}
 		}
 
+		public override void PostSetupContent() {
+			if( ModLoader.GetMod( "PKE Meter" ) != null ) {
+				TheTricksterMod.InitializePKE();
+			}
+		}
+
 		////
 
 		public override void Unload() {
+			TheTricksterConfig.Instance = null;
 			TheTricksterMod.Instance = null;
 		}
 
