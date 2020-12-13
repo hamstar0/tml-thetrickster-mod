@@ -9,7 +9,7 @@ namespace TheTrickster {
 	public partial class TheTricksterMod : Mod {
 		public static void InitializePKE() {
 			int timer = 0;
-			PKEMeter.PKEGauge gauge = PKEMeter.PKEMeterAPI.GetGauge();
+			PKEMeter.Logic.PKEGauge gauge = PKEMeter.PKEMeterAPI.GetGauge();
 			float lastGaugedTricksterPercent = 0f;
 			float lastFluctuationRate = 0f;
 
