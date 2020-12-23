@@ -37,26 +37,26 @@ namespace TheTrickster {
 			PKEMeter.PKEMeterAPI.SetMeterText( ( plr, pos, gauges ) => {
 				(string text, Color color) currText = meterTextFunc?.Invoke( plr, pos, gauges )
 					?? ("", Color.Transparent);
-				if( textTimer <= 0 && currText.text != "" ) {	// yield
+
+				textTimer--;
+
+				if( currText.text != "" ) {   // always yield
 					return currText;
 				}
 
-				if( gauges.y > 0.75f ) {
+				if( textTimer <= 0 && gauges.y > 0.75f ) {
 					textTimer = 60;
 				}
 
 				if( textTimer > 0 ) {
-					currText.color = Color.Yellow;
-					currText.color = currText.color * ( 0.5f + ( Main.rand.NextFloat() * 0.5f ) );
+					currText.color = Color.Yellow * ( 0.5f + ( Main.rand.NextFloat() * 0.5f ) );
 
-					if( Main.rand.NextFloat() < 0.99f ) {
+					if( Main.rand.NextFloat() < 0.9f ) {
 						currText.text = "CLASS VI TRANSDIM ELEVATED ORGANIC";
 					} else {
 						currText.text = "CLASS IX ULDTRADIM POST-MORTAL DEITY";
 					}
 				}
-
-				textTimer--;
 
 				return currText;
 			} );
