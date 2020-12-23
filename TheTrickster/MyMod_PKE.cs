@@ -8,10 +8,11 @@ using TheTrickster.NPCs;
 namespace TheTrickster {
 	public partial class TheTricksterMod : Mod {
 		public static void InitializePKE() {
-			int timer = 0;
+			PKEMeter.Logic.PKEText meterTextFunc = PKEMeter.PKEMeterAPI.GetMeterText();
 			PKEMeter.Logic.PKEGauge gauge = PKEMeter.PKEMeterAPI.GetGauge();
 			float lastGaugedTricksterPercent = 0f;
 			float lastFluctuationRate = 0f;
+			int timer = 0;
 
 			PKEMeter.PKEMeterAPI.SetGauge( ( plr, pos ) => {
 				(float b, float g, float y, float r) existingGauge = gauge?.Invoke( plr, pos )
@@ -27,6 +28,25 @@ namespace TheTrickster {
 				existingGauge.y = TheTricksterMod.ApplyFluctuation( lastGaugedTricksterPercent, lastFluctuationRate );
 
 				return existingGauge;
+			} );
+
+			PKEMeter.PKEMeterAPI.SetMeterText( ( plr, pos, gauges ) => {
+				(string text, Color color) currText = meterTextFunc?.Invoke( plr, pos, gauges )
+					?? ("", Color.Transparent);
+
+				if( gauges.r > 0.75f ) {
+				} else if( gauges.y > 0.75f ) {
+					currText.color = Color.Yellow;
+					if( Main.rand.NextFloat() < 0.99f ) {
+						currText.text = "CLASS VI TRANSDIM ELEVATED ORGANIC";
+					} else {
+						currText.text = "CLASS IX ULDTRADIM POST-MORTAL DEITY";
+					}
+				}
+
+				currText.color = currText.color * (0.5f + (Main.rand.NextFloat() * 0.5f));
+
+				return currText;
 			} );
 		}
 
