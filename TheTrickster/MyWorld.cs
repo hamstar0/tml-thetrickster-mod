@@ -115,10 +115,11 @@ namespace TheTrickster {
 
 			if( Main.netMode != NetmodeID.Server ) {
 				MapMarkers.AddFullScreenMapMarker(
-					tileX,
-					tileY,
-					"Trickster Defeat " + this.TricksterDefeats,
-					TheTricksterMod.Instance.MapIcon
+					tileX: tileX,
+					tileY: tileY,
+					id: "Trickster Defeat " + this.TricksterDefeats,
+					icon: TheTricksterMod.Instance.MapIcon,
+					scale: 1.5f
 				);
 			}
 		}
