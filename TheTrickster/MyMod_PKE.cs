@@ -2,6 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
+using HamstarHelpers.Helpers.Debug;
 using TheTrickster.NPCs;
 
 
@@ -10,16 +11,19 @@ namespace TheTrickster {
 		public static void InitializePKE() {
 			PKEMeter.Logic.PKEText meterTextFunc = PKEMeter.PKEMeterAPI.GetMeterText();
 			PKEMeter.Logic.PKEGauge gauge = PKEMeter.PKEMeterAPI.GetGauge();
+
 			float lastGaugedTricksterPercent = 0f;
 			float lastFluctuationRate = 0f;
-			int timer = 0;
+
+			int gaugeTimer = 0;
+			int textTimer = 0;
 
 			PKEMeter.PKEMeterAPI.SetGauge( ( plr, pos ) => {
 				(float b, float g, float y, float r) existingGauge = gauge?.Invoke( plr, pos )
 					?? (0f, 0f, 0f, 0f);
 
-				if( timer-- <= 0 ) {
-					timer = 10;
+				if( gaugeTimer-- <= 0 ) {
+					gaugeTimer = 10;
 					lastGaugedTricksterPercent = TheTricksterMod.GaugeTricksterPresence( pos, out lastFluctuationRate )
 						?? 0f;
 				}
@@ -33,10 +37,18 @@ namespace TheTrickster {
 			PKEMeter.PKEMeterAPI.SetMeterText( ( plr, pos, gauges ) => {
 				(string text, Color color) currText = meterTextFunc?.Invoke( plr, pos, gauges )
 					?? ("", Color.Transparent);
+				if( textTimer <= 0 && currText.text != "" ) {	// yield
+					return currText;
+				}
 
-				if( gauges.r > 0.75f ) {
-				} else if( gauges.y > 0.75f ) {
+				if( gauges.y > 0.75f ) {
+					textTimer = 60;
+				}
+
+				if( textTimer > 0 ) {
 					currText.color = Color.Yellow;
+					currText.color = currText.color * ( 0.5f + ( Main.rand.NextFloat() * 0.5f ) );
+
 					if( Main.rand.NextFloat() < 0.99f ) {
 						currText.text = "CLASS VI TRANSDIM ELEVATED ORGANIC";
 					} else {
@@ -44,7 +56,7 @@ namespace TheTrickster {
 					}
 				}
 
-				currText.color = currText.color * (0.5f + (Main.rand.NextFloat() * 0.5f));
+				textTimer--;
 
 				return currText;
 			} );
