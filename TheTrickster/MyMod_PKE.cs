@@ -8,7 +8,6 @@ using HamstarHelpers.Helpers.Debug;
 namespace TheTrickster {
 	public partial class TheTricksterMod : Mod {
 		public static void InitializePKE() {
-			PKEMeter.Logic.PKEText meterTextFunc = PKEMeter.PKEMeterAPI.GetMeterText();
 			PKEMeter.Logic.PKEGauge gauge = PKEMeter.PKEMeterAPI.GetGauge();
 
 			float lastGaugedTricksterPercent = 0f;
@@ -16,7 +15,6 @@ namespace TheTrickster {
 			bool isTricksterNear = false;
 
 			int gaugeTimer = 0;
-			int textTimer = 0;
 
 			//
 
@@ -37,32 +35,23 @@ namespace TheTrickster {
 				return existingGauge;
 			} );
 
+			PKEMeter.PKEMeterAPI.SetMeterText( "Trickster", ( plr, pos, gauges ) => {
+				string text = "";
+				Color color = Color.White;
+				float priority = 0f;
 
-			PKEMeter.PKEMeterAPI.SetMeterText( ( plr, pos, gauges ) => {
-				(string text, Color color) currText = meterTextFunc?.Invoke( plr, pos, gauges )
-					?? ("", Color.Transparent);
-
-				textTimer--;
-
-				if( !isTricksterNear && currText.text != "" ) {   // yield when no specific signals
-					return currText;
-				}
-
-				if( textTimer <= 0 && gauges.y > 0.75f ) {
-					textTimer = 60;
-				}
-
-				if( textTimer > 0 ) {
-					currText.color = Color.Yellow * ( 0.5f + ( Main.rand.NextFloat() * 0.5f ) );
+				if( isTricksterNear ) {
+					color = Color.Yellow * ( 0.5f + ( Main.rand.NextFloat() * 0.5f ) );
+					priority = 0.6f;
 
 					if( Main.rand.NextFloat() < 0.9f ) {
-						currText.text = "CLASS VI TRANSDIM ELEVATED ORGANIC";
+						text = "CLASS VI TRANSDIM ELEVATED ORGANIC";
 					} else {
-						currText.text = "CLASS IX ULDTRADIM POST-MORTAL DEITY";
+						text = "CLASS IX ULDTRADIM POST-MORTAL DEITY";
 					}
 				}
 
-				return currText;
+				return new PKEMeter.Logic.PKETextMessage( text, color, priority );
 			} );
 		}
 	}
