@@ -21,13 +21,13 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 
-			// Only one at a time
-			if( Main.npc.Any(n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>()) ) {
+			// Should have nearby NPCs
+			if( spawnInfo.player.activeNPCs < 3f ) {
 				return 0f;
 			}
 
-			// Should have nearby NPCs
-			if( spawnInfo.player.activeNPCs < 3f ) {
+			// Only one at a time
+			if( Main.npc.Any(n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>()) ) {
 				return 0f;
 			}
 

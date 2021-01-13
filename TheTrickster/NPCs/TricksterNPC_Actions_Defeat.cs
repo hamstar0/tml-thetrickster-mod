@@ -5,7 +5,6 @@ using Terraria.Utilities;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.DotNET.Extensions;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.Items;
 using HamstarHelpers.Helpers.TModLoader;
@@ -16,20 +15,20 @@ namespace TheTrickster.NPCs {
 		public static bool IsNearbyOtherTricksterDefeats( int tileX, int tileY ) {
 			var config = TheTricksterConfig.Instance;
 			var myworld = ModContent.GetInstance<TheTricksterWorld>();
-			int minDistSqr = config.Get<int>( nameof(config.MinTileSpawnDistanceAwayFromAnyPreviousDefeat) );
-			minDistSqr *= minDistSqr;
+			int minTileDist = config.Get<int>( nameof(config.MinTileSpawnDistanceAwayFromAnyPreviousDefeat) );
+			int minTileDistSqr = minTileDist * minTileDist;
 
 			foreach( (int dTileX, int dTileY) in myworld.TricksterDefeatLocations ) {
 				int diffX = tileX - dTileX;
 				int diffY = tileY - dTileY;
 				int diffSqr = (diffX * diffX) + (diffY * diffY);
 
-				if( diffSqr < minDistSqr ) {
-					return false;
+				if( diffSqr < minTileDistSqr ) {
+					return true;
 				}
 			}
 
-			return true;
+			return false;
 		}
 
 

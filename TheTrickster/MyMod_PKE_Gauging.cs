@@ -8,31 +8,22 @@ using TheTrickster.NPCs;
 
 namespace TheTrickster {
 	public partial class TheTricksterMod : Mod {
-		public static float? GaugeTricksterPresence( Vector2 worldPos, out float fluctuationRate, out bool isTricksterNear ) {
+		public static float GaugeTricksterPresence( Vector2 worldPos, out float fluctuationRate ) {
 			var config = TheTricksterConfig.Instance;
 			int maxTileRange = config.Get<int>( nameof( config.TricksterPKEDetectionTileRangeMax ) );
 			if( maxTileRange <= 0 ) {
 				fluctuationRate = 0f;
-				isTricksterNear = false;
-				return null;
+				return 0f;
 			}
 
 			int tileX = (int)worldPos.X / 16;
 			int tileY = (int)worldPos.Y / 16;
-			if( !TricksterNPC.IsWithinSpawnRange( tileX, tileY ) ) {
+			if( !TricksterNPC.IsWithinSpawnRange(tileX, tileY) ) {
 				fluctuationRate = 0f;
-				isTricksterNear = false;
-				return null;
-			}
-
-			if( TricksterNPC.IsNearbyOtherTricksterDefeats( tileX, tileY ) ) {
-				fluctuationRate = 0f;
-				isTricksterNear = false;
-				return null;
+				return 0f;
 			}
 
 			NPC nearest = TheTricksterMod.FindNearestTrickster( worldPos, maxTileRange );
-			isTricksterNear = nearest != null;
 
 			return TheTricksterMod.GaugeTrickstersNear( worldPos, maxTileRange, nearest, out fluctuationRate );
 		}
@@ -44,41 +35,37 @@ namespace TheTrickster {
 					NPC nearestTricksterNPC,
 					out float fluctuationRate ) {
 			float maxWldRange = maxTileRange * 16f;
-			float nearestNpcDist = (nearestTricksterNPC.Center - worldPos).Length();
+			float nearestNpcDist = maxWldRange + 1f;
+			
+			if( nearestTricksterNPC != null ) {
+				nearestNpcDist = (nearestTricksterNPC.Center - worldPos).Length();
+			}
 
 			float nearestPerc = (float)nearestNpcDist / (float)maxWldRange;
 			float gaugedPerc = Math.Max( 1f - nearestPerc, 0f );
 
-			var mynpc = (TricksterNPC)nearestTricksterNPC.modNPC;
-
 			if( nearestTricksterNPC != null ) {
+				var mynpc = (TricksterNPC)nearestTricksterNPC.modNPC;
+
 				// Apply 'is alerted' fluctuations
 				if( mynpc.IsAlerted ) {
 					fluctuationRate = 1f;
 				}
 				// Apply 'is lurking nearby' fluctuations
 				else {
-					fluctuationRate = 1f / 60f;
+					fluctuationRate = gaugedPerc;
 				}
 			}
 			// Apply 'is able to spawn' fluctuations
 			else {
-				fluctuationRate = 10f / 60f;
+				if( TricksterNPC.IsNearbyOtherTricksterDefeats( (int)(worldPos.X/16f), (int)(worldPos.Y/16) ) ) {
+					fluctuationRate = 1f / (60f * 3f);
+				} else {
+					fluctuationRate = 10f / 60f;
+				}
 			}
 
 			return gaugedPerc;
-		}
-
-
-		public static float ApplyFluctuation( float percent, float fluctuationRate ) {
-			if( Main.rand.NextFloat() < fluctuationRate ) {
-				return percent;
-			}
-
-			float fluctuation = 1f - percent;
-			fluctuation *= Main.rand.NextFloat();
-
-			return percent + fluctuation;
 		}
 
 
@@ -89,9 +76,9 @@ namespace TheTrickster {
 
 			int tricksterType = ModContent.NPCType<TricksterNPC>();
 
-			int maxRange = maxTileRange * 16;
-			int maxRangeSqr = maxRange * maxRange;
-			int nearestDistSqr = Int32.MaxValue;
+			int maxWldRange = maxTileRange * 16;
+			int maxWldRangeSqr = maxWldRange * maxWldRange;
+			int nearestWldDistSqr = Int32.MaxValue;
 
 			int maxNpcs = Main.npc.Length;
 			for( int i = 0; i < maxNpcs; i++ ) {
@@ -101,12 +88,12 @@ namespace TheTrickster {
 				}
 
 				int distSqr = (int)( worldPos - npc.Center ).LengthSquared();
-				if( distSqr >= maxRangeSqr ) {
+				if( distSqr >= maxWldRangeSqr ) {
 					continue;
 				}
 
-				if( distSqr < nearestDistSqr ) {
-					nearestDistSqr = distSqr;
+				if( distSqr < nearestWldDistSqr ) {
+					nearestWldDistSqr = distSqr;
 					nearestNpc = npc;
 				}
 			}

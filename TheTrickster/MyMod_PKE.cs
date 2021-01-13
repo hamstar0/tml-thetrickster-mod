@@ -12,7 +12,6 @@ namespace TheTrickster {
 
 			float lastGaugedTricksterPercent = 0f;
 			float lastFluctuationRate = 0f;
-			bool isTricksterNear = false;
 
 			int gaugeTimer = 0;
 
@@ -25,12 +24,13 @@ namespace TheTrickster {
 				if( gaugeTimer-- <= 0 ) {
 					gaugeTimer = 10;
 					lastGaugedTricksterPercent = TheTricksterMod.GaugeTricksterPresence(
-						pos, out lastFluctuationRate, out isTricksterNear
-					) ?? 0f;
+						worldPos: pos,
+						fluctuationRate: out lastFluctuationRate
+					);
 				}
 
 				// Yellow channel
-				existingGauge.y = TheTricksterMod.ApplyFluctuation( lastGaugedTricksterPercent, lastFluctuationRate );
+				existingGauge.y = TheTricksterMod.GetFluctuatedGaugeAmount( lastGaugedTricksterPercent, lastFluctuationRate );
 
 				return existingGauge;
 			} );
@@ -40,19 +40,34 @@ namespace TheTrickster {
 				Color color = Color.White;
 				float priority = 0f;
 
-				if( isTricksterNear ) {
+				if( lastGaugedTricksterPercent > 0f ) {
 					color = Color.Yellow * ( 0.5f + ( Main.rand.NextFloat() * 0.5f ) );
 					priority = 0.6f;
 
 					if( Main.rand.NextFloat() < 0.9f ) {
 						text = "CLASS VI TRANSDIM ELEVATED ORGANIC";
 					} else {
-						text = "CLASS IX ULDTRADIM POST-MORTAL DEITY";
+						text = "CLASS IX ULTRADIM POST-MORTAL DEITY";
 					}
 				}
 
 				return new PKEMeter.Logic.PKETextMessage( text, color, priority );
 			} );
+		}
+
+
+		////////////////
+
+		public static float GetFluctuatedGaugeAmount( float percent, float fluctuationRate ) {
+			if( Main.rand.NextFloat() < fluctuationRate ) {
+				return percent;
+			}
+
+			float rand = Main.rand.NextFloat();
+			float fluctuation = 1f - percent;
+			fluctuation *= rand * rand;
+
+			return percent + fluctuation;
 		}
 	}
 }
