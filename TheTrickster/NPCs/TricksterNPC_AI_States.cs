@@ -22,7 +22,7 @@ namespace TheTrickster.NPCs {
 			case TricksterState.Attack:
 				var myworld = ModContent.GetInstance<TheTricksterWorld>();
 				int attackTicksLessPer = config.Get<int>( nameof(TheTricksterConfig.AttackDurationTicksReducedPerDefeat) );
-				int reducedChargeTime = myworld.TricksterDefeats * attackTicksLessPer;
+				int reducedChargeTime = myworld.TricksterDefeatLocations.Count * attackTicksLessPer;
 				int attackDuration = config.Get<int>( nameof(TheTricksterConfig.AttackDurationTicks) );
 				int chargeTime = attackDuration - reducedChargeTime;
 				

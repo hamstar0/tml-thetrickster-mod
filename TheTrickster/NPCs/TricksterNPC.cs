@@ -80,7 +80,7 @@ namespace TheTrickster.NPCs {
 
 				if( myworld != null ) {
 					int lifeAdded = config.Get<int>( nameof(TheTricksterConfig.StatLifeAddedEachDefeat) );
-					addedHp = myworld.TricksterDefeats * lifeAdded;
+					addedHp = myworld.TricksterDefeatLocations.Count * lifeAdded;
 				}
 			}
 

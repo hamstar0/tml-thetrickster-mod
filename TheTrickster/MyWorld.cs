@@ -16,8 +16,6 @@ namespace TheTrickster {
 
 		////////////////
 
-		public int TricksterDefeats { get; private set; } = 0;
-
 		public ISet<(int, int)> TricksterDefeatLocations { get; private set; }
 
 
@@ -33,7 +31,6 @@ namespace TheTrickster {
 
 		public override void Initialize() {
 			this._TricksterDefeatLocations.Clear();
-			this.TricksterDefeats = 0;
 		}
 
 		////
@@ -42,10 +39,9 @@ namespace TheTrickster {
 			this._TricksterDefeatLocations.Clear();
 
 			if( tag.ContainsKey("trickster_defeats") ) {
-				this.TricksterDefeats = tag.GetInt( "trickster_defeats" );
-			}
-			if( tag.ContainsKey("trickster_defeat_x_0") ) {
-				for( int i=0; i<this.TricksterDefeats; i++ ) {
+				int defeats = tag.GetInt( "trickster_defeats" );
+
+				for( int i=0; i<defeats; i++ ) {
 					int x = tag.GetInt( "trickster_defeat_x_" + i );
 					int y = tag.GetInt( "trickster_defeat_y_" + i );
 
@@ -56,7 +52,7 @@ namespace TheTrickster {
 
 		public override TagCompound Save() {
 			var tag = new TagCompound {
-				{ "trickster_defeats", this.TricksterDefeats }
+				{ "trickster_defeats", this.TricksterDefeatLocations.Count }
 			};
 
 			int i = 0;
@@ -75,11 +71,11 @@ namespace TheTrickster {
 		public override void NetReceive( BinaryReader reader ) {
 			if( reader == null ) { return; }
 			try {
-				this.TricksterDefeats = reader.ReadInt32();
+				int defeats = reader.ReadInt32();
 
 				this._TricksterDefeatLocations.Clear();
 
-				for( int i = 0; i < this.TricksterDefeats; i++ ) {
+				for( int i = 0; i < defeats; i++ ) {
 					int x = reader.ReadInt32();
 					int y = reader.ReadInt32();
 
@@ -91,13 +87,11 @@ namespace TheTrickster {
 		public override void NetSend( BinaryWriter writer ) {
 			if( writer == null ) { return; }
 			try {
-				writer.Write( (int)this.TricksterDefeats );
+				writer.Write( (int)this.TricksterDefeatLocations.Count );
 
-				int i = 0;
 				foreach( (int tileX, int tileY) in this._TricksterDefeatLocations ) {
 					writer.Write( (int)tileX );
 					writer.Write( (int)tileY );
-					i++;
 				}
 			} catch { }
 		}
@@ -106,8 +100,6 @@ namespace TheTrickster {
 		////////////////
 
 		public void AddTricksterDefeat( NPC tricksterNpc ) {
-			this.TricksterDefeats += 1;
-
 			int tileX = (int)( tricksterNpc.position.X / 16f );
 			int tileY = (int)( tricksterNpc.position.Y / 16f );
 
@@ -115,7 +107,7 @@ namespace TheTrickster {
 
 			if( Main.netMode != NetmodeID.Server ) {
 				MapMarkers.SetFullScreenMapMarker(
-					id: "Trickster Defeat " + this.TricksterDefeats,
+					id: "Trickster Defeat " + this.TricksterDefeatLocations.Count,
 					tileX: tileX,
 					tileY: tileY,
 					icon: TheTricksterMod.Instance.MapIcon,
