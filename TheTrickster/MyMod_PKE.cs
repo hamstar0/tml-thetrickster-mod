@@ -35,6 +35,8 @@ namespace TheTrickster {
 				return existingGauge;
 			} );
 
+			//
+
 			PKEMeter.PKEMeterAPI.SetMeterText( "Trickster", ( plr, pos, gauges ) => {
 				string text = "";
 				Color color = Color.White;
@@ -59,7 +61,8 @@ namespace TheTrickster {
 		////////////////
 
 		public static float GetFluctuatedGaugeAmount( float percent, float fluctuationRate ) {
-			if( Main.rand.NextFloat() < fluctuationRate ) {
+			// No fluctuation this time?
+			if( Main.rand.NextFloat() >= fluctuationRate ) {
 				return percent;
 			}
 

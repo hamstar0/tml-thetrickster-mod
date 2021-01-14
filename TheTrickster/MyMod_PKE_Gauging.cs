@@ -59,7 +59,8 @@ namespace TheTrickster {
 			// Apply 'is able to spawn' fluctuations
 			else {
 				if( TricksterNPC.IsNearbyOtherTricksterDefeats( (int)(worldPos.X/16f), (int)(worldPos.Y/16) ) ) {
-					fluctuationRate = 1f / (60f * 3f);
+					gaugedPerc = 0f;
+					fluctuationRate = 0f;
 				} else {
 					fluctuationRate = 10f / 60f;
 				}
