@@ -5,13 +5,14 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using HamstarHelpers.Services.Maps;
 using HamstarHelpers.Classes.DataStructures;
+using HamstarHelpers.Helpers.Debug;
+using HamstarHelpers.Services.Maps;
 
 
 namespace TheTrickster {
 	class TheTricksterWorld : ModWorld {
-		private ISet<(int, int)> _TricksterDefeatLocations = new HashSet<(int, int)>();
+		private ISet<(int, int)> _TricksterDefeatLocations;
 
 
 		////////////////
@@ -23,6 +24,7 @@ namespace TheTrickster {
 		////////////////
 
 		public TheTricksterWorld() : base() {
+			this._TricksterDefeatLocations = new HashSet<(int, int)>();
 			this.TricksterDefeatLocations = new ReadOnlySet<(int, int)>( this._TricksterDefeatLocations );
 		}
 
@@ -30,7 +32,7 @@ namespace TheTrickster {
 		////////////////
 
 		public override void Initialize() {
-			this._TricksterDefeatLocations.Clear();
+			//this._TricksterDefeatLocations.Clear();
 		}
 
 		////
@@ -46,13 +48,16 @@ namespace TheTrickster {
 					int y = tag.GetInt( "trickster_defeat_y_" + i );
 
 					this._TricksterDefeatLocations.Add( (x, y) );
+
+					this.AddTricksterDefeatToMap( x, y );
+					//LogHelpers.Log( "Loaded "+(i+1)+" (of "+defeats+") victories over Trickster ("+x+", "+y+")." );
 				}
 			}
 		}
 
 		public override TagCompound Save() {
 			var tag = new TagCompound {
-				{ "trickster_defeats", this.TricksterDefeatLocations.Count }
+				{ "trickster_defeats", this._TricksterDefeatLocations.Count }
 			};
 
 			int i = 0;
@@ -61,6 +66,8 @@ namespace TheTrickster {
 				tag["trickster_defeat_y_"+i] = tileY;
 				i++;
 			}
+
+			LogHelpers.Log( "Saved "+this._TricksterDefeatLocations.Count+" victories over Trickster." );
 
 			return tag;
 		}
@@ -87,7 +94,7 @@ namespace TheTrickster {
 		public override void NetSend( BinaryWriter writer ) {
 			if( writer == null ) { return; }
 			try {
-				writer.Write( (int)this.TricksterDefeatLocations.Count );
+				writer.Write( (int)this._TricksterDefeatLocations.Count );
 
 				foreach( (int tileX, int tileY) in this._TricksterDefeatLocations ) {
 					writer.Write( (int)tileX );
@@ -105,6 +112,12 @@ namespace TheTrickster {
 
 			this._TricksterDefeatLocations.Add( (tileX, tileY) );
 
+			this.AddTricksterDefeatToMap( tileX, tileY );
+		}
+
+		////
+
+		private void AddTricksterDefeatToMap( int tileX, int tileY ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				MapMarkers.SetFullScreenMapMarker(
 					id: "Trickster Defeat " + this.TricksterDefeatLocations.Count,

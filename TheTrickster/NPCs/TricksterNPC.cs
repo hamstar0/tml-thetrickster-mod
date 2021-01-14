@@ -111,19 +111,24 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
+		public override bool PreAI() {
+			Player targPlr = this.TargetPlayer;
+
+			if( targPlr == null ) {
+				this.npc.target = this.npc.FindClosestPlayer();
+			} else if( targPlr.dead || (targPlr.Center - this.npc.Center).LengthSquared() > 10240000 ) {  // 200 tiles
+				this.npc.target = this.npc.FindClosestPlayer();
+			}
+
+			return this.TargetPlayer != null;
+		}
+
 		public override void AI() {
 			bool isNewlyAlerted = false;
 
 			if( !this.IsAlerted ) {
 				this.IsAlerted = true;
 				isNewlyAlerted = true;
-			}
-
-			Player targPlr = this.TargetPlayer;
-			if( targPlr == null || targPlr.dead ) {
-				if( Vector2.DistanceSquared( targPlr.Center, this.npc.Center ) > 10240000 ) {  // 200 tiles
-					this.npc.target = this.npc.FindClosestPlayer();
-				}
 			}
 
 			// Resist being knocked around when on the ground
