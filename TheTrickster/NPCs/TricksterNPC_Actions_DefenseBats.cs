@@ -12,13 +12,15 @@ using TheTrickster.Protocols;
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public void DeployDefenseBats() {
-			if( Main.netMode != 1 ) {
-				for( int i=0; i<2; i++ ) {
+			if( Main.netMode != NetmodeID.MultiplayerClient ) {
+				int maxBats = Main.rand.Next( 2 );
+
+				for( int i=0; i<maxBats; i++ ) {
 					this.DeployDefenseBat();
 				}
 			}
 
-			if( Main.netMode != 2 ) {
+			if( Main.netMode != NetmodeID.Server ) {
 				ParticleFxHelpers.MakeDustCloud( this.npc.Center, 3, 0.3f, 2f );
 			}
 		}

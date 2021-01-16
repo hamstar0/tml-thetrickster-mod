@@ -26,6 +26,15 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 
+			/*spawnInfo.player.ZoneJungle ||*/
+			if( spawnInfo.player.ZoneHoly || spawnInfo.player.ZoneCorrupt || spawnInfo.player.ZoneCrimson ) {
+				return 0f;
+			}
+
+			if( spawnInfo.player.ZoneSandstorm ) {
+				return 0f;
+			}
+
 			// Only one at a time
 			if( Main.npc.Any(n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>()) ) {
 				return 0f;

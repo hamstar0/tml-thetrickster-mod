@@ -123,6 +123,7 @@ namespace TheTrickster.NPCs {
 			return this.TargetPlayer != null;
 		}
 
+
 		public override void AI() {
 			bool isNewlyAlerted = false;
 
@@ -147,7 +148,11 @@ namespace TheTrickster.NPCs {
 
 		public override Color? GetAlpha( Color drawColor ) {
 			if( this.State == TricksterState.Lurk ) {
-				return drawColor * 0.15f;
+				float scale = Main.rand.NextFloat();
+				scale = (float)Math.Pow( scale, 30 );
+				scale = 0.15f + (0.35f * scale);
+
+				return drawColor * scale;
 			}
 			return base.GetAlpha( drawColor );
 		}

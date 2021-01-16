@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.Utilities;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
@@ -65,11 +66,13 @@ namespace TheTrickster.NPCs {
 				}
 			}
 
-			if( Main.netMode != 1 ) {
-				var drops = TheTricksterConfig.Instance.Get<ItemDefinition>( nameof(TheTricksterConfig.DropsOnDefeat) );
-				int itemType = drops?.Type ?? -1;
-				if( itemType != -1 ) {
-					ItemHelpers.CreateItem( this.npc.position, itemType, 1, 24, 24 );
+			if( Main.netMode != NetmodeID.MultiplayerClient ) {
+				var config = TheTricksterConfig.Instance;
+				var dropItemDef = config.Get<ItemDefinition>( nameof(config.DropsOnDefeat) );
+
+				int dropItemType = dropItemDef?.Type ?? -1;
+				if( dropItemType != -1 ) {
+					ItemHelpers.CreateItem( this.npc.position, dropItemType, 1, 24, 24 );
 				}
 			}
 
