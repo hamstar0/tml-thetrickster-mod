@@ -10,12 +10,18 @@ namespace TheTrickster {
 		[Range( 0f, 10f )]
 		[DefaultValue( 0.04f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float SpawnChance { get; set; } = 0.04f;	//0.02?
+		public float SpawnChanceAboveGround { get; set; } = 0.04f;
+		
+		[Range( 0f, 10f )]
+		[DefaultValue( 0.02f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float SpawnChanceUnderGround { get; set; } = 0.02f;
 
+		//
 
-		[Range( 0, 4096 )]
-		[DefaultValue( 96 )]
-		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 96;
+		[Range( 0, 8192 )]
+		[DefaultValue( 160 )]
+		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 160;
 
 
 		//
@@ -29,8 +35,8 @@ namespace TheTrickster {
 		public int StatLifeAddedEachDefeat { get; set; } = 1;
 
 		[Range( 0, 100000 )]
-		[DefaultValue( 15 )]
-		public int StatLifeMax { get; set; } = 15;
+		[DefaultValue( 13 )]
+		public int StatLifeMax { get; set; } = 13;
 
 		[Range( 0, 999999 )]
 		[DefaultValue( 999999 )]

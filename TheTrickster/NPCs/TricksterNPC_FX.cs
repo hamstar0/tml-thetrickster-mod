@@ -16,17 +16,19 @@ namespace TheTrickster.NPCs {
 				this.RunFX_Attack( isNewlyAlerted );
 			} else {
 				this.RunFX_UnAttack( isNewlyAlerted );
-
-				if( this.State == TricksterState.Lurk ) {
-					this.RunFX_Lurk( isNewlyAlerted );
-				}
 			}
 		}
 
 
 		////////////////
 		
-		private void RunFX_Lurk( bool isNewlyAlerted ) { }
+		private Color GetLurkDrawColor( Color drawColor ) {
+			float scale = Main.rand.NextFloat();
+			scale = (float)Math.Pow( scale, 30 );
+			scale = 0.25f + (0.55f * scale);
+
+			return drawColor * scale;
+		}
 
 
 		////////////////

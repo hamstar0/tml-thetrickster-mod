@@ -55,7 +55,11 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 
-			return TheTricksterConfig.Instance.Get<float>( nameof(TheTricksterConfig.SpawnChance) );
+			if( tileY < WorldHelpers.SurfaceLayerBottomTileY ) {
+				return TheTricksterConfig.Instance.Get<float>( nameof(TheTricksterConfig.SpawnChanceAboveGround) );
+			} else {
+				return TheTricksterConfig.Instance.Get<float>( nameof(TheTricksterConfig.SpawnChanceUnderGround) );
+			}
 		}
 
 

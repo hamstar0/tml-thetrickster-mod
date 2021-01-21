@@ -148,11 +148,7 @@ namespace TheTrickster.NPCs {
 
 		public override Color? GetAlpha( Color drawColor ) {
 			if( this.State == TricksterState.Lurk ) {
-				float scale = Main.rand.NextFloat();
-				scale = (float)Math.Pow( scale, 30 );
-				scale = 0.15f + (0.35f * scale);
-
-				return drawColor * scale;
+				return this.GetLurkDrawColor( drawColor );
 			}
 			return base.GetAlpha( drawColor );
 		}

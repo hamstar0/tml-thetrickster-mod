@@ -28,8 +28,8 @@ namespace TheTrickster {
 		public int AttackDurationTicksReducedPerDefeat { get; set; } = 15;
 
 		[Range( 1, 60 * 60 * 60 )]
-		[DefaultValue( 60 * 2 )]
-		public int AttackDurationTicksMinimum { get; set; } = 60 * 2;
+		[DefaultValue( (int)(60f * 2.5f) )]
+		public int AttackDurationTicksMinimum { get; set; } = (int)(60f * 2.5f);
 
 		[Range( 0, 60 * 60 * 60 )]
 		[DefaultValue( (int)( 60f * 1.5f ) )]
@@ -49,8 +49,8 @@ namespace TheTrickster {
 		public int MaxDodgeRadius { get; set; } = 44 * 16;
 
 		[Range( 60, 60 * 60 * 60 )]
-		[DefaultValue( 60 * 15 )]
-		public int InvulnTickDuration { get; set; } = 60 * 15;
+		[DefaultValue( 60 * 10 )]
+		public int InvulnTickDuration { get; set; } = 60 * 10;
 
 
 		[Range( 1, 100 )]
