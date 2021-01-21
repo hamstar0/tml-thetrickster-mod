@@ -45,10 +45,11 @@ namespace TheTrickster.NPCs {
 				Main.rand.NextFloat() - 0.5f
 			) * 8f;
 
+			var config = TheTricksterConfig.Instance;
 			var mynpc = npc.GetGlobalNPC<TheTricksterGlobalNPC>();
-			mynpc.IsTricksterBat = true;
+			mynpc.TricksterBatDurationTicks = config.Get<int>( nameof(config.TricksterDefensiveBatTickDuration) );
 
-			if( Main.netMode == 2 ) {
+			if( Main.netMode == NetmodeID.Server ) {
 				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
 				TricksterBatProtocol.Broadcast( npcWho );
 			}

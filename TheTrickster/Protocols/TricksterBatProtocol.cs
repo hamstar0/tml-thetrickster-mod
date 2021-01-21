@@ -46,8 +46,9 @@ namespace TheTrickster.Protocols {
 				return;
 			}
 
+			var config = TheTricksterConfig.Instance;
 			var mynpc = npc.GetGlobalNPC<TheTricksterGlobalNPC>();
-			mynpc.IsTricksterBat = true;
+			mynpc.TricksterBatDurationTicks = config.Get<int>( nameof(config.TricksterDefensiveBatTickDuration) );
 		}
 
 		protected override void ReceiveOnServer( int fromWho ) {

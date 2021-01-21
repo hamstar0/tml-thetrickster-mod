@@ -1,16 +1,17 @@
 ﻿using System;
 using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
 using HamstarHelpers.Classes.Errors;
 using HamstarHelpers.Classes.Protocols.Packet.Interfaces;
 using HamstarHelpers.Helpers.Debug;
-using Terraria.ModLoader;
 using TheTrickster.NPCs;
 
 
 namespace TheTrickster.Protocols {
 	class TricksterStealProtocol : PacketProtocolBroadcast {
 		public static void Broadcast( int npcWho, int itemWho ) {
-			if( Main.netMode != 2 ) {
+			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModHelpersException("Not server");
 			}
 
@@ -59,6 +60,7 @@ namespace TheTrickster.Protocols {
 			var myitem = item.GetGlobalItem<TheTricksterGlobalItem>();
 			myitem.IsStolenBy = this.NpcWho;
 		}
+
 
 		protected override void ReceiveOnServer( int fromWho ) {
 			throw new NotImplementedException();

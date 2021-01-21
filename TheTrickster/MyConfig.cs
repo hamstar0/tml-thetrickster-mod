@@ -29,6 +29,8 @@ namespace TheTrickster {
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
 		public float SpawnChance { get; set; } = 0.04f;	//0.02?
 
+		//
+
 		[Range( 1, 10000 )]
 		[DefaultValue( 4 )]
 		public int StatInitialLife { get; set; } = 4;
@@ -57,8 +59,8 @@ namespace TheTrickster {
 		public int IdleDurationTicks { get; set; } = 60 * 2;
 		
 		[Range( 1, 60 * 60 * 60 )]
-		[DefaultValue( 60 * 20 )]
-		public int LurkDurationTicks { get; set; } = 60 * 20;
+		[DefaultValue( 60 * 30 )]
+		public int LurkDurationTicks { get; set; } = 60 * 30;
 
 		[Range( 1, 60 * 60 * 60 )]
 		[DefaultValue( (int)(60f * 5.5f) )]
@@ -97,6 +99,10 @@ namespace TheTrickster {
 		[Range( 1, 100 )]
 		[DefaultValue( 1 )]
 		public int HitsBeforeBlink { get; set; } = 1;
+
+		[Range( 2, 60 * 60 * 10 )]
+		[DefaultValue( 60 * 10 )]
+		public int TricksterDefensiveBatTickDuration { get; set; } = 60 * 10;
 
 		//[Range( 0, 100 )]
 		//[DefaultValue( 2 )]

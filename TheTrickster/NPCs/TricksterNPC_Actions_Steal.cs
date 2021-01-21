@@ -27,8 +27,15 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( player.whoAmI == Main.myPlayer ) {
+				string itemDesc = item.HoverName;
+				if( item.stack > 1 ) {
+					itemDesc = item.stack+" "+itemDesc+"s";
+				} else {
+					itemDesc = "A "+itemDesc;
+				}
+
 				Main.PlaySound( SoundID.Item14, this.npc.Center );
-				Main.NewText( item.HoverName + " was stolen from your inventory!", Color.Red );
+				Main.NewText( "Oh no! "+itemDesc+" was stolen from your inventory!", Color.OrangeRed );
 
 				TheTricksterMod.Instance.DisplayFlash();
 			}
@@ -36,7 +43,7 @@ namespace TheTrickster.NPCs {
 			var myitem = item.GetGlobalItem<TheTricksterGlobalItem>();
 			myitem.IsStolenBy = this.npc.whoAmI;
 
-			if( Main.netMode == 2 ) {
+			if( Main.netMode == NetmodeID.Server ) {
 				TricksterStealProtocol.Broadcast( this.npc.whoAmI, itemIdx );
 			}
 

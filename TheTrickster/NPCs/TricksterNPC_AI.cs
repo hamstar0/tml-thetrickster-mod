@@ -32,6 +32,7 @@ namespace TheTrickster.NPCs {
 				this.RunAIDecision( decision );
 				return;
 			}
+
 			if( !this.CanAIAct(out decision) ) {
 				if( !this.RunAIDecision(decision) ) {
 					this.RunAIPassive();

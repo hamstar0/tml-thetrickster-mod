@@ -29,7 +29,7 @@ namespace TheTrickster.NPCs {
 
 				if( Vector2.DistanceSquared(otherNpc.Center, this.npc.Center) < radiusSqr ) {
 					var mynpc = otherNpc.GetGlobalNPC<TheTricksterGlobalNPC>();
-					if( mynpc.IsTricksterBat ) {
+					if( mynpc.TricksterBatDurationTicks > 0 ) {
 						continue;
 					}
 

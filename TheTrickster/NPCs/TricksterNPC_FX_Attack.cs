@@ -100,7 +100,7 @@ namespace TheTrickster.NPCs {
 				this.EncounterFX();
 			}*/
 
-			float percent = this.ElapsedStateTicks / (float)this.GetCurrentStateTickDuration();
+			float percent = (float)this.ElapsedStateTicks / (float)this.GetCurrentStateTickDuration();
 
 			if( this.AttackChargeSoundInstance == null || this.AttackChargeSoundInstance.State != SoundState.Playing ) {
 				/*float distScale = 1f - (Vector2.Distance( Main.LocalPlayer.Center, this.npc.Center ) / 1600f);

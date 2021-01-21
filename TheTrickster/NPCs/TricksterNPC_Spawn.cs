@@ -17,7 +17,9 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public override float SpawnChance( NPCSpawnInfo spawnInfo ) {
-			if( TricksterNPC.IsWithinSpawnRange(spawnInfo.spawnTileX, spawnInfo.spawnTileY) ) {
+			int tileX = spawnInfo.spawnTileX;
+			int tileY = spawnInfo.spawnTileY;
+			if( TricksterNPC.IsWithinSpawnRange(tileX, tileY) ) {
 				return 0f;
 			}
 
@@ -26,13 +28,22 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 
+			// "Normal" biomes only
 			/*spawnInfo.player.ZoneJungle ||*/
 			if( spawnInfo.player.ZoneHoly || spawnInfo.player.ZoneCorrupt || spawnInfo.player.ZoneCrimson ) {
 				return 0f;
 			}
 
+			// No sandstorms
 			if( spawnInfo.player.ZoneSandstorm ) {
 				return 0f;
+			}
+
+			// If on surface, only spawn where there's background walls
+			if( tileY < WorldHelpers.SurfaceLayerBottomTileY ) {
+				if( (Main.tile[tileX, tileY]?.wall ?? 0) == 0 ) {
+					return 0f;
+				}
 			}
 
 			// Only one at a time
@@ -40,7 +51,7 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 
-			if( TricksterNPC.IsNearbyOtherTricksterDefeats(spawnInfo.spawnTileX, spawnInfo.spawnTileY) ) {
+			if( TricksterNPC.IsNearbyOtherTricksterDefeats(tileX, tileY) ) {
 				return 0f;
 			}
 
