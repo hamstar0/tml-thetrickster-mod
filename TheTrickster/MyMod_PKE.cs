@@ -8,7 +8,7 @@ using HamstarHelpers.Helpers.Debug;
 namespace TheTrickster {
 	public partial class TheTricksterMod : Mod {
 		public static void InitializePKE() {
-			PKEMeter.Logic.PKEGauge gauge = PKEMeter.PKEMeterAPI.GetGauge();
+			PKEMeter.Logic.PKEGaugesGetter gauge = PKEMeter.PKEMeterAPI.GetGauge();
 
 			float lastGaugedTricksterPercent = 0f;
 			float lastFluctuationRate = 0f;
@@ -18,8 +18,8 @@ namespace TheTrickster {
 			//
 
 			PKEMeter.PKEMeterAPI.SetGauge( ( plr, pos ) => {
-				(float b, float g, float y, float r) existingGauge = gauge?.Invoke( plr, pos )
-					?? (0f, 0f, 0f, 0f);
+				PKEMeter.Logic.PKEGaugeValues existingGauge = gauge?.Invoke( plr, pos )
+					?? new PKEMeter.Logic.PKEGaugeValues( 0f, 0f, 0f, 0f);
 
 				if( gaugeTimer-- <= 0 ) {
 					gaugeTimer = 10;
@@ -30,7 +30,10 @@ namespace TheTrickster {
 				}
 
 				// Yellow channel
-				existingGauge.y = TheTricksterMod.GetFluctuatedGaugeAmount( lastGaugedTricksterPercent, lastFluctuationRate );
+				existingGauge.YellowPercent = TheTricksterMod.GetFluctuatedGaugeAmount(
+					lastGaugedTricksterPercent,
+					lastFluctuationRate
+				);
 
 				return existingGauge;
 			} );
@@ -53,8 +56,10 @@ namespace TheTrickster {
 					}
 				}
 
-				return new PKEMeter.Logic.PKETextMessage( "YELLOW: SPECIMEN", text, color, priority );
+				return new PKEMeter.Logic.PKETextMessage( text, color, priority );
 			} );
+
+			PKEMeter.PKEMeterAPI.SetPKEYellowTooltip( () => "SPECIMEN" );
 		}
 
 
