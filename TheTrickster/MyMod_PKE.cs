@@ -53,7 +53,7 @@ namespace TheTrickster {
 					}
 				}
 
-				return new PKEMeter.Logic.PKETextMessage( text, color, priority );
+				return new PKEMeter.Logic.PKETextMessage( "YELLOW: SPECIMEN", text, color, priority );
 			} );
 		}
 
