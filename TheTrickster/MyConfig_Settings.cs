@@ -13,15 +13,15 @@ namespace TheTrickster {
 		public float SpawnChanceAboveGround { get; set; } = 0.04f;
 		
 		[Range( 0f, 10f )]
-		[DefaultValue( 0.02f )]
+		[DefaultValue( 0.03f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float SpawnChanceUnderGround { get; set; } = 0.02f;
+		public float SpawnChanceUnderGround { get; set; } = 0.03f;
 
 		//
 
 		[Range( 0, 8192 )]
-		[DefaultValue( 160 )]
-		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 160;
+		[DefaultValue( 128 )]
+		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 128;
 
 
 		//
