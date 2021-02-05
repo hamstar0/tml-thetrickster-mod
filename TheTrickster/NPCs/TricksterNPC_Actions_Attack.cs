@@ -26,16 +26,22 @@ namespace TheTrickster.NPCs {
 				if( otherNpc.whoAmI == this.npc.whoAmI || otherNpc.type == this.npc.type ) {
 					continue;
 				}
-
-				if( Vector2.DistanceSquared(otherNpc.Center, this.npc.Center) < radiusSqr ) {
-					var mynpc = otherNpc.GetGlobalNPC<TheTricksterGlobalNPC>();
-					if( mynpc.TricksterBatDurationTicks > 0 ) {
-						continue;
-					}
-
-					int invulDur = config.Get<int>( nameof(TheTricksterConfig.InvulnTickDuration) );
-					otherNpc.AddBuff( invulnBuffType, invulDur );
+				if( Vector2.DistanceSquared(otherNpc.Center, this.npc.Center) >= radiusSqr ) {
+					continue;
 				}
+				var mynpc = otherNpc.GetGlobalNPC<TheTricksterGlobalNPC>();
+				if( mynpc.TricksterBatDurationTicks > 0 ) {
+					continue;
+				}
+
+				int invulDur = config.Get<int>( nameof(TheTricksterConfig.InvulnTickDuration) );
+
+				// Let's not make bats *that* evil!
+				if( npc.aiStyle == 14 ) {
+					invulDur = (invulDur * 3) / 4;
+				}
+
+				otherNpc.AddBuff( invulnBuffType, invulDur );
 			}
 		}
 	}
