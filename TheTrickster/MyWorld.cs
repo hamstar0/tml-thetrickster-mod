@@ -33,7 +33,7 @@ namespace TheTrickster {
 		////////////////
 
 		public override void Initialize() {
-			//this._TricksterDefeatLocations.Clear();
+			this._TricksterDefeatLocations.Clear();
 		}
 
 		////
