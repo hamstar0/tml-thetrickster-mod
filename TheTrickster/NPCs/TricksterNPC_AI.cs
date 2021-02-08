@@ -36,8 +36,9 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			this.RunAIStateFinish();
+			this.RunAI_States_Finish();
 		}
+
 
 		////
 
@@ -56,13 +57,28 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( !this.RunAI_Decision( decision ) ) {
-				this.RunAIPassive();
+				this.RunAI_States();
 			}
 
 			return false;
 		}
 
 		////
+
+		private bool RunAI_Decision( TricksterDecision decision ) {
+			switch( decision ) {
+			case TricksterDecision.Flee:
+				this.FleeAction();
+				return true;
+				//case TricksterDecision.Laugh:
+				//	this.EncounterFX();
+				//	return true;
+			}
+			return false;
+		}
+
+
+		////////////////
 
 		private bool CanAIContinue( out TricksterDecision decision ) {
 			if( this.State == TricksterState.Attack ) {
@@ -107,59 +123,6 @@ namespace TheTrickster.NPCs {
 
 			action = TricksterDecision.None;
 			return true;
-		}
-
-		////
-
-		private bool RunAI_Decision( TricksterDecision decision ) {
-			switch( decision ) {
-			case TricksterDecision.Flee:
-				this.FleeAction();
-				return true;
-				//case TricksterDecision.Laugh:
-				//	this.EncounterFX();
-				//	return true;
-			}
-			return false;
-		}
-
-
-		////////////////
-
-		private void RunAIPassive() {
-			switch( this.State ) {
-			case TricksterState.Lurk:
-				this.RunLurkPassiveAI();
-				break;
-			case TricksterState.Attack:
-				this.AttackChargingSideEffects();
-				break;
-			}
-		}
-
-
-		////////////////
-
-		private void RunAIStateFinish() {
-			switch( this.State ) {
-			case TricksterState.Idle:
-				this.RunIdleFinishAI();
-				break;
-			case TricksterState.Lurk:
-				this.RunLurkFinishAI();
-				break;
-			case TricksterState.PreAttack:
-				this.RunPreAttackFinishAI();
-				break;
-			case TricksterState.Attack:
-				this.RunAttackFinishAI();
-				break;
-			case TricksterState.Cooldown:
-				this.RunCooldownFinishAI();
-				break;
-			default:
-				break;
-			}
 		}
 	}
 }

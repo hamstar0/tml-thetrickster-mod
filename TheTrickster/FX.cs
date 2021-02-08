@@ -19,15 +19,25 @@ namespace TheTrickster {
 		}
 
 
-		public static void TricksterChargeArc( Vector2 position, Vector2 direction, float offset ) {
+		public static void TricksterChargeArc(
+					Vector2 position,
+					Vector2 direction,
+					float length,
+					float scaleMin = 0.01f,
+					float scaleMax = 0.11f ) {
 			int duration = 3;
 
 			DrawHooks.AddPostDrawTilesHook( () => {
-				float scaleBase = Main.rand.NextFloat();
-				float scale = 0.01f + ( scaleBase * 0.1f );
-				Color color = Color.White * ( 0.5f + ( scaleBase * 0.5f ) );
+				float scaleRand = Main.rand.NextFloat();
+				float scale = scaleMin + (scaleRand * (scaleMax-scaleMin));
+				Color color = Color.White * (0.5f + (scaleRand * 0.5f));
 
-				LightningFxHelpers.DrawLightning( position, position + (direction * offset * 4f), scale, color );
+				LightningFxHelpers.DrawLightning(
+					position,
+					position + (direction * length),
+					scale,
+					color
+				);
 				return duration-- > 0;
 			} );
 		}

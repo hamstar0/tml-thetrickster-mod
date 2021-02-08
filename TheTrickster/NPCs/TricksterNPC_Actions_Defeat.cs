@@ -36,7 +36,7 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void DefeatEffects() {
+		public void Defeat() {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
 

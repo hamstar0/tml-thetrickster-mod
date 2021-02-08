@@ -24,32 +24,32 @@ namespace TheTrickster.NPCs {
 			}
 		}
 
-		public static void AnimateAttackChargeAreaFX( Vector2 position, float percent, int particles ) {
+		public static void AnimateAttackChargeAreaFX( Vector2 position, float percentCharged, int particles ) {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
 			float radius = 80f;
-			bool willDrawLightning = (rand.NextFloat() * 3f) < (percent * percent);
+			bool willDrawLightning = (rand.NextFloat() * 3f) < (percentCharged * percentCharged);
 
-			particles = (particles / 2) + (int)(percent * (float)(particles / 2));
+			particles = (particles / 2) + (int)(percentCharged * (float)(particles / 2));
 
 			for( int i = 0; i < particles; i++ ) {
-				if( rand.NextFloat() >= percent ) { continue; }
+				if( rand.NextFloat() >= percentCharged ) { continue; }
 
 				var dir = new Vector2( rand.NextFloat() - 0.5f, rand.NextFloat() - 0.5f );
 				dir.Normalize();
 
-				float offset = 8f + ( rand.NextFloat() * ( radius - 8f ) );
-				offset *= 0.75f + percent;
+				float arcLength = 8f + (rand.NextFloat() * (radius - 8f));
+				arcLength *= 0.75f + percentCharged;
 
-				Vector2 dustPos = position + (dir * offset);
+				Vector2 dustPos = position + (dir * arcLength);
 
-				Vector2 pullVelocity = -dir * ( offset / 8f );
+				Vector2 pullVelocity = -dir * ( arcLength / 8f );
 
 				FX.TricksterChargeSpark( dustPos, pullVelocity );
 
 				if( willDrawLightning ) {
 					willDrawLightning = false;
 
-					FX.TricksterChargeArc( dustPos, dir, offset );
+					FX.TricksterChargeArc( dustPos, dir, arcLength * 4f );
 				}
 			}
 		}

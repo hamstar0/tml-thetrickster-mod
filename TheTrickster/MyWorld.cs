@@ -8,6 +8,7 @@ using Terraria.ModLoader.IO;
 using HamstarHelpers.Classes.DataStructures;
 using HamstarHelpers.Helpers.Debug;
 using HamstarHelpers.Services.Maps;
+using TheTrickster.Protocols;
 
 
 namespace TheTrickster {
@@ -110,9 +111,17 @@ namespace TheTrickster {
 			int tileX = (int)( tricksterNpc.position.X / 16f );
 			int tileY = (int)( tricksterNpc.position.Y / 16f );
 
+			this.AddTricksterDefeat( tileX, tileY );
+		}
+
+		public void AddTricksterDefeat( int tileX, int tileY ) {
 			this._TricksterDefeatLocations.Add( (tileX, tileY) );
 
 			this.AddTricksterDefeatToMap( tileX, tileY );
+
+			if( Main.netMode == NetmodeID.Server ) {
+				TricksterDefeatProtocol.Send( tileX, tileY );
+			}
 		}
 
 		////

@@ -6,7 +6,24 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		private void RunLurkPassiveAI() {
+		private void RunAI_States() {
+			switch( this.State ) {
+			case TricksterState.Lurk:
+				this.RunAI_States_Lurk();
+				break;
+			case TricksterState.Attack:
+				this.RunAI_States_Attack();
+				break;
+			case TricksterState.Cooldown:
+				this.RunAI_States_Cooldown();
+				break;
+			}
+		}
+
+
+		////////////////
+
+		private void RunAI_States_Lurk() {
 			var config = TheTricksterConfig.Instance;
 			int lurkStealRange = config.Get<int>( nameof(TheTricksterConfig.LurkStealRange) );
 			float stealRangeSqr = lurkStealRange * lurkStealRange;
@@ -41,68 +58,55 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		private void RunIdleFinishAI() {
-			Player player = this.TargetPlayer;
-			if( player == null && !player.active && player.dead ) {
+		private int AttackChargingSideEffectCooldown = 0;
+
+
+		public void RunAI_States_Attack() {
+			if( this.AttackChargingSideEffectCooldown-- > 0 ) {
 				return;
 			}
+			this.AttackChargingSideEffectCooldown = 10;
 
 			var config = TheTricksterConfig.Instance;
-			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
-			float distSqr = atkRad * atkRad;
+			int atkRad = config.Get<int>( nameof( config.AttackRadius ) );
+			float attackRangeSqr = atkRad * atkRad;
+			int maxProjs = Main.projectile.Length;
+			//int maxPlrs = Main.player.Length;
 
-			if( Vector2.DistanceSquared(player.Center, this.npc.Center) >= distSqr ) {
-				return;
+			for( int i = 0; i < maxProjs; i++ ) {
+				Projectile proj = Main.projectile[i];
+				if( proj?.active != true ) {
+					continue;
+				}
+
+				if( (proj.Center - this.npc.Center).LengthSquared() < attackRangeSqr ) {
+					proj.velocity *= 0.8f;
+				}
 			}
 
-			int minDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MinDodgeRadius) );
-			int maxDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MaxDodgeRadius) );
+			/*for( int i=0; i<maxPlrs; i++ ) {
+				Player plr = Main.player[i];
+				if( plr?.active != true ) {
+					continue;
+				}
 
-			this.DodgeAction( minDodgeRad, maxDodgeRad );
-
-			this.SetState( TricksterState.PreAttack );
+				if( (plr.Center - this.npc.Center).LengthSquared() < attackRangeSqr ) {
+					plr.velocity *= 0.9f;
+				}
+			}*/
 		}
 
 
-		private void RunLurkFinishAI() {
-			Player player = this.TargetPlayer;
-			if( player == null && !player.active && player.dead ) {
-				return;
-			}
+		////////////////
 
-			var config = TheTricksterConfig.Instance;
-			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
-			float distSqr = atkRad * atkRad;
-			if( Vector2.DistanceSquared(player.Center, this.npc.Center) >= distSqr ) {
-				return;
-			}
+		private void RunAI_States_Cooldown() {
+			var dir = new Vector2( Main.rand.NextFloat() - 0.5f, Main.rand.NextFloat() - 0.5f );
+			dir.Normalize();
 
-			this.EncounterFormal();
+			float arcLength = (16f * 3f) + (Main.rand.NextFloat() * 16f * 4f);
+			Vector2 fxPos = npc.Center + (dir * arcLength);
 
-			this.SetState( TricksterState.PreAttack );
-		}
-
-
-		private void RunPreAttackFinishAI() {
-			this.RunIdleFinishAI();
-		}
-
-
-		private void RunAttackFinishAI() {
-			this.LaunchAttack();
-
-			this.SetState( TricksterState.Cooldown );
-		}
-
-
-		private void RunCooldownFinishAI() {
-			var config = TheTricksterConfig.Instance;
-			int minDodgeRad = config.Get<int>( nameof(config.MinDodgeRadius) );
-			int maxDodgeRad = config.Get<int>( nameof(config.MaxDodgeRadius) );
-
-			this.DodgeAction( minDodgeRad, maxDodgeRad );
-
-			this.SetState( TricksterState.PreAttack );
+			FX.TricksterChargeArc( fxPos, dir, arcLength, 0.01f, 0.06f );
 		}
 	}
 }
