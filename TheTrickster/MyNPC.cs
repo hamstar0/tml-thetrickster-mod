@@ -65,12 +65,7 @@ namespace TheTrickster {
 		public override void DrawEffects( NPC npc, ref Color drawColor ) {
 			if( this.TricksterBatDurationTicks > 0 ) {
 				if( Main.rand.Next( 60 ) < 8 ) {
-					Dust.NewDust(
-						Position: npc.Center,
-						Width: 4,
-						Height: 4,
-						Type: 173  //21, 27, 62, 65
-					);
+					FX.BatDust( npc.Center );
 				}
 			}
 		}

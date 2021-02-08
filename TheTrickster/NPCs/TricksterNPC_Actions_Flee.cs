@@ -21,7 +21,7 @@ namespace TheTrickster.NPCs {
 				for( int i = 0; i < 3; i++ ) {
 					float dirX = 6f * ( rand.NextFloat() - 0.5f );
 
-					Projectile proj = Main.projectile[Projectile.NewProjectile(
+					int projIdx = Projectile.NewProjectile(
 						X: pos.X,
 						Y: pos.Y,
 						SpeedX: dirX,
@@ -30,15 +30,20 @@ namespace TheTrickster.NPCs {
 						Damage: 0,
 						KnockBack: 0f,
 						Owner: Main.myPlayer
-					)];
+					);
+					Projectile proj = Main.projectile[ projIdx ];
 					proj.timeLeft = 150;
+
+					if( Main.netMode == NetmodeID.Server ) {
+						NetMessage.SendData( MessageID.SyncProjectile, -1, -1, null, projIdx );
+					}
 				}
 			}
 
 			Main.npc[this.npc.whoAmI] = new NPC();
 			this.npc.active = false;
 
-			if( Main.netMode == 2 ) {	// is this needed?
+			if( Main.netMode == NetmodeID.Server ) {	// is this needed?
 				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
 			}
 		}

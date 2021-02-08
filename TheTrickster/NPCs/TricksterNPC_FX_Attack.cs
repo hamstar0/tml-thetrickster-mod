@@ -7,9 +7,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
 using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Helpers.TModLoader;
-using HamstarHelpers.Services.Hooks.Draw;
 
 
 namespace TheTrickster.NPCs {
@@ -22,19 +20,7 @@ namespace TheTrickster.NPCs {
 				dir.Normalize();
 				Vector2 dustPos = position + (dir * rand.NextFloat() * radius);
 
-				int dustIdx = Dust.NewDust(
-					Position: dustPos,
-					Width: 1,
-					Height: 1,
-					Type: 269,
-					SpeedX: 0f,
-					SpeedY: 0f,
-					Alpha: 0,
-					newColor: Color.White,
-					Scale: 1f
-				);
-				Dust dust = Main.dust[dustIdx];
-				dust.noGravity = true;
+				FX.TricksterAttackSpark( dustPos );
 			}
 		}
 
@@ -58,29 +44,12 @@ namespace TheTrickster.NPCs {
 
 				Vector2 pullVelocity = -dir * ( offset / 8f );
 
-				Dust dust = Dust.NewDustPerfect(
-					Position: dustPos,
-					Type: 222,//	133:0.5, 222:0.5, 246
-					Velocity: pullVelocity,
-					Scale: 0.5f
-				);
-				dust.noGravity = true;
-				dust.fadeIn = 0.4f;//0.33f;
-
-				///
+				FX.TricksterChargeSpark( dustPos, pullVelocity );
 
 				if( willDrawLightning ) {
 					willDrawLightning = false;
 
-					int duration = 3;
-					DrawHooks.AddPostDrawTilesHook( () => {
-						float scaleBase = rand.NextFloat();
-						float scale = 0.01f + ( scaleBase * 0.1f );
-						Color color = Color.White * ( 0.5f + ( scaleBase * 0.5f ) );
-
-						LightningFxHelpers.DrawLightning( position, position + (dir * offset * 4f), scale, color );
-						return duration-- > 0;
-					} );
+					FX.TricksterChargeArc( dustPos, dir, offset );
 				}
 			}
 		}
@@ -100,7 +69,7 @@ namespace TheTrickster.NPCs {
 				this.EncounterFX();
 			}*/
 
-			float percent = (float)this.ElapsedStateTicks / (float)this.GetCurrentStateTickDuration();
+			float percent = (float)this.ElapsedStateTicks / (float)TricksterNPC.GetCurrentStateTickDuration(this.State);
 
 			if( this.AttackChargeSoundInstance == null || this.AttackChargeSoundInstance.State != SoundState.Playing ) {
 				/*float distScale = 1f - (Vector2.Distance( Main.LocalPlayer.Center, this.npc.Center ) / 1600f);
