@@ -8,6 +8,9 @@ namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		private void RunAI_States() {
 			switch( this.State ) {
+			case TricksterState.Mock:
+				this.RunAI_States_Mock();
+				break;
 			case TricksterState.Lurk:
 				this.RunAI_States_Lurk();
 				break;
@@ -23,12 +26,39 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
+		private void RunAI_States_Mock() {
+			float helloRange = 16 * 16;
+			float helloRangeSqr = helloRange * helloRange;
+			bool saidHello = false;
+
+			int plrs = Main.player.Length;
+			for( int i=0; i<plrs; i++ ) {
+				Player plr = Main.player[i];
+				if( plr?.active != true || plr.dead ) {
+					continue;
+				}
+
+				if( (plr.Center - this.npc.Center).LengthSquared() < helloRangeSqr ) {
+					saidHello = true;
+					break;
+				}
+			}
+
+			if( saidHello ) {
+				this.EncounterFormal( true );
+				this.FleeAction();
+			}
+		}
+
+
+		////////////////
+
 		private void RunAI_States_Lurk() {
 			var config = TheTricksterConfig.Instance;
 			int lurkStealRange = config.Get<int>( nameof(TheTricksterConfig.LurkStealRange) );
 			float stealRangeSqr = lurkStealRange * lurkStealRange;
 
-			bool isThief = false;
+			bool hasStolen = false;
 
 			int plrs = Main.player.Length;
 			for( int i=0; i<plrs; i++ ) {
@@ -41,15 +71,15 @@ namespace TheTrickster.NPCs {
 					continue;
 				}
 
-				isThief = this.StealFromPlayer( plr );
+				hasStolen = this.StealFromPlayer( plr );
 				break;
 			}
 
-			if( isThief ) {
+			if( hasStolen ) {
 				int minDodgeRad = config.Get<int>( nameof(config.MinDodgeRadius) );
 
 				this.DodgeAction( minDodgeRad, minDodgeRad );
-				this.EncounterFormal();
+				this.EncounterFormal( true );
 
 				this.SetState( TricksterState.PreAttack );
 			}

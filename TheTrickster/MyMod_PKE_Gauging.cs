@@ -18,7 +18,7 @@ namespace TheTrickster {
 
 			int tileX = (int)worldPos.X / 16;
 			int tileY = (int)worldPos.Y / 16;
-			if( !TricksterNPC.IsWithinSpawnRange(tileX, tileY) ) {
+			if( !TricksterNPC.CanSpawn(tileX, tileY, Main.LocalPlayer) ) {
 				fluctuationRate = 0f;
 				return 0f;
 			}

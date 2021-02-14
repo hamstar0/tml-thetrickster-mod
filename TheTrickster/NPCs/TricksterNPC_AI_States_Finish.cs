@@ -67,7 +67,7 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
-			this.EncounterFormal();
+			this.EncounterFormal( false );
 
 			this.SetState( TricksterState.PreAttack );
 		}

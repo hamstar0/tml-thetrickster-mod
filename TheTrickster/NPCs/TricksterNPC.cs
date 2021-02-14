@@ -72,14 +72,14 @@ namespace TheTrickster.NPCs {
 		private void SetDefaultMaxLife() {
 			var config = TheTricksterConfig.Instance;
 			int baseHp = 5, addedHp = 0;
-			int statLifeMax = config.Get<int>( nameof( TheTricksterConfig.StatLifeMax ) );
+			int statLifeMax = config.Get<int>( nameof(config.StatLifeMax) );
 
 			if( TheTricksterConfig.Instance != null ) {
-				baseHp = config.Get<int>( nameof(TheTricksterConfig.StatInitialLife) );
+				baseHp = config.Get<int>( nameof(config.StatInitialLife) );
 				var myworld = ModContent.GetInstance<TheTricksterWorld>();
 
 				if( myworld != null ) {
-					int lifeAdded = config.Get<int>( nameof(TheTricksterConfig.StatLifeAddedEachDefeat) );
+					int lifeAdded = config.Get<int>( nameof(config.StatLifeAddedEachDefeat) );
 					addedHp = myworld.TricksterDefeatLocations.Count * lifeAdded;
 				}
 			}

@@ -55,10 +55,10 @@ namespace TheTrickster.NPCs {
 			// Before
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 
-			if( Main.netMode != 1 ) {
+			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
 
-				if( Main.netMode == 2 ) {
+				if( Main.netMode == NetmodeID.Server ) {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
 				}
 			}

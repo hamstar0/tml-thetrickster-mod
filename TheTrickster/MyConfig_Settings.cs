@@ -13,9 +13,16 @@ namespace TheTrickster {
 		public float SpawnChanceAboveGround { get; set; } = 0.04f;
 		
 		[Range( 0f, 10f )]
-		[DefaultValue( 0.03f )]
+		[DefaultValue( 0.02f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float SpawnChanceUnderGround { get; set; } = 0.03f;
+		public float SpawnChanceUnderGround { get; set; } = 0.02f;	// 0.03?
+
+		//
+		
+		[Range( 0f, 1f )]
+		[DefaultValue( 0.2f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float OnSpawnPassivePercentChance { get; set; } = 0.2f;
 
 		//
 

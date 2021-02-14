@@ -5,10 +5,11 @@ using Terraria.ModLoader;
 namespace TheTrickster.NPCs {
 	public enum TricksterState : int {
 		Idle = 0,
-		Lurk = 1,
-		PreAttack = 2,
-		Attack = 3,
-		Cooldown = 4
+		Mock = 1,
+		Lurk = 2,
+		PreAttack = 3,
+		Attack = 4,
+		Cooldown = 5
 	}
 
 

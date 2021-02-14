@@ -38,14 +38,8 @@ namespace TheTrickster.NPCs {
 
 		public void Defeat() {
 			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
-			int soundSlot = this.mod.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
 
-			Main.PlaySound(
-				type: (int)SoundType.Custom,
-				x: (int)this.npc.Center.X,
-				y: (int)this.npc.Center.Y,
-				Style: soundSlot
-			);
+			FX.TricksterLaughFX( this.npc.Center );
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
 			if( this.npc.target == Main.myPlayer ) {

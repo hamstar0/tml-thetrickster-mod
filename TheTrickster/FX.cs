@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ModLoader;
 using HamstarHelpers.Helpers.Fx;
 using HamstarHelpers.Services.Hooks.Draw;
 
@@ -67,6 +68,30 @@ namespace TheTrickster {
 				Height: 4,
 				Type: 173  //21, 27, 62, 65
 			);
+		}
+
+
+		////////////////
+
+		public static void TricksterLaughFX( Vector2 pos ) {
+			Vector2 scrMid = Main.screenPosition;
+			scrMid.X += Main.screenWidth / 2;
+			scrMid.Y += Main.screenHeight / 2;
+			float distSqr = Vector2.DistanceSquared( scrMid, pos );
+
+			if( distSqr < 409600 ) {    //640
+				Vector2 diff = pos - scrMid;
+				Vector2 newPos = scrMid + ( diff * 0.5f );
+
+				int soundSlot = TheTricksterMod.Instance.GetSoundSlot( SoundType.Custom, "Sounds/Custom/TricksterLaugh" );
+				Main.PlaySound(
+					type: (int)SoundType.Custom,
+					x: (int)newPos.X,
+					y: (int)newPos.Y,
+					Style: soundSlot,
+					volumeScale: 0.8f
+				);
+			}
 		}
 	}
 }

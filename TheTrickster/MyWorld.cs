@@ -20,6 +20,8 @@ namespace TheTrickster {
 
 		public ISet<(int, int)> TricksterDefeatLocations { get; private set; }
 
+		public int TricksterEncounters { get; private set; } = 0;
+
 
 
 		////////////////
@@ -34,12 +36,14 @@ namespace TheTrickster {
 
 		public override void Initialize() {
 			this._TricksterDefeatLocations.Clear();
+			this.TricksterEncounters = 0;
 		}
 
 		////
 
 		public override void Load( TagCompound tag ) {
 			this._TricksterDefeatLocations.Clear();
+			this.TricksterEncounters = 0;
 
 			if( tag.ContainsKey("trickster_defeats") ) {
 				int defeats = tag.GetInt( "trickster_defeats" );
@@ -54,11 +58,16 @@ namespace TheTrickster {
 					//LogHelpers.Log( "Loaded "+(i+1)+" (of "+defeats+") victories over Trickster ("+x+", "+y+")." );
 				}
 			}
+
+			if( tag.ContainsKey("trickster_encounters") ) {
+				this.TricksterEncounters = tag.GetInt( "trickster_encounters" );
+			}
 		}
 
 		public override TagCompound Save() {
 			var tag = new TagCompound {
-				{ "trickster_defeats", this._TricksterDefeatLocations.Count }
+				{ "trickster_defeats", this._TricksterDefeatLocations.Count },
+				{ "trickster_encounters", this.TricksterEncounters }
 			};
 
 			int i = 0;
@@ -89,6 +98,8 @@ namespace TheTrickster {
 
 					this._TricksterDefeatLocations.Add( (x, y) );
 				}
+
+				this.TricksterEncounters = reader.ReadInt32();
 			} catch { }
 		}
 
@@ -101,7 +112,16 @@ namespace TheTrickster {
 					writer.Write( (int)tileX );
 					writer.Write( (int)tileY );
 				}
+
+				writer.Write( (int)this.TricksterEncounters );
 			} catch { }
+		}
+
+
+		////////////////
+		
+		public void AddTricksterEncounter() {
+			this.TricksterEncounters++;
 		}
 
 
