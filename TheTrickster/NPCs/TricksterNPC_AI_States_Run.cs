@@ -46,7 +46,7 @@ namespace TheTrickster.NPCs {
 
 			if( saidHello ) {
 				this.EncounterFormal( true );
-				this.FleeAction();
+				this.FleeAction( false );
 			}
 		}
 

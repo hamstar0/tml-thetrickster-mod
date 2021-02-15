@@ -20,9 +20,9 @@ namespace TheTrickster {
 		//
 		
 		[Range( 0f, 1f )]
-		[DefaultValue( 0.2f )]
+		[DefaultValue( 1f / 3f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float OnSpawnPassivePercentChance { get; set; } = 0.2f;
+		public float OnSpawnPassivePercentChance { get; set; } = 1f / 3f;
 
 		//
 

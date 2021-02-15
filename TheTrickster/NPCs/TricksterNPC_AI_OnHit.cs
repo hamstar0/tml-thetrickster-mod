@@ -9,7 +9,7 @@ namespace TheTrickster.NPCs {
 
 			switch( this.State ) {
 			case TricksterState.Mock:
-				this.RunOnHitAI_Leave();
+				this.RunOnHitAI_Leave( false );
 				break;
 			case TricksterState.Lurk:
 				this.RunOnHitAI_DodgeIf( true );
@@ -31,10 +31,10 @@ namespace TheTrickster.NPCs {
 
 		////
 
-		private void RunOnHitAI_Leave() {
+		private void RunOnHitAI_Leave( bool dropBombs ) {
 			this.EncounterFormal( true );
 
-			this.FleeAction();
+			this.FleeAction( dropBombs );
 		}
 
 		private void RunOnHitAI_DodgeIf( bool isFormalEncounter ) {

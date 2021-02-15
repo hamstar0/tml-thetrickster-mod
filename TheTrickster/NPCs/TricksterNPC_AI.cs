@@ -27,13 +27,11 @@ namespace TheTrickster.NPCs {
 			this.ElapsedTicksAlive++;
 			this.ElapsedStateTicks++;
 
-			TricksterDecision decision;
-
-			if( !this.RunAI_Decision_Continuation(out decision) ) {
+			if( !this.RunAI_Decision_Continuation() ) {
 				return;
 			}
 
-			if( !this.RunAI_Decision_Action(decision) ) {
+			if( !this.RunAI_Decision_Action() ) {
 				return;
 			}
 
@@ -43,8 +41,8 @@ namespace TheTrickster.NPCs {
 
 		////
 
-		private bool RunAI_Decision_Continuation( out TricksterDecision decision ) {
-			if( this.CanAIContinue( out decision ) ) {
+		private bool RunAI_Decision_Continuation() {
+			if( this.CanAIContinue( out TricksterDecision decision ) ) {
 				return true;
 			}
 
@@ -52,8 +50,8 @@ namespace TheTrickster.NPCs {
 			return false;
 		}
 
-		private bool RunAI_Decision_Action( TricksterDecision decision ) {
-			if( this.CanAIAct( out decision ) ) {
+		private bool RunAI_Decision_Action() {
+			if( this.CanAIAct( out TricksterDecision decision ) ) {
 				return true;
 			}
 
@@ -69,7 +67,7 @@ namespace TheTrickster.NPCs {
 		private bool RunAI_Decision( TricksterDecision decision ) {
 			switch( decision ) {
 			case TricksterDecision.Flee:
-				this.FleeAction();
+				this.FleeAction( true );
 				return true;
 				//case TricksterDecision.Laugh:
 				//	this.EncounterFX();
