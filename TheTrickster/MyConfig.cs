@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
-using Terraria.ID;
 using Terraria.ModLoader.Config;
 using HamstarHelpers.Classes.UI.ModConfig;
 using HamstarHelpers.Helpers.Debug;
@@ -27,7 +25,7 @@ namespace TheTrickster {
 
 		public override ModConfig Clone() {
 			var clone = (TheTricksterConfig)this.MemberwiseClone();
-			clone.DropsOnDefeat = this.DropsOnDefeat;
+			clone.DropsOnDefeat = new ItemDefinition( this.DropsOnDefeat.Type );
 			return clone;
 		}
 	}

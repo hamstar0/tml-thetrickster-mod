@@ -14,6 +14,8 @@ namespace TheTrickster.NPCs {
 
 			switch( state ) {
 			default:
+			case TricksterState.Mock:
+				return config.Get<int>( nameof( config.MaxEncounterDurationTicks ) );
 			case TricksterState.Idle:
 				return config.Get<int>( nameof( config.IdleDurationTicks ) );
 			case TricksterState.Lurk:

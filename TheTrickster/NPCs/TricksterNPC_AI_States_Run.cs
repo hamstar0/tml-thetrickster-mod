@@ -38,10 +38,12 @@ namespace TheTrickster.NPCs {
 					continue;
 				}
 
-				if( (plr.Center - this.npc.Center).LengthSquared() < helloRangeSqr ) {
-					saidHello = true;
-					break;
+				if( (plr.Center - this.npc.Center).LengthSquared() >= helloRangeSqr ) {
+					continue;
 				}
+
+				saidHello = true;
+				break;
 			}
 
 			if( saidHello ) {

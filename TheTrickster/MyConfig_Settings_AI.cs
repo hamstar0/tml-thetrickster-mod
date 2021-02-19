@@ -8,7 +8,7 @@ namespace TheTrickster {
 	public partial class TheTricksterConfig : ModConfig {
 		[Range( 0, 60 * 60 * 60 )]
 		[DefaultValue( 60 * 180 )]
-		public int TicksUntilFlee { get; set; } = 60 * 180;
+		public int MaxEncounterDurationTicks { get; set; } = 60 * 180;	// 3 minutes
 
 
 		[Range( 1, 60 * 60 * 60 )]

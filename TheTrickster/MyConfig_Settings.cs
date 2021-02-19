@@ -8,9 +8,9 @@ using HamstarHelpers.Helpers.Debug;
 namespace TheTrickster {
 	public partial class TheTricksterConfig : ModConfig {
 		[Range( 0f, 10f )]
-		[DefaultValue( 0.04f )]
+		[DefaultValue( 0.015f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float SpawnChanceAboveGround { get; set; } = 0.04f;
+		public float SpawnChanceAboveGround { get; set; } = 0.015f;
 		
 		[Range( 0f, 10f )]
 		[DefaultValue( 0.02f )]

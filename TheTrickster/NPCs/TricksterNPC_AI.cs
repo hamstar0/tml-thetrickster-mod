@@ -16,7 +16,8 @@ namespace TheTrickster.NPCs {
 	public enum TricksterDecision : int {
 		None = 0,
 		Flee = 1,
-		//Laugh = 2
+		StageFinished = 2,
+		//Laugh = 3
 	}
 
 
@@ -27,83 +28,32 @@ namespace TheTrickster.NPCs {
 			this.ElapsedTicksAlive++;
 			this.ElapsedStateTicks++;
 
-			if( !this.RunAI_Decision_Continuation() ) {
-				return;
-			}
+			TricksterDecision decision = this.GetAIDecision();
 
-			if( !this.RunAI_Decision_Action() ) {
-				return;
-			}
-
-			this.RunAI_States_Finish();
-		}
-
-
-		////
-
-		private bool RunAI_Decision_Continuation() {
-			if( this.CanAIContinue( out TricksterDecision decision ) ) {
-				return true;
-			}
-
-			this.RunAI_Decision( decision );
-			return false;
-		}
-
-		private bool RunAI_Decision_Action() {
-			if( this.CanAIAct( out TricksterDecision decision ) ) {
-				return true;
-			}
-
-			if( !this.RunAI_Decision( decision ) ) {
+			if( decision != TricksterDecision.None ) {
+				this.EnactAIDecision( decision );
+			} else {
 				this.RunAI_States();
 			}
-
-			return false;
-		}
-
-		////
-
-		private bool RunAI_Decision( TricksterDecision decision ) {
-			switch( decision ) {
-			case TricksterDecision.Flee:
-				this.FleeAction( true );
-				return true;
-				//case TricksterDecision.Laugh:
-				//	this.EncounterFX();
-				//	return true;
-			}
-			return false;
 		}
 
 
 		////////////////
 
-		private bool CanAIContinue( out TricksterDecision decision ) {
+		private TricksterDecision GetAIDecision() {
 			if( this.State == TricksterState.Attack ) {
-				decision = TricksterDecision.None;
-				return true;
+				return TricksterDecision.None;
 			}
 
-			int fleeTicks = TheTricksterConfig.Instance.Get<int>( nameof(TheTricksterConfig.TicksUntilFlee) );
-			if( fleeTicks <= 0 ) {
-				decision = TricksterDecision.None;
-				return true;
+			var config = TheTricksterConfig.Instance;
+			int fleeTicks = config.Get<int>( nameof(config.MaxEncounterDurationTicks) );
+			if( fleeTicks > 0 && this.ElapsedTicksAlive > fleeTicks ) {
+				return TricksterDecision.Flee;
 			}
 
-			if( this.ElapsedTicksAlive <= fleeTicks ) {
-				decision = TricksterDecision.None;
-				return true;
-			}
-
-			decision = TricksterDecision.Flee;
-			return false;
-		}
-
-		private bool CanAIAct( out TricksterDecision action ) {
-			if( this.ElapsedStateTicks < TricksterNPC.GetCurrentStateTickDuration(this.State) ) {
-				action = TricksterDecision.None;
-				return false;
+			int stageDuration = TricksterNPC.GetCurrentStateTickDuration( this.State );
+			if( this.ElapsedStateTicks >= stageDuration ) {
+				return TricksterDecision.StageFinished;
 			}
 
 			/*string timerName = "TricksterProximityScan_" + this.npc.whoAmI;
@@ -115,13 +65,28 @@ namespace TheTrickster.NPCs {
 				IList<int> npcWhos = NPCFinderHelpers.FindNPCsNearby( this.npc.Center, 0, 16 * 64, false );
 
 				if( npcWhos.Count < TheTricksterConfig.Instance.MaximumNearbyMobsBeforeFleeing ) {
-					action = TricksterAction.Flee;
-					return false;
+					return TricksterAction.Flee;
 				}
 			}*/
 
-			action = TricksterDecision.None;
-			return true;
+			return TricksterDecision.None;
+		}
+
+
+		////////////////
+
+		private void EnactAIDecision( TricksterDecision decision ) {
+			switch( decision ) {
+			case TricksterDecision.Flee:
+				this.FleeAction( true );
+				break;
+			case TricksterDecision.StageFinished:
+				this.FinishAIState();
+				break;
+			//case TricksterDecision.Laugh:
+			//	this.EncounterFX();
+			//	return true;
+			}
 		}
 	}
 }

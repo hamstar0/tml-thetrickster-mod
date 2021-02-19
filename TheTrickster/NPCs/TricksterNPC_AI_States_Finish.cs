@@ -6,22 +6,22 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		private void RunAI_States_Finish() {
+		private void FinishAIState() {
 			switch( this.State ) {
 			case TricksterState.Idle:
-				this.RunAI_States_Finish_Idle();
+				this.FinishAIState_Idle();
 				break;
 			case TricksterState.Lurk:
-				this.RunAI_States_Finish_Lurk();
+				this.FinishAIState_Lurk();
 				break;
 			case TricksterState.PreAttack:
-				this.RunAI_States_Finish_PreAttack();
+				this.FinishAIState_PreAttack();
 				break;
 			case TricksterState.Attack:
-				this.RunAI_States_Finish_Attack();
+				this.FinishAIState_Attack();
 				break;
 			case TricksterState.Cooldown:
-				this.RunAI_States_Finish_Cooldown();
+				this.FinishAIState_Cooldown();
 				break;
 			default:
 				break;
@@ -31,7 +31,7 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		private void RunAI_States_Finish_Idle() {
+		private void FinishAIState_Idle() {
 			Player player = this.TargetPlayer;
 			if( player == null && !player.active && player.dead ) {
 				return;
@@ -54,7 +54,7 @@ namespace TheTrickster.NPCs {
 		}
 
 
-		private void RunAI_States_Finish_Lurk() {
+		private void FinishAIState_Lurk() {
 			Player player = this.TargetPlayer;
 			if( player == null && !player.active && player.dead ) {
 				return;
@@ -73,19 +73,19 @@ namespace TheTrickster.NPCs {
 		}
 
 
-		private void RunAI_States_Finish_PreAttack() {
-			this.RunAI_States_Finish_Idle();
+		private void FinishAIState_PreAttack() {
+			this.FinishAIState_Idle();
 		}
 
 
-		private void RunAI_States_Finish_Attack() {
+		private void FinishAIState_Attack() {
 			this.LaunchAttack();
 
 			this.SetState( TricksterState.Cooldown );
 		}
 
 
-		private void RunAI_States_Finish_Cooldown() {
+		private void FinishAIState_Cooldown() {
 			var config = TheTricksterConfig.Instance;
 			int minDodgeRad = config.Get<int>( nameof(config.MinDodgeRadius) );
 			int maxDodgeRad = config.Get<int>( nameof(config.MaxDodgeRadius) );
