@@ -27,8 +27,8 @@ namespace TheTrickster {
 		//
 
 		[Range( 0, 8192 )]
-		[DefaultValue( 128 )]
-		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 128;
+		[DefaultValue( 192 )]
+		public int MinTileSpawnDistanceAwayFromAnyPreviousDefeat { get; set; } = 192;
 
 
 		//

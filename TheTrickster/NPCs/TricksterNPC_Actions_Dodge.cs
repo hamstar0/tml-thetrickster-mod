@@ -29,6 +29,16 @@ namespace TheTrickster.NPCs {
 				return;
 			}
 
+			var validLanding = new TilePattern( new TilePatternBuilder {
+				HasLava = false,
+				HasHoney = false,
+				CustomCheck = ( x, y ) => {
+					Tile tile = Main.tile[x, y];
+					return !tile.active() || tile.inActive() || !Main.tileSolid[tile.type];
+				}
+			} );
+			//validLanding = TilePattern.CombineNegative( TilePattern.NonSolid, validLanding );
+			
 			Vector2 dir, testPos, groundPos;
 			bool isOnGround;
 			int tileX=0, tileY=0;
@@ -50,7 +60,7 @@ namespace TheTrickster.NPCs {
 
 				tileX = (int)groundPos.X / 16;
 				tileY = (int)groundPos.Y / 16;
-			} while( !isOnGround || !TilePattern.NonSolid.CheckArea( new Rectangle(tileX-1, tileY-3, 3, 3) ) );
+			} while( !isOnGround || !validLanding.CheckArea( new Rectangle(tileX-1, tileY-3, 3, 3) ) );
 
 			// Before
 			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
