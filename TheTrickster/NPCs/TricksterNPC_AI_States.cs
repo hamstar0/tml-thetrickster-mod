@@ -22,14 +22,14 @@ namespace TheTrickster.NPCs {
 				return config.Get<int>( nameof( config.LurkDurationTicks ) );
 			case TricksterState.PreAttack:
 				return config.Get<int>( nameof( config.IdleDurationTicks ) );
-			case TricksterState.Attack:
+			case TricksterState.AttackChargeup:
 				var myworld = ModContent.GetInstance<TheTricksterWorld>();
-				int attackTicksLessPer = config.Get<int>( nameof( config.AttackDurationTicksReducedPerDefeat ) );
+				int attackTicksLessPer = config.Get<int>( nameof( config.AttackChargeupDurationTicksReducedPerDefeat ) );
 				int reducedChargeTime = myworld.TricksterDefeatLocations.Count * attackTicksLessPer;
-				int attackDuration = config.Get<int>( nameof( config.AttackDurationTicks ) );
+				int attackDuration = config.Get<int>( nameof( config.AttackChargeupDurationTicks ) );
 				int chargeTime = attackDuration - reducedChargeTime;
 
-				return Math.Max( chargeTime, config.Get<int>( nameof( config.AttackDurationTicksMinimum ) ) );
+				return Math.Max( chargeTime, config.Get<int>( nameof(config.AttackChargeupDurationTicksMinimum) ) );
 			case TricksterState.Cooldown:
 				return config.Get<int>( nameof( config.CooldownDurationTicks ) );
 			}
@@ -74,7 +74,7 @@ namespace TheTrickster.NPCs {
 			IList<(int, int)> path;
 
 			if( TileCollisionHelpers.FindPathSimple( plrTile, npcTile, 2000, out path ) ) {
-				state = TricksterState.Attack;
+				state = TricksterState.AttackChargeup;
 
 				this.SetState( state, false );
 			}

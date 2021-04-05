@@ -17,7 +17,7 @@ namespace TheTrickster.NPCs {
 			case TricksterState.PreAttack:
 				this.FinishAIState_PreAttack();
 				break;
-			case TricksterState.Attack:
+			case TricksterState.AttackChargeup:
 				this.FinishAIState_Attack();
 				break;
 			case TricksterState.Cooldown:

@@ -12,7 +12,7 @@ namespace TheTrickster.NPCs {
 				this.EncounterFX();
 			}*/
 
-			if( this.State == TricksterState.Attack ) {
+			if( this.State == TricksterState.AttackChargeup ) {
 				this.RunFX_Attack( isNewlyAlerted );
 			} else {
 				this.RunFX_UnAttack( isNewlyAlerted );

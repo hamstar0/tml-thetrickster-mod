@@ -18,7 +18,7 @@ namespace TheTrickster.NPCs {
 				this.RunOnHitAI_DodgeIf( false );
 				break;
 			case TricksterState.PreAttack:
-			case TricksterState.Attack:
+			case TricksterState.AttackChargeup:
 				this.SetState( TricksterState.Idle );
 				this.RunOnHitAI_DodgeIf( false );
 				break;

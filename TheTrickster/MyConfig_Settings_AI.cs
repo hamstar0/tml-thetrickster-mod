@@ -21,15 +21,15 @@ namespace TheTrickster {
 
 		[Range( 1, 60 * 60 * 60 )]
 		[DefaultValue( (int)(60f * 5.5f) )]
-		public int AttackDurationTicks { get; set; } = (int)( 60f * 5.5f );
+		public int AttackChargeupDurationTicks { get; set; } = (int)( 60f * 5.5f );
 
 		[Range( 0, 60 * 60 * 60 )]
 		[DefaultValue( 15 )]
-		public int AttackDurationTicksReducedPerDefeat { get; set; } = 15;
+		public int AttackChargeupDurationTicksReducedPerDefeat { get; set; } = 15;
 
 		[Range( 1, 60 * 60 * 60 )]
 		[DefaultValue( (int)(60f * 2.5f) )]
-		public int AttackDurationTicksMinimum { get; set; } = (int)(60f * 2.5f);
+		public int AttackChargeupDurationTicksMinimum { get; set; } = (int)(60f * 2.5f);
 
 		[Range( 0, 60 * 60 * 60 )]
 		[DefaultValue( (int)( 60f * 6f ) )]

@@ -8,7 +8,7 @@ namespace TheTrickster.NPCs {
 		Mock = 1,
 		Lurk = 2,
 		PreAttack = 3,
-		Attack = 4,
+		AttackChargeup = 4,
 		Cooldown = 5
 	}
 
@@ -41,14 +41,14 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		private TricksterDecision GetAIDecision() {
-			if( this.State == TricksterState.Attack ) {
-				return TricksterDecision.None;
-			}
+			if( this.State != TricksterState.AttackChargeup ) {
+				var config = TheTricksterConfig.Instance;
+				int fleeTicks = config.Get<int>( nameof(config.MaxEncounterDurationTicks) );
 
-			var config = TheTricksterConfig.Instance;
-			int fleeTicks = config.Get<int>( nameof(config.MaxEncounterDurationTicks) );
-			if( fleeTicks > 0 && this.ElapsedTicksAlive > fleeTicks ) {
-				return TricksterDecision.Flee;
+				if( fleeTicks > 0 && this.ElapsedTicksAlive > fleeTicks ) {
+					return TricksterDecision.Flee;
+				}
+
 			}
 
 			int stageDuration = TricksterNPC.GetCurrentStateTickDuration( this.State );

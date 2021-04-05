@@ -14,7 +14,7 @@ namespace TheTrickster.NPCs {
 			case TricksterState.Lurk:
 				this.RunAI_States_Lurk();
 				break;
-			case TricksterState.Attack:
+			case TricksterState.AttackChargeup:
 				this.RunAI_States_Attack();
 				break;
 			case TricksterState.Cooldown:
@@ -94,13 +94,16 @@ namespace TheTrickster.NPCs {
 
 
 		public void RunAI_States_Attack() {
-			if( this.AttackChargingSideEffectCooldown-- > 0 ) {
-				return;
-			}
-			this.AttackChargingSideEffectCooldown = 10;
+			if( this.AttackChargingSideEffectCooldown-- <= 0 ) {
+				this.AttackChargingSideEffectCooldown = 10;
 
+				this.RunAI_States_Attack_DeflectProjetiles();
+			}
+		}
+
+		private void RunAI_States_Attack_DeflectProjetiles() {
 			var config = TheTricksterConfig.Instance;
-			int atkRad = config.Get<int>( nameof( config.AttackRadius ) );
+			int atkRad = config.Get<int>( nameof(config.AttackRadius) );
 			float attackRangeSqr = atkRad * atkRad;
 			int maxProjs = Main.projectile.Length;
 			//int maxPlrs = Main.player.Length;
