@@ -62,7 +62,7 @@ namespace TheTrickster.NPCs {
 			if( time > 0 ) {
 				Timers.SetTimer( timerName, 30, false, () => false );
 
-				IList<int> npcWhos = NPCFinderHelpers.FindNPCsNearby( this.npc.Center, 0, 16 * 64, false );
+				IList<int> npcWhos = NPCFinderLibraries.FindNPCsNearby( this.npc.Center, 0, 16 * 64, false );
 
 				if( npcWhos.Count < TheTricksterConfig.Instance.MaximumNearbyMobsBeforeFleeing ) {
 					return TricksterAction.Flee;

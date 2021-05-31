@@ -1,21 +1,23 @@
 ﻿using System;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Classes.Errors;
-using HamstarHelpers.Classes.Protocols.Packet.Interfaces;
-using HamstarHelpers.Helpers.Debug;
+using ModLibsCore.Classes.Errors;
+using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Services.Network.SimplePacket;
 using TheTrickster.NPCs;
 
 
 namespace TheTrickster.Protocols {
-	class TricksterStateProtocol : PacketProtocolBroadcast {
-		public static void Broadcast( int npcWho, TricksterState state ) {
-			if( Main.netMode != 2 ) {
-				throw new ModHelpersException("Not server");
+	[Serializable]
+	class TricksterStateProtocol : SimplePacketPayload {
+		public static void BroadcastToClients( int npcWho, TricksterState state ) {
+			if( Main.netMode != NetmodeID.Server ) {
+				throw new ModLibsException("Not server");
 			}
 
-			var protocol = new TricksterStateProtocol( npcWho, (int)state );
-			protocol.SendToClient( -1, -1 );
+			var packet = new TricksterStateProtocol( npcWho, (int)state );
+			SimplePacket.SendToClient( packet, -1, -1 );
 		}
 
 
@@ -39,26 +41,26 @@ namespace TheTrickster.Protocols {
 
 		////////////////
 
-		protected override void ReceiveOnClient() {
+		public override void ReceiveOnClient() {
 			NPC npc = Main.npc[ this.NpcWho ];
 			if( !npc.active ) {
 				return;
 			}
 			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
-				LogHelpers.AlertOnce( "Mismatched NPC type." );
+				LogLibraries.AlertOnce( "Mismatched NPC type." );
 				return;
 			}
 
 			var mynpc = npc.modNPC as TricksterNPC;
 			if( mynpc == null ) {
-				LogHelpers.WarnOnce( "Trickster is not a Trickster...?" );
+				LogLibraries.WarnOnce( "Trickster is not a Trickster...?" );
 				return;
 			}
 
 			mynpc.SetState( (TricksterState)this.State );
 		}
 
-		protected override void ReceiveOnServer( int fromWho ) {
+		public override void ReceiveOnServer( int fromWho ) {
 			throw new NotImplementedException();
 		}
 	}

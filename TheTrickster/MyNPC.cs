@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Helpers.NPCs;
-using HamstarHelpers.Helpers.XNA;
+using ModLibsGeneral.Libraries.NPCs;
+using ModLibsGeneral.Libraries.XNA;
 
 
 namespace TheTrickster {
@@ -26,7 +26,7 @@ namespace TheTrickster {
 			}
 
 			if( this.TricksterBatDurationTicks == 1 ) {
-				NPCHelpers.RawHurt( npc, 9999 );
+				NPCLibraries.RawHurt( npc, 9999 );
 			}
 
 			return base.PreAI( npc );
@@ -57,7 +57,7 @@ namespace TheTrickster {
 
 		public override Color? GetAlpha( NPC npc, Color drawColor ) {
 			if( this.TricksterBatDurationTicks > 0 ) {
-				return XNAColorHelpers.Mul( drawColor, Color.Red );
+				return XNAColorLibraries.Mul( drawColor, Color.Red );
 			}
 			return base.GetAlpha( npc, drawColor );
 		}

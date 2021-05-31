@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using HamstarHelpers.Helpers.Fx;
-using HamstarHelpers.Services.Hooks.Draw;
+using ModLibsCore.Services.Hooks.Draw;
+using ModLibsGeneral.Libraries.Fx;
 
 
 namespace TheTrickster {
@@ -33,7 +33,7 @@ namespace TheTrickster {
 				float scale = scaleMin + (scaleRand * (scaleMax-scaleMin));
 				Color color = Color.White * (0.5f + (scaleRand * 0.5f));
 
-				LightningFxHelpers.DrawLightning(
+				LightningFxLibraries.DrawLightning(
 					position,
 					position + (direction * length),
 					scale,

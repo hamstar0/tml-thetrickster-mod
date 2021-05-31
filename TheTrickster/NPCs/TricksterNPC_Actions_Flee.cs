@@ -4,9 +4,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Fx;
-using HamstarHelpers.Helpers.TModLoader;
+using ModLibsCore.Libraries.Debug;
+using ModLibsGeneral.Libraries.Fx;
+using ModLibsCore.Libraries.TModLoader;
 
 
 namespace TheTrickster.NPCs {
@@ -16,7 +16,7 @@ namespace TheTrickster.NPCs {
 				this.DropBombs();
 			}
 
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
+			ParticleFxLibraries.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
 			Main.npc[this.npc.whoAmI] = new NPC();
 			this.npc.active = false;
@@ -28,7 +28,7 @@ namespace TheTrickster.NPCs {
 
 
 		public void DropBombs() {
-			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
+			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
 			Vector2 pos = this.npc.position;
 
 			for( int i = 0; i < 3; i++ ) {

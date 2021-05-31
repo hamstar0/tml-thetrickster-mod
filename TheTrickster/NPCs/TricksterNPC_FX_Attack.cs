@@ -6,14 +6,14 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.TModLoader;
+using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Libraries.TModLoader;
 
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public static void AnimateAttackBurstFX( Vector2 position, float radius, int particles ) {
-			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
+			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
 
 			for( int i = 0; i < particles; i++ ) {
 				Vector2 dir = new Vector2( rand.NextFloat() - 0.5f, rand.NextFloat() - 0.5f );
@@ -25,7 +25,7 @@ namespace TheTrickster.NPCs {
 		}
 
 		public static void AnimateAttackChargeAreaFX( Vector2 position, float percentCharged, int particles ) {
-			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
+			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
 			float radius = 80f;
 			bool willDrawLightning = (rand.NextFloat() * 3f) < (percentCharged * percentCharged);
 

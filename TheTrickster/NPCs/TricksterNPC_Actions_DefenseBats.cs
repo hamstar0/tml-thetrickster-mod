@@ -3,9 +3,9 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Buffs;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Fx;
+using ModLibsCore.Libraries.Debug;
+using ModLibsGeneral.Libraries.Fx;
+using ModLibsUtilityContent.Buffs;
 using TheTrickster.Protocols;
 
 
@@ -21,7 +21,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( Main.netMode != NetmodeID.Server ) {
-				ParticleFxHelpers.MakeDustCloud( this.npc.Center, 3, 0.3f, 2f );
+				ParticleFxLibraries.MakeDustCloud( this.npc.Center, 3, 0.3f, 2f );
 			}
 		}
 
@@ -37,7 +37,7 @@ namespace TheTrickster.NPCs {
 			npc.lifeMax = 1;
 			npc.defense = 999999;
 			npc.damage = 1;
-			//npc.color = XNAColorHelpers.Mul( npc.color, Color.Red );
+			//npc.color = XNAColorLibraries.Mul( npc.color, Color.Red );
 			npc.value = 0;
 			npc.SpawnedFromStatue = true;	// no loot abuse?
 			npc.velocity = new Vector2(
@@ -51,7 +51,7 @@ namespace TheTrickster.NPCs {
 
 			if( Main.netMode == NetmodeID.Server ) {
 				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
-				TricksterBatProtocol.Broadcast( npcWho );
+				TricksterBatProtocol.BroadcastToClients( npcWho );
 			}
 
 			npc.AddBuff( ModContent.BuffType<DegreelessnessBuff>(), 60 );

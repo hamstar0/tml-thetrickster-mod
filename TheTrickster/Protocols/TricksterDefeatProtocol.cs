@@ -2,20 +2,21 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Classes.Errors;
-using HamstarHelpers.Classes.Protocols.Packet.Interfaces;
-using HamstarHelpers.Helpers.Debug;
+using ModLibsCore.Classes.Errors;
+using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Services.Network.SimplePacket;
 
 
 namespace TheTrickster.Protocols {
-	class TricksterDefeatProtocol : PacketProtocolSendToClient {
-		public static void Send( int tileX, int tileY ) {
+	[Serializable]
+	class TricksterDefeatProtocol : SimplePacketPayload {
+		public static void BroadcastToClients( int tileX, int tileY ) {
 			if( Main.netMode != NetmodeID.Server ) {
-				throw new ModHelpersException("Not server");
+				throw new ModLibsException("Not server");
 			}
 
-			var protocol = new TricksterDefeatProtocol( tileX, tileY );
-			protocol.SendToClient( -1, -1 );
+			var packet = new TricksterDefeatProtocol( tileX, tileY );
+			SimplePacket.SendToClient( packet , -1, -1 );
 		}
 
 
@@ -39,10 +40,11 @@ namespace TheTrickster.Protocols {
 
 		////////////////
 
-		protected override void InitializeServerSendData( int toWho ) {
+		public override void ReceiveOnServer( int fromWho ) {
+			throw new NotImplementedException();
 		}
 
-		protected override void Receive() {
+		public override void ReceiveOnClient() {
 			var myworld = ModContent.GetInstance<TheTricksterWorld>();
 
 			myworld.AddTricksterDefeat( this.TileX, this.TileY );

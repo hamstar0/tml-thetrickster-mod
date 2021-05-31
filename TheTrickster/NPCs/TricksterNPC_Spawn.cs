@@ -2,13 +2,13 @@
 using System.Linq;
 using Terraria;
 using Terraria.ModLoader;
-using HamstarHelpers.Helpers.World;
+using ModLibsGeneral.Libraries.World;
 
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public static bool IsWithinSpawnRange( int tileX, int tileY ) {
-			//return tileY >= WorldHelpers.RockLayerTopTileY; // Underground and underworld only
+			//return tileY >= WorldLibraries.RockLayerTopTileY; // Underground and underworld only
 			return true;
 		}
 
@@ -34,7 +34,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			// If on surface, only spawn where there's background walls
-			if( tileY < WorldHelpers.SurfaceLayerBottomTileY ) {
+			if( tileY < WorldLocationLibraries.SurfaceLayerBottomTileY ) {
 				if( ( Main.tile[tileX, tileY]?.wall ?? 0 ) == 0 ) {
 					return false;
 				}
@@ -63,7 +63,7 @@ namespace TheTrickster.NPCs {
 				return 0f;
 			}
 
-			if( tileY < WorldHelpers.SurfaceLayerBottomTileY ) {
+			if( tileY < WorldLocationLibraries.SurfaceLayerBottomTileY ) {
 				return TheTricksterConfig.Instance.Get<float>( nameof(TheTricksterConfig.SpawnChanceAboveGround) );
 			} else {
 				return TheTricksterConfig.Instance.Get<float>( nameof(TheTricksterConfig.SpawnChanceUnderGround) );

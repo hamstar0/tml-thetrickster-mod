@@ -4,17 +4,17 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.Utilities;
-using HamstarHelpers.Classes.Tiles.TilePattern;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Fx;
-using HamstarHelpers.Helpers.TModLoader;
-using HamstarHelpers.Helpers.World;
-
+using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Libraries.TModLoader;
+using ModLibsGeneral.Libraries.Fx;
+using ModLibsGeneral.Libraries.World;
+using ModLibsTiles.Classes.Tiles.TilePattern;
+using ModLibsGeneral.Libraries.Tiles;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public void DodgeAction( int minDodgeRadius, int maxDodgeRadius ) {
-			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
+			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
 			int minDistSqr = minDodgeRadius * minDodgeRadius;
 
 			int plrWho = this.npc.HasPlayerTarget
@@ -50,7 +50,12 @@ namespace TheTrickster.NPCs {
 				testPos = player.Center + dir;
 				maxDodgeRadius += 1;
 
-				isOnGround = WorldHelpers.DropToGround( testPos, false, TilePattern.CommonSolid, out groundPos );
+				isOnGround = TileWorldLibraries.DropToGround(
+					worldPos: testPos,
+					invertGravity: false,
+					isGround: (x2, y2) => TilePattern.CommonSolid.Check(x2, y2),
+					groundPos: out groundPos
+				);
 				if( !isOnGround ) { continue; }
 
 				if( Vector2.DistanceSquared(player.Center, groundPos) < minDistSqr ) {
@@ -63,7 +68,7 @@ namespace TheTrickster.NPCs {
 			} while( !isOnGround || !validLanding.CheckArea( new Rectangle(tileX-1, tileY-3, 3, 3) ) );
 
 			// Before
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
+			ParticleFxLibraries.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
@@ -74,7 +79,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			// After
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
+			ParticleFxLibraries.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 		}
 	}
 }

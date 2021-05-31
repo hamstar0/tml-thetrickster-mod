@@ -2,21 +2,22 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Classes.Errors;
-using HamstarHelpers.Classes.Protocols.Packet.Interfaces;
-using HamstarHelpers.Helpers.Debug;
+using ModLibsCore.Classes.Errors;
+using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Services.Network.SimplePacket;
 using TheTrickster.NPCs;
 
 
 namespace TheTrickster.Protocols {
-	class TricksterStealProtocol : PacketProtocolBroadcast {
-		public static void Broadcast( int npcWho, int itemWho ) {
+	[Serializable]
+	class TricksterStealProtocol : SimplePacketPayload {
+		public static void BroadcastToClients( int npcWho, int itemWho ) {
 			if( Main.netMode != NetmodeID.Server ) {
-				throw new ModHelpersException("Not server");
+				throw new ModLibsException("Not server");
 			}
 
-			var protocol = new TricksterStealProtocol( npcWho, itemWho );
-			protocol.SendToClient( -1, -1 );
+			var packet = new TricksterStealProtocol( npcWho, itemWho );
+			SimplePacket.SendToClient( packet, -1, -1 );
 		}
 
 
@@ -40,20 +41,20 @@ namespace TheTrickster.Protocols {
 
 		////////////////
 
-		protected override void ReceiveOnClient() {
+		public override void ReceiveOnClient() {
 			NPC npc = Main.npc[ this.NpcWho ];
 			if( !npc.active ) {
-				LogHelpers.Warn( "Nonexistent thief (" + this.NpcWho + ")." );
+				LogLibraries.Warn( "Nonexistent thief (" + this.NpcWho + ")." );
 				return;
 			}
 			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
-				LogHelpers.AlertOnce( "Mismatched NPC type." );
+				LogLibraries.AlertOnce( "Mismatched NPC type." );
 				return;
 			}
 
 			Item item = Main.item[ this.ItemWho ];
 			if( !item.active ) {
-				LogHelpers.Warn( "Nonexistent item stolen ("+this.ItemWho+")." );
+				LogLibraries.Warn( "Nonexistent item stolen ("+this.ItemWho+")." );
 				return;
 			}
 
@@ -62,7 +63,7 @@ namespace TheTrickster.Protocols {
 		}
 
 
-		protected override void ReceiveOnServer( int fromWho ) {
+		public override void ReceiveOnServer( int fromWho ) {
 			throw new NotImplementedException();
 		}
 	}

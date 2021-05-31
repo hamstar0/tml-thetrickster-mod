@@ -1,20 +1,21 @@
 ﻿using System;
 using Terraria;
 using Terraria.ID;
-using HamstarHelpers.Classes.Errors;
-using HamstarHelpers.Classes.Protocols.Packet.Interfaces;
-using HamstarHelpers.Helpers.Debug;
+using ModLibsCore.Classes.Errors;
+using ModLibsCore.Services.Network.SimplePacket;
+using ModLibsCore.Libraries.Debug;
 
 
 namespace TheTrickster.Protocols {
-	class TricksterBatProtocol : PacketProtocolBroadcast {
-		public static void Broadcast( int npcWho ) {
-			if( Main.netMode != 2 ) {
-				throw new ModHelpersException("Not server");
+	[Serializable]
+	class TricksterBatProtocol : SimplePacketPayload {
+		public static void BroadcastToClients( int npcWho ) {
+			if( Main.netMode != NetmodeID.Server ) {
+				throw new ModLibsException("Not server");
 			}
 
-			var protocol = new TricksterBatProtocol( npcWho );
-			protocol.SendToClient( -1, -1 );
+			var payload = new TricksterBatProtocol( npcWho );
+			SimplePacket.SendToClient( payload , - 1, -1 );
 		}
 
 
@@ -36,13 +37,13 @@ namespace TheTrickster.Protocols {
 
 		////////////////
 
-		protected override void ReceiveOnClient() {
+		public override void ReceiveOnClient() {
 			NPC npc = Main.npc[ this.NpcWho ];
 			if( !npc.active ) {
 				return;
 			}
 			if( npc.type != NPCID.CaveBat ) {
-				LogHelpers.AlertOnce( "Mismatched NPC type." );
+				LogLibraries.AlertOnce( "Mismatched NPC type." );
 				return;
 			}
 
@@ -51,7 +52,7 @@ namespace TheTrickster.Protocols {
 			mynpc.TricksterBatDurationTicks = config.Get<int>( nameof(config.TricksterDefensiveBatTickDuration) );
 		}
 
-		protected override void ReceiveOnServer( int fromWho ) {
+		public override void ReceiveOnServer( int fromWho ) {
 			throw new NotImplementedException();
 		}
 	}

@@ -5,9 +5,9 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using HamstarHelpers.Classes.DataStructures;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Services.Maps;
+using ModLibsCore.Classes.DataStructures;
+using ModLibsCore.Libraries.Debug;
+using ModLibsMaps.Services.Maps;
 using TheTrickster.Protocols;
 
 
@@ -55,7 +55,7 @@ namespace TheTrickster {
 					this._TricksterDefeatLocations.Add( (x, y) );
 
 					this.AddTricksterDefeatToMap( x, y );
-					//LogHelpers.Log( "Loaded "+(i+1)+" (of "+defeats+") victories over Trickster ("+x+", "+y+")." );
+					//LogLibraries.Log( "Loaded "+(i+1)+" (of "+defeats+") victories over Trickster ("+x+", "+y+")." );
 				}
 			}
 
@@ -77,7 +77,7 @@ namespace TheTrickster {
 				i++;
 			}
 
-			LogHelpers.Log( "Saved "+this._TricksterDefeatLocations.Count+" victories over Trickster." );
+			LogLibraries.Log( "Saved "+this._TricksterDefeatLocations.Count+" victories over Trickster." );
 
 			return tag;
 		}
@@ -140,7 +140,7 @@ namespace TheTrickster {
 			this.AddTricksterDefeatToMap( tileX, tileY );
 
 			if( Main.netMode == NetmodeID.Server ) {
-				TricksterDefeatProtocol.Send( tileX, tileY );
+				TricksterDefeatProtocol.BroadcastToClients( tileX, tileY );
 			}
 		}
 

@@ -3,8 +3,8 @@ using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Players;
+using ModLibsCore.Libraries.Debug;
+using ModLibsGeneral.Libraries.Players;
 using TheTrickster.Protocols;
 
 
@@ -17,10 +17,10 @@ namespace TheTrickster.NPCs {
 
 			int randSlot;
 			do {
-				randSlot = Main.rand.Next( 0, PlayerItemHelpers.VanillaInventoryLastMainSlot );
+				randSlot = Main.rand.Next( 0, PlayerItemLibraries.VanillaInventoryLastMainSlot );
 			} while( player.inventory[randSlot].IsAir || player.selectedItem == randSlot );
 
-			int itemIdx = PlayerItemHelpers.DropInventoryItem( player, randSlot );
+			int itemIdx = PlayerItemLibraries.DropInventoryItem( player, randSlot );
 			Item item = Main.item[ itemIdx ];
 			if( item.IsAir ) {
 				return false;
@@ -44,7 +44,7 @@ namespace TheTrickster.NPCs {
 			myitem.IsStolenBy = this.npc.whoAmI;
 
 			if( Main.netMode == NetmodeID.Server ) {
-				TricksterStealProtocol.Broadcast( this.npc.whoAmI, itemIdx );
+				TricksterStealProtocol.BroadcastToClients( this.npc.whoAmI, itemIdx );
 			}
 
 			return true;

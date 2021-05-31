@@ -5,10 +5,10 @@ using Terraria.ID;
 using Terraria.Utilities;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
-using HamstarHelpers.Helpers.Debug;
-using HamstarHelpers.Helpers.Fx;
-using HamstarHelpers.Helpers.Items;
-using HamstarHelpers.Helpers.TModLoader;
+using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Libraries.TModLoader;
+using ModLibsGeneral.Libraries.Fx;
+using ModLibsGeneral.Libraries.Items;
 
 
 namespace TheTrickster.NPCs {
@@ -37,10 +37,10 @@ namespace TheTrickster.NPCs {
 		////////////////
 
 		public void Defeat() {
-			UnifiedRandom rand = TmlHelpers.SafelyGetRand();
+			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
 
 			FX.TricksterLaughFX( this.npc.Center );
-			ParticleFxHelpers.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
+			ParticleFxLibraries.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
 			if( this.npc.target == Main.myPlayer ) {
 				switch( rand.Next(6) ) {
@@ -71,7 +71,7 @@ namespace TheTrickster.NPCs {
 
 				int dropItemType = dropItemDef?.Type ?? -1;
 				if( dropItemType != -1 ) {
-					ItemHelpers.CreateItem( this.npc.position, dropItemType, 1, 24, 24 );
+					ItemLibraries.CreateItem( this.npc.position, dropItemType, 1, 24, 24 );
 				}
 			}
 

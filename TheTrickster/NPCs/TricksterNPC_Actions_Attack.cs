@@ -2,8 +2,8 @@
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ModLoader;
-using HamstarHelpers.Buffs;
-using HamstarHelpers.Helpers.Debug;
+using ModLibsCore.Libraries.Debug;
+using ModLibsUtilityContent.Buffs;
 
 
 namespace TheTrickster.NPCs {

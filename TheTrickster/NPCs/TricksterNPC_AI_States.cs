@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using HamstarHelpers.Helpers.Collisions;
+using ModLibsGeneral.Libraries.Collisions;
 using TheTrickster.Protocols;
 
 
@@ -48,7 +48,7 @@ namespace TheTrickster.NPCs {
 			this.PostSetState( ref newState );
 
 			if( syncs && Main.netMode == NetmodeID.Server ) {
-				TricksterStateProtocol.Broadcast( this.npc.whoAmI, newState );
+				TricksterStateProtocol.BroadcastToClients( this.npc.whoAmI, newState );
 			}
 		}
 
@@ -73,7 +73,7 @@ namespace TheTrickster.NPCs {
 			(int x, int y) npcTile = ((int)this.npc.Center.X / 16, (int)this.npc.Center.Y / 16);
 			IList<(int, int)> path;
 
-			if( TileCollisionHelpers.FindPathSimple( plrTile, npcTile, 2000, out path ) ) {
+			if( TileCollisionLibraries.FindPathSimple( plrTile, npcTile, 2000, out path ) ) {
 				state = TricksterState.AttackChargeup;
 
 				this.SetState( state, false );
