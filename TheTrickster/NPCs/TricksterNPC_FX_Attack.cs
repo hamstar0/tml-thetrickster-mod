@@ -80,7 +80,10 @@ namespace TheTrickster.NPCs {
 					this.AttackChargeSoundInstance.Volume = 0.25f + ((percent * 0.75f) * distScale);
 				}	//<- volume doesnt work?*/
 				this.AttackChargeSoundInstance = Main.PlaySound( SoundID.Item93, this.npc.Center );
-				this.AttackChargeSoundInstance.Volume *= 0.25f + ( percent * 0.75f );
+
+				if( this.AttackChargeSoundInstance != null ) {
+					this.AttackChargeSoundInstance.Volume *= 0.25f + ( percent * 0.75f );
+				}
 			}
 
 			TricksterNPC.AnimateAttackChargeAreaFX( this.npc.Center, percent, 12 );

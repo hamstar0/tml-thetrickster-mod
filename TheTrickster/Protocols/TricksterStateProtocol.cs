@@ -44,16 +44,17 @@ namespace TheTrickster.Protocols {
 		public override void ReceiveOnClient() {
 			NPC npc = Main.npc[ this.NpcWho ];
 			if( !npc.active ) {
+				LogLibraries.AlertOnce( "Inactive NPC type." );
 				return;
 			}
 			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
-				LogLibraries.AlertOnce( "Mismatched NPC type." );
+				LogLibraries.AlertOnce( "Mismatched NPC type (is "+npc.FullName+")." );
 				return;
 			}
 
 			var mynpc = npc.modNPC as TricksterNPC;
 			if( mynpc == null ) {
-				LogLibraries.WarnOnce( "Trickster is not a Trickster...?" );
+				LogLibraries.WarnOnce( "Trickster is not a Trickster... (is "+npc.FullName+")?" );
 				return;
 			}
 
