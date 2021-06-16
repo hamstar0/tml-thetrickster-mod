@@ -6,7 +6,6 @@ using Terraria.ModLoader;
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		private void RunOnHitAI() {
-
 			switch( this.State ) {
 			case TricksterState.Mock:
 				this.RunOnHitAI_Leave( false );

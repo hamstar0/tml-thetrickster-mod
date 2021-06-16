@@ -7,13 +7,13 @@ using Terraria.Utilities;
 using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Libraries.TModLoader;
 using ModLibsGeneral.Libraries.Fx;
-using ModLibsGeneral.Libraries.World;
-using ModLibsTiles.Classes.Tiles.TilePattern;
 using ModLibsGeneral.Libraries.Tiles;
+using ModLibsTiles.Classes.Tiles.TilePattern;
+
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		public void DodgeAction( int minDodgeRadius, int maxDodgeRadius ) {
+		public void DodgeAction( int minDodgeRadius, int maxDodgeRadius, bool syncsIfServer = true ) {
 			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
 			int minDistSqr = minDodgeRadius * minDodgeRadius;
 
@@ -73,7 +73,7 @@ namespace TheTrickster.NPCs {
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
 
-				if( Main.netMode == NetmodeID.Server ) {
+				if( syncsIfServer && Main.netMode == NetmodeID.Server ) {
 					NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
 				}
 			}

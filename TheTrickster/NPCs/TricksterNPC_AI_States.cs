@@ -39,7 +39,7 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void SetState( TricksterState newState, bool syncs = true ) {
+		public void SetState( TricksterState newState, bool syncsIfServer = true ) {
 			this.State = newState;
 
 			this.HitsDuringCurrentStage = 0;
@@ -47,7 +47,7 @@ namespace TheTrickster.NPCs {
 
 			this.PostSetState( ref newState );
 
-			if( syncs && Main.netMode == NetmodeID.Server ) {
+			if( syncsIfServer && Main.netMode == NetmodeID.Server ) {
 				TricksterStateProtocol.BroadcastToClients( this.npc.whoAmI, newState );
 			}
 		}
