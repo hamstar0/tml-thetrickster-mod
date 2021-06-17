@@ -58,7 +58,11 @@ namespace TheTrickster.Protocols {
 				return;
 			}
 
-			mynpc.SetState( (TricksterState)this.State );
+			mynpc.SetState(
+				newState: (TricksterState)this.State,
+				syncsIfServer: false,
+				forcedForClient: true
+			);
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

@@ -39,7 +39,11 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void SetState( TricksterState newState, bool syncsIfServer = true ) {
+		public void SetState( TricksterState newState, bool syncsIfServer = true, bool forcedForClient=false ) {
+			if( !forcedForClient && Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
+			}
+
 			this.State = newState;
 
 			this.HitsDuringCurrentStage = 0;
