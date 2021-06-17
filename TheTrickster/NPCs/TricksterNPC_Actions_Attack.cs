@@ -14,7 +14,7 @@ namespace TheTrickster.NPCs {
 			int radiusSqr = atkRad * atkRad;
 			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
 
-			//this.HasAttacked = true;
+			this.HasAttacked = true;
 
 			this.CreateLaunchedAttackFX( atkRad );
 

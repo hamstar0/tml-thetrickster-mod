@@ -14,7 +14,7 @@ namespace TheTrickster.NPCs {
 		
 		public bool IsAlerted { get; private set; }
 
-		//public bool HasAttacked { get; private set; } = false;
+		public bool HasAttacked { get; private set; } = false;
 
 		public int ElapsedTicksAlive { get; private set; } = 0;
 		public int ElapsedStateTicks { get; private set; } = 0;
