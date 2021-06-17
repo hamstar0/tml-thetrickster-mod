@@ -52,6 +52,11 @@ namespace TheTrickster {
 		[DefaultValue( 60 * 10 )]
 		public int InvulnTickDuration { get; set; } = 60 * 10;
 
+		[Range( 0f, 10f )]
+		[DefaultValue( 1f / 2f )]
+		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
+		public float InvulnTickDurationScaleForBats { get; set; } = 1f / 2f;
+
 
 		[Range( 1, 100 )]
 		[DefaultValue( 1 )]

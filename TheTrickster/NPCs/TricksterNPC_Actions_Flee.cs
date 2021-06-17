@@ -28,6 +28,10 @@ namespace TheTrickster.NPCs {
 
 
 		public void DropBombs() {
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
+			}
+
 			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
 			Vector2 pos = this.npc.position;
 

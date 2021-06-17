@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using ModLibsUtilityContent.Buffs;
@@ -12,7 +13,6 @@ namespace TheTrickster.NPCs {
 			var config = TheTricksterConfig.Instance;
 			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
 			int radiusSqr = atkRad * atkRad;
-			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
 
 			this.HasAttacked = true;
 
@@ -29,20 +29,36 @@ namespace TheTrickster.NPCs {
 				if( Vector2.DistanceSquared(otherNpc.Center, this.npc.Center) >= radiusSqr ) {
 					continue;
 				}
-				var mynpc = otherNpc.GetGlobalNPC<TheTricksterGlobalNPC>();
-				if( mynpc.TricksterBatDurationTicks > 0 ) {
-					continue;
-				}
 
-				int invulDur = config.Get<int>( nameof(TheTricksterConfig.InvulnTickDuration) );
-
-				// Let's not make bats *that* evil!
-				if( npc.aiStyle == 14 ) {
-					invulDur = (invulDur * 3) / 4;
-				}
-
-				otherNpc.AddBuff( invulnBuffType, invulDur );
+				this.ApplyAttackEffectToNpc( otherNpc );
 			}
+		}
+
+
+		public bool ApplyAttackEffectToNpc( NPC otherNpc ) {
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
+				return false;
+			}
+
+			var config = TheTricksterConfig.Instance;
+			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
+
+			var mynpc = otherNpc.GetGlobalNPC<TheTricksterGlobalNPC>();
+			if( mynpc.TricksterBatDurationTicks > 0 ) {
+				return false;
+			}
+
+			int invulDur = config.Get<int>( nameof(TheTricksterConfig.InvulnTickDuration) );
+
+			// Let's not make bats *that* evil!
+			if( npc.aiStyle == 14 ) {
+				float scale = config.Get<float>( nameof( TheTricksterConfig.InvulnTickDurationScaleForBats ) );
+				invulDur = (int)((float)invulDur * scale );
+			}
+
+			otherNpc.AddBuff( invulnBuffType, invulDur );
+
+			return true;
 		}
 	}
 }
