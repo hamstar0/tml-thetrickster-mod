@@ -8,7 +8,6 @@ using ModLibsCore.Services.Network.SimplePacket;
 
 
 namespace TheTrickster.Protocols {
-	[Serializable]
 	class TricksterDefeatProtocol : SimplePacketPayload {
 		public static void BroadcastToClients( int tileX, int tileY ) {
 			if( Main.netMode != NetmodeID.Server ) {

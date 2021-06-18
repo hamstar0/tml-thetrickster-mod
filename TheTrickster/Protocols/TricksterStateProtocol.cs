@@ -9,7 +9,6 @@ using TheTrickster.NPCs;
 
 
 namespace TheTrickster.Protocols {
-	[Serializable]
 	class TricksterStateProtocol : SimplePacketPayload {
 		public static void BroadcastToClients( int npcWho, TricksterState state ) {
 			if( Main.netMode != NetmodeID.Server ) {
@@ -48,7 +47,7 @@ namespace TheTrickster.Protocols {
 				return;
 			}
 			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
-				LogLibraries.AlertOnce( "Mismatched NPC type (is "+npc.FullName+")." );
+				LogLibraries.AlertOnce( "Mismatched NPC type (is "+npc.FullName+", idx:"+this.NpcWho+")." );
 				return;
 			}
 

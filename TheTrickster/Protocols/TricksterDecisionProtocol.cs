@@ -9,13 +9,13 @@ using TheTrickster.NPCs;
 
 
 namespace TheTrickster.Protocols {
-	class TricksterStealProtocol : SimplePacketPayload {
-		public static void BroadcastToClients( int npcWho, int itemWho ) {
+	class TricksterDecisionProtocol : SimplePacketPayload {
+		public static void BroadcastToClients( int npcWho, TricksterDecision decision, TricksterState state ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var packet = new TricksterStealProtocol( npcWho, itemWho );
+			var packet = new TricksterDecisionProtocol( npcWho, (int)decision, (int)state );
 			SimplePacket.SendToClient( packet, -1, -1 );
 		}
 
@@ -24,17 +24,17 @@ namespace TheTrickster.Protocols {
 		////////////////
 
 		public int NpcWho;
-		public int ItemWho;
+		public int Decision;
 
 
 
 		////////////////
 
-		private TricksterStealProtocol() { }
+		private TricksterDecisionProtocol() { }
 
-		private TricksterStealProtocol( int npcWho, int itemWho ) {
+		private TricksterDecisionProtocol( int npcWho, int decision, int state ) {
 			this.NpcWho = npcWho;
-			this.ItemWho = itemWho;
+			this.Decision = decision;
 		}
 
 
@@ -43,24 +43,22 @@ namespace TheTrickster.Protocols {
 		public override void ReceiveOnClient() {
 			NPC npc = Main.npc[ this.NpcWho ];
 			if( !npc.active ) {
-				LogLibraries.Warn( "Nonexistent thief (" + this.NpcWho + ")." );
+				LogLibraries.AlertOnce( "Inactive NPC type." );
 				return;
 			}
 			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
-				LogLibraries.AlertOnce( "Mismatched NPC type." );
+				LogLibraries.AlertOnce( "Mismatched NPC type (is "+npc.FullName+", idx:"+this.NpcWho+")." );
 				return;
 			}
 
-			Item item = Main.item[ this.ItemWho ];
-			if( !item.active ) {
-				LogLibraries.Warn( "Nonexistent item stolen ("+this.ItemWho+")." );
+			var mynpc = npc.modNPC as TricksterNPC;
+			if( mynpc == null ) {
+				LogLibraries.WarnOnce( "Trickster is not a Trickster... (is "+npc.FullName+")?" );
 				return;
 			}
 
-			var myitem = item.GetGlobalItem<TheTricksterGlobalItem>();
-			myitem.IsStolenBy = this.NpcWho;
+			mynpc.EnactAIDecision( (TricksterDecision)this.Decision );
 		}
-
 
 		public override void ReceiveOnServer( int fromWho ) {
 			throw new NotImplementedException();

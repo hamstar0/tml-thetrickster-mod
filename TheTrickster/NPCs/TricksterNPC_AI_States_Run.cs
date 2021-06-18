@@ -6,27 +6,25 @@ using Terraria.ModLoader;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		private void RunAI_States() {
+		private TricksterDecision RunAI_States() {
 			switch( this.State ) {
 			case TricksterState.Mock:
-				this.RunAI_States_Mock();
-				break;
+				return this.RunAI_States_Mock();
 			case TricksterState.Lurk:
-				this.RunAI_States_Lurk();
-				break;
+				return this.RunAI_States_Lurk();
 			case TricksterState.AttackChargeup:
-				this.RunAI_States_Attack();
-				break;
+				return this.RunAI_States_Attack();
 			case TricksterState.Cooldown:
-				this.RunAI_States_Cooldown();
-				break;
+				return this.RunAI_States_Cooldown();
+			default:
+				return TricksterDecision.None;
 			}
 		}
 
 
 		////////////////
 
-		private void RunAI_States_Mock() {
+		private TricksterDecision RunAI_States_Mock() {
 			float helloRange = 16 * 16;
 			float helloRangeSqr = helloRange * helloRange;
 			bool saidHello = false;
@@ -48,14 +46,18 @@ namespace TheTrickster.NPCs {
 
 			if( saidHello ) {
 				this.EncounterFormal( true );
-				this.FleeAction( false );
+
+				return TricksterDecision.FleeNoBombs;
+				//this.FleeAction( false );
+			} else {
+				return TricksterDecision.None;
 			}
 		}
 
 
 		////////////////
 
-		private void RunAI_States_Lurk() {
+		private TricksterDecision RunAI_States_Lurk() {
 			var config = TheTricksterConfig.Instance;
 			int lurkStealRange = config.Get<int>( nameof(TheTricksterConfig.LurkStealRange) );
 			float stealRangeSqr = lurkStealRange * lurkStealRange;
@@ -78,30 +80,36 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( hasStolen ) {
-				int minDodgeRad = config.Get<int>( nameof(config.MinDodgeRadius) );
+				int minDodgeRad = config.Get<int>( nameof( config.MinDodgeRadius ) );
+				int maxDodgeRad = config.Get<int>( nameof( config.MaxDodgeRadius ) );
+				maxDodgeRad = ( ( maxDodgeRad - minDodgeRad ) / 3 ) + minDodgeRad;
 
-				this.DodgeAction( minDodgeRad, minDodgeRad );
+				this.DodgeAction( minDodgeRad, maxDodgeRad );
+
 				this.EncounterFormal( true );
 
 				this.SetState( TricksterState.PreAttack );
 			}
+			
+			return TricksterDecision.None;
 		}
 
 
 		////////////////
 
-		private int AttackChargingSideEffectCooldown = 0;
+		 private int AttackChargingSideEffectCooldown = 0;
 
-
-		public void RunAI_States_Attack() {
+		public TricksterDecision RunAI_States_Attack() {
 			if( this.AttackChargingSideEffectCooldown-- <= 0 ) {
 				this.AttackChargingSideEffectCooldown = 10;
 
-				this.RunAI_States_Attack_DeflectProjetiles();
+				return this.RunAI_States_Attack_DeflectProjetiles();
 			}
+
+			return TricksterDecision.None;
 		}
 
-		private void RunAI_States_Attack_DeflectProjetiles() {
+		private TricksterDecision RunAI_States_Attack_DeflectProjetiles() {
 			var config = TheTricksterConfig.Instance;
 			int atkRad = config.Get<int>( nameof(config.AttackRadius) );
 			float attackRangeSqr = atkRad * atkRad;
@@ -129,12 +137,14 @@ namespace TheTrickster.NPCs {
 					plr.velocity *= 0.9f;
 				}
 			}*/
+
+			return TricksterDecision.None;
 		}
 
 
 		////////////////
 
-		private void RunAI_States_Cooldown() {
+		private TricksterDecision RunAI_States_Cooldown() {
 			var dir = new Vector2( Main.rand.NextFloat() - 0.5f, Main.rand.NextFloat() - 0.5f );
 			dir.Normalize();
 
@@ -142,6 +152,8 @@ namespace TheTrickster.NPCs {
 			Vector2 fxPos = npc.Center + (dir * arcLength);
 
 			FX.TricksterChargeArc( fxPos, dir, arcLength, 0.01f, 0.06f );
+
+			return TricksterDecision.None;
 		}
 	}
 }

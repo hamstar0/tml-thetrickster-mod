@@ -7,7 +7,6 @@ using ModLibsCore.Libraries.Debug;
 
 
 namespace TheTrickster.Protocols {
-	[Serializable]
 	class TricksterBatProtocol : SimplePacketPayload {
 		public static void BroadcastToClients( int npcWho ) {
 			if( Main.netMode != NetmodeID.Server ) {

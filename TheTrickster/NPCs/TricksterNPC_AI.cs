@@ -1,4 +1,6 @@
 ﻿using System;
+using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 
@@ -15,9 +17,10 @@ namespace TheTrickster.NPCs {
 
 	public enum TricksterDecision : int {
 		None = 0,
-		Flee = 1,
-		StageFinished = 2,
-		//Laugh = 3
+		FleeNoBombs = 1,
+		FleeWithBombs = 2,
+		StageFinished = 3,
+		//Laugh = 4
 	}
 
 
@@ -28,27 +31,28 @@ namespace TheTrickster.NPCs {
 			this.ElapsedTicksAlive++;
 			this.ElapsedStateTicks++;
 
-			TricksterDecision decision = this.GetAIDecision();
+			TricksterDecision decision = this.GetGeneralAIDecision();
 
-			if( decision != TricksterDecision.None ) {
+			if( decision == TricksterDecision.None ) {
+				decision = this.RunAI_States();
+			}
+
+			if( Main.netMode != NetmodeID.MultiplayerClient ) {
 				this.EnactAIDecision( decision );
-			} else {
-				this.RunAI_States();
 			}
 		}
 
 
 		////////////////
 
-		private TricksterDecision GetAIDecision() {
+		private TricksterDecision GetGeneralAIDecision() {
 			if( this.State != TricksterState.AttackChargeup ) {
 				var config = TheTricksterConfig.Instance;
 				int fleeTicks = config.Get<int>( nameof(config.MaxEncounterDurationTicks) );
 
 				if( fleeTicks > 0 && this.ElapsedTicksAlive > fleeTicks ) {
-					return TricksterDecision.Flee;
+					return TricksterDecision.FleeNoBombs;
 				}
-
 			}
 
 			int stageDuration = TricksterNPC.GetCurrentStateTickDuration( this.State );
@@ -75,9 +79,12 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		private void EnactAIDecision( TricksterDecision decision ) {
-			switch( decision ) {
-			case TricksterDecision.Flee:
+		public void EnactAIDecision( TricksterDecision decision ) {
+			switch( decision ) { f
+			case TricksterDecision.FleeNoBombs:
+				this.FleeAction( false );
+				break;
+			case TricksterDecision.FleeWithBombs:
 				this.FleeAction( true );
 				break;
 			case TricksterDecision.StageFinished:
