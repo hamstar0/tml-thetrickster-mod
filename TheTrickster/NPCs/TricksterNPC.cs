@@ -106,7 +106,7 @@ namespace TheTrickster.NPCs {
 				TricksterDecision decision = this.RunOnHitAI();
 
 				if( Main.netMode != NetmodeID.MultiplayerClient ) {
-					this.EnactAIDecision( decision );
+					this.EnactAIDecision( decision, true );
 				}
 			}
 			return true;

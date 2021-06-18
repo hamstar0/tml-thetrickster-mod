@@ -10,12 +10,12 @@ using TheTrickster.NPCs;
 
 namespace TheTrickster.Protocols {
 	class TricksterDecisionProtocol : SimplePacketPayload {
-		public static void BroadcastToClients( int npcWho, TricksterDecision decision, TricksterState state ) {
+		public static void BroadcastToClients( int npcWho, TricksterDecision decision ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var packet = new TricksterDecisionProtocol( npcWho, (int)decision, (int)state );
+			var packet = new TricksterDecisionProtocol( npcWho, (int)decision );
 			SimplePacket.SendToClient( packet, -1, -1 );
 		}
 
@@ -32,7 +32,7 @@ namespace TheTrickster.Protocols {
 
 		private TricksterDecisionProtocol() { }
 
-		private TricksterDecisionProtocol( int npcWho, int decision, int state ) {
+		private TricksterDecisionProtocol( int npcWho, int decision ) {
 			this.NpcWho = npcWho;
 			this.Decision = decision;
 		}
@@ -57,7 +57,7 @@ namespace TheTrickster.Protocols {
 				return;
 			}
 
-			mynpc.EnactAIDecision( (TricksterDecision)this.Decision );
+			mynpc.EnactAIDecision( (TricksterDecision)this.Decision, false );
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-
+using TheTrickster.Protocols;
 
 namespace TheTrickster.NPCs {
 	public enum TricksterState : int {
@@ -38,7 +38,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
-				this.EnactAIDecision( decision );
+				this.EnactAIDecision( decision, true );
 			}
 		}
 
@@ -79,8 +79,8 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void EnactAIDecision( TricksterDecision decision ) {
-			switch( decision ) { f
+		public void EnactAIDecision( TricksterDecision decision, bool sync ) {
+			switch( decision ) {
 			case TricksterDecision.FleeNoBombs:
 				this.FleeAction( false );
 				break;
@@ -93,6 +93,10 @@ namespace TheTrickster.NPCs {
 			//case TricksterDecision.Laugh:
 			//	this.EncounterFX();
 			//	return true;
+			}
+
+			if( sync && Main.netMode == NetmodeID.Server ) {
+				TricksterDecisionProtocol.BroadcastToClients( this.npc.whoAmI, decision );
 			}
 		}
 	}
