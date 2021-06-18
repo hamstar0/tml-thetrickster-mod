@@ -14,7 +14,7 @@ namespace TheTrickster {
 
 
 		////////////////
-
+		
 		public T Get<T>( string propName ) {
 			if( !this.Overrides.TryGetValue( propName, out object val ) ) {
 				if( !ReflectionLibraries.Get( this, propName, out T myval ) ) {

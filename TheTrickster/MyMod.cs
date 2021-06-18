@@ -38,8 +38,6 @@ namespace TheTrickster {
 		////
 
 		public override void Load() {
-			TheTricksterConfig.Instance = ModContent.GetInstance<TheTricksterConfig>();
-
 			if( Main.netMode != NetmodeID.Server && !Main.dedServ ) {
 				this.MapIcon = ModContent.GetTexture( "TheTrickster/NPCs/TricksterIcon" );
 			}
@@ -54,7 +52,6 @@ namespace TheTrickster {
 		////
 
 		public override void Unload() {
-			TheTricksterConfig.Instance = null;
 			TheTricksterMod.Instance = null;
 		}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using ModLibsCore.Classes.UI.ModConfig;
 using ModLibsCore.Libraries.Debug;
@@ -11,7 +12,7 @@ namespace TheTrickster {
 
 	
 	public partial class TheTricksterConfig : ModConfig {
-		public static TheTricksterConfig Instance { get; internal set; }
+		public static TheTricksterConfig Instance => ModContent.GetInstance<TheTricksterConfig>();
 
 
 
@@ -26,6 +27,7 @@ namespace TheTrickster {
 		public override ModConfig Clone() {
 			var clone = (TheTricksterConfig)this.MemberwiseClone();
 			clone.DropsOnDefeat = new ItemDefinition( this.DropsOnDefeat.Type );
+
 			return clone;
 		}
 	}
