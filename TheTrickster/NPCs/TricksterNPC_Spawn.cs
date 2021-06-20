@@ -89,10 +89,9 @@ namespace TheTrickster.NPCs {
 			var mynpc = myNpc.modNPC as TricksterNPC;
 			TricksterState state = this.DecideOnSpawnState();
 			
-			if( Main.netMode == NetmodeID.Server ) {
-				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npcWho );
-				//TricksterStateProtocol.Broadcast( this.npc.whoAmI, state );    < -Is this handled by SendExtraAI?
-			}
+			//if( Main.netMode == NetmodeID.Server ) {
+			//	NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npcWho );    < -Is this handled by SendExtraAI?
+			//}
 
 			mynpc.SetState( state );
 
