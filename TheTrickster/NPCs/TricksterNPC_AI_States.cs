@@ -51,6 +51,8 @@ namespace TheTrickster.NPCs {
 
 			this.PostSetState( ref newState );
 
+			this.State = newState;
+
 			if( syncsIfServer && Main.netMode == NetmodeID.Server ) {
 				TricksterStateProtocol.BroadcastToClients( this.npc.whoAmI, newState );
 			}
@@ -60,14 +62,13 @@ namespace TheTrickster.NPCs {
 
 		private void PostSetState( ref TricksterState state ) {
 			Player plr = this.TargetPlayer;
-			if( plr == null ) {
-				return;
-			}
 
-			switch( state ) {
-			case TricksterState.PreAttack:
-				this.PostSetState_PreAttack( plr, ref state );
-				break;
+			if( plr != null ) {
+				switch( state ) {
+				case TricksterState.PreAttack:
+					this.PostSetState_PreAttack( plr, ref state );
+					break;
+				}
 			}
 		}
 

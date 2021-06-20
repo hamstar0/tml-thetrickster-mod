@@ -20,7 +20,11 @@ namespace TheTrickster.NPCs {
 			this.IsAlerted = isAlerted;
 
 			if( state != this.State ) {
-				this.SetState( state, false, true );
+				//this.SetState( state, false, true );	<- State changes handle their own sync, separately and manually
+				this.State = state;
+
+				this.HitsDuringCurrentStage = 0;
+				this.ElapsedStateTicks = 0;
 			}
 		}
 	}
