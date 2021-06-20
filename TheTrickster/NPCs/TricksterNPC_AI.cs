@@ -4,6 +4,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using TheTrickster.Protocols;
 
+
 namespace TheTrickster.NPCs {
 	public enum TricksterState : int {
 		Idle = 0,

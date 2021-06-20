@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using Terraria.ModLoader;
 using Terraria.ModLoader.Config;
 using ModLibsCore.Classes.UI.ModConfig;
@@ -26,6 +27,9 @@ namespace TheTrickster {
 
 		public override ModConfig Clone() {
 			var clone = (TheTricksterConfig)this.MemberwiseClone();
+
+			clone.Overrides = new ConcurrentDictionary<string, object>( this.Overrides );
+
 			clone.DropsOnDefeat = new ItemDefinition( this.DropsOnDefeat.Type );
 
 			return clone;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
+using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.World;
 
 
@@ -72,22 +74,27 @@ namespace TheTrickster.NPCs {
 
 
 		////////////////
-
+		
 		public override int SpawnNPC( int tileX, int tileY ) {
 			int npcWho = base.SpawnNPC( tileX, tileY );
 			NPC myNpc = Main.npc[npcWho];
+			if( !myNpc?.active != true || myNpc.type != ModContent.NPCType<TricksterNPC>() ) {
+				LogLibraries.Alert( "Could not spawn Trickster." );
+				return npcWho;
+			}
 
 			int nearPlrWho = myNpc.FindClosestPlayer();
 			myNpc.target = nearPlrWho;
 
 			var mynpc = myNpc.modNPC as TricksterNPC;
 			TricksterState state = this.DecideOnSpawnState();
+			
+			if( Main.netMode == NetmodeID.Server ) {
+				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npcWho );
+				//TricksterStateProtocol.Broadcast( this.npc.whoAmI, state );    < -Is this handled by SendExtraAI?
+			}
 
 			mynpc.SetState( state );
-
-			//if( Main.netMode == NetmodeID.Server ) {	<- Is this handled by SendExtraAI?
-			//	TricksterStateProtocol.Broadcast( this.npc.whoAmI, state );
-			//}
 
 			return npcWho;
 		}
