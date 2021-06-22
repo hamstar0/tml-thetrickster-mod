@@ -2,7 +2,7 @@
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using TheTrickster.Protocols;
+using TheTrickster.Packets;
 
 
 namespace TheTrickster.NPCs {
@@ -97,7 +97,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( sync && Main.netMode == NetmodeID.Server ) {
-				TricksterDecisionProtocol.BroadcastToClients( this.npc.whoAmI, decision );
+				TricksterDecisionPacket.BroadcastToClients( this.npc.whoAmI, decision );
 			}
 		}
 	}

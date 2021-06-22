@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Services.Timers;
 using ModLibsUtilityContent.Buffs;
-using TheTrickster.Protocols;
+using TheTrickster.Packets;
 
 
 namespace TheTrickster.NPCs {
@@ -51,7 +51,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
-				TricksterAttackProtocol.BroadcastToClients( this.npc.whoAmI, attackCenter );
+				TricksterAttackPacket.BroadcastToClients( this.npc.whoAmI, attackCenter );
 			}
 
 			//

@@ -7,14 +7,14 @@ using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Services.Network.SimplePacket;
 
 
-namespace TheTrickster.Protocols {
-	class TricksterDefeatProtocol : SimplePacketPayload {
+namespace TheTrickster.Packets {
+	class TricksterDefeatPacket : SimplePacketPayload {
 		public static void BroadcastToClients( int tileX, int tileY ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var packet = new TricksterDefeatProtocol( tileX, tileY );
+			var packet = new TricksterDefeatPacket( tileX, tileY );
 			SimplePacket.SendToClient( packet , -1, -1 );
 		}
 
@@ -29,9 +29,9 @@ namespace TheTrickster.Protocols {
 
 		////////////////
 
-		private TricksterDefeatProtocol() { }
+		private TricksterDefeatPacket() { }
 
-		private TricksterDefeatProtocol( int tileX, int tileY ) {
+		private TricksterDefeatPacket( int tileX, int tileY ) {
 			this.TileX = tileX;
 			this.TileY = tileY;
 		}

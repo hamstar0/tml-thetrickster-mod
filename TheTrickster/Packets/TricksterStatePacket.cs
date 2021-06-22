@@ -8,14 +8,14 @@ using ModLibsCore.Services.Network.SimplePacket;
 using TheTrickster.NPCs;
 
 
-namespace TheTrickster.Protocols {
-	class TricksterStealProtocol : SimplePacketPayload {
-		public static void BroadcastToClients( int npcWho, int itemWho ) {
+namespace TheTrickster.Packets {
+	class TricksterStatePacket : SimplePacketPayload {
+		public static void BroadcastToClients( int npcWho, TricksterState state ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var packet = new TricksterStealProtocol( npcWho, itemWho );
+			var packet = new TricksterStatePacket( npcWho, (int)state );
 			SimplePacket.SendToClient( packet, -1, -1 );
 		}
 
@@ -24,17 +24,17 @@ namespace TheTrickster.Protocols {
 		////////////////
 
 		public int NpcWho;
-		public int ItemWho;
+		public int State;
 
 
 
 		////////////////
 
-		private TricksterStealProtocol() { }
+		private TricksterStatePacket() { }
 
-		private TricksterStealProtocol( int npcWho, int itemWho ) {
+		private TricksterStatePacket( int npcWho, int state ) {
 			this.NpcWho = npcWho;
-			this.ItemWho = itemWho;
+			this.State = state;
 		}
 
 
@@ -47,16 +47,18 @@ namespace TheTrickster.Protocols {
 				return;
 			}
 
-			Item item = Main.item[ this.ItemWho ];
-			if( !item.active ) {
-				LogLibraries.Warn( "Nonexistent item stolen ("+this.ItemWho+")." );
+			var mynpc = npc.modNPC as TricksterNPC;
+			if( mynpc == null ) {
+				LogLibraries.WarnOnce( "Trickster is not a Trickster... (is "+npc.FullName+")?" );
 				return;
 			}
 
-			var myitem = item.GetGlobalItem<TheTricksterGlobalItem>();
-			myitem.IsStolenBy = this.NpcWho;
+			mynpc.SetState(
+				newState: (TricksterState)this.State,
+				syncsIfServer: false,
+				forcedForClient: true
+			);
 		}
-
 
 		public override void ReceiveOnServer( int fromWho ) {
 			throw new NotImplementedException();

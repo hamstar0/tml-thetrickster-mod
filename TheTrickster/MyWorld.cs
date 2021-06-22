@@ -8,7 +8,7 @@ using Terraria.ModLoader.IO;
 using ModLibsCore.Classes.DataStructures;
 using ModLibsCore.Libraries.Debug;
 using ModLibsMaps.Services.Maps;
-using TheTrickster.Protocols;
+using TheTrickster.Packets;
 
 
 namespace TheTrickster {
@@ -140,7 +140,7 @@ namespace TheTrickster {
 			this.AddTricksterDefeatToMap( tileX, tileY );
 
 			if( Main.netMode == NetmodeID.Server ) {
-				TricksterDefeatProtocol.BroadcastToClients( tileX, tileY );
+				TricksterDefeatPacket.BroadcastToClients( tileX, tileY );
 			}
 		}
 

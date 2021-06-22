@@ -5,7 +5,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.Players;
-using TheTrickster.Protocols;
+using TheTrickster.Packets;
 
 
 namespace TheTrickster.NPCs {
@@ -44,7 +44,7 @@ namespace TheTrickster.NPCs {
 			myitem.IsStolenBy = this.npc.whoAmI;
 
 			if( Main.netMode == NetmodeID.Server ) {
-				TricksterStealProtocol.BroadcastToClients( this.npc.whoAmI, itemIdx );
+				TricksterStealPacket.BroadcastToClients( this.npc.whoAmI, itemIdx );
 			}
 
 			return true;

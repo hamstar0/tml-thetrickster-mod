@@ -6,14 +6,14 @@ using ModLibsCore.Services.Network.SimplePacket;
 using ModLibsCore.Libraries.Debug;
 
 
-namespace TheTrickster.Protocols {
-	class TricksterBatProtocol : SimplePacketPayload {
+namespace TheTrickster.Packets {
+	class TricksterBatPacket : SimplePacketPayload {
 		public static void BroadcastToClients( int npcWho ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var payload = new TricksterBatProtocol( npcWho );
+			var payload = new TricksterBatPacket( npcWho );
 			SimplePacket.SendToClient( payload , - 1, -1 );
 		}
 
@@ -27,9 +27,9 @@ namespace TheTrickster.Protocols {
 
 		////////////////
 
-		private TricksterBatProtocol() { }
+		private TricksterBatPacket() { }
 
-		private TricksterBatProtocol( int npcWho ) {
+		private TricksterBatPacket( int npcWho ) {
 			this.NpcWho = npcWho;
 		}
 

@@ -4,7 +4,7 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsGeneral.Libraries.Collisions;
-using TheTrickster.Protocols;
+using TheTrickster.Packets;
 
 
 namespace TheTrickster.NPCs {
@@ -54,7 +54,7 @@ namespace TheTrickster.NPCs {
 			this.State = newState;
 
 			if( syncsIfServer && Main.netMode == NetmodeID.Server ) {
-				TricksterStateProtocol.BroadcastToClients( this.npc.whoAmI, newState );
+				TricksterStatePacket.BroadcastToClients( this.npc.whoAmI, newState );
 			}
 		}
 

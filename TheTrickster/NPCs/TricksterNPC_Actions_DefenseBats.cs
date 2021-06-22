@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.Fx;
 using ModLibsUtilityContent.Buffs;
-using TheTrickster.Protocols;
+using TheTrickster.Packets;
 
 
 namespace TheTrickster.NPCs {
@@ -51,7 +51,7 @@ namespace TheTrickster.NPCs {
 
 			if( Main.netMode == NetmodeID.Server ) {
 				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, batNpc.whoAmI );
-				TricksterBatProtocol.BroadcastToClients( batNpcWho );
+				TricksterBatPacket.BroadcastToClients( batNpcWho );
 			}
 
 			batNpc.AddBuff( ModContent.BuffType<DegreelessnessBuff>(), 60 );

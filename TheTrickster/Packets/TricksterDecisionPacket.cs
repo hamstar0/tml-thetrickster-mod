@@ -8,14 +8,14 @@ using ModLibsCore.Services.Network.SimplePacket;
 using TheTrickster.NPCs;
 
 
-namespace TheTrickster.Protocols {
-	class TricksterDecisionProtocol : SimplePacketPayload {
+namespace TheTrickster.Packets {
+	class TricksterDecisionPacket : SimplePacketPayload {
 		public static void BroadcastToClients( int npcWho, TricksterDecision decision ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var packet = new TricksterDecisionProtocol( npcWho, (int)decision );
+			var packet = new TricksterDecisionPacket( npcWho, (int)decision );
 			SimplePacket.SendToClient( packet, -1, -1 );
 		}
 
@@ -30,9 +30,9 @@ namespace TheTrickster.Protocols {
 
 		////////////////
 
-		private TricksterDecisionProtocol() { }
+		private TricksterDecisionPacket() { }
 
-		private TricksterDecisionProtocol( int npcWho, int decision ) {
+		private TricksterDecisionPacket( int npcWho, int decision ) {
 			this.NpcWho = npcWho;
 			this.Decision = decision;
 		}

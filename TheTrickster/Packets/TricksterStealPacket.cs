@@ -1,23 +1,22 @@
 ﻿using System;
-using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Errors;
-using ModLibsCore.Services.Network.SimplePacket;
 using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Services.Network.SimplePacket;
 using TheTrickster.NPCs;
 
 
-namespace TheTrickster.Protocols {
-	class TricksterAttackProtocol : SimplePacketPayload {
-		public static void BroadcastToClients( int npcWho, Vector2 attackCenter ) {
+namespace TheTrickster.Packets {
+	class TricksterStealPacket : SimplePacketPayload {
+		public static void BroadcastToClients( int npcWho, int itemWho ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var payload = new TricksterAttackProtocol( npcWho, attackCenter );
-			SimplePacket.SendToClient( payload , - 1, -1 );
+			var packet = new TricksterStealPacket( npcWho, itemWho );
+			SimplePacket.SendToClient( packet, -1, -1 );
 		}
 
 
@@ -25,17 +24,17 @@ namespace TheTrickster.Protocols {
 		////////////////
 
 		public int NpcWho;
-		public Vector2 AttackCenter;
+		public int ItemWho;
 
 
 
 		////////////////
 
-		private TricksterAttackProtocol() { }
+		private TricksterStealPacket() { }
 
-		private TricksterAttackProtocol( int npcWho, Vector2 attackCenter ) {
+		private TricksterStealPacket( int npcWho, int itemWho ) {
 			this.NpcWho = npcWho;
-			this.AttackCenter = attackCenter;
+			this.ItemWho = itemWho;
 		}
 
 
@@ -48,14 +47,16 @@ namespace TheTrickster.Protocols {
 				return;
 			}
 
-			var mynpc = npc.modNPC as TricksterNPC;
-			if( mynpc == null ) {
-				LogLibraries.WarnOnce( "Trickster is not a Trickster... (is " + npc.FullName + ")?" );
+			Item item = Main.item[ this.ItemWho ];
+			if( !item.active ) {
+				LogLibraries.Warn( "Nonexistent item stolen ("+this.ItemWho+")." );
 				return;
 			}
 
-			mynpc.LaunchAttack( this.AttackCenter, false, true );
+			var myitem = item.GetGlobalItem<TheTricksterGlobalItem>();
+			myitem.IsStolenBy = this.NpcWho;
 		}
+
 
 		public override void ReceiveOnServer( int fromWho ) {
 			throw new NotImplementedException();
