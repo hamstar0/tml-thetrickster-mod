@@ -66,10 +66,6 @@ namespace TheTrickster.NPCs {
 
 
 		public bool ApplyAttackEffectToNpc( NPC otherNpc ) {
-			if( Main.netMode == NetmodeID.MultiplayerClient ) {
-				return false;
-			}
-
 			var config = TheTricksterConfig.Instance;
 			int invulnBuffType = ModContent.BuffType<DegreelessnessBuff>();
 
