@@ -38,11 +38,8 @@ namespace TheTrickster.Protocols {
 
 		public override void ReceiveOnClient() {
 			NPC npc = Main.npc[ this.NpcWho ];
-			if( !npc.active ) {
-				return;
-			}
-			if( npc.type != NPCID.CaveBat ) {
-				LogLibraries.AlertOnce( "Mismatched NPC type." );
+			if( npc?.active != true || npc.type != NPCID.CaveBat ) {
+				LogLibraries.Alert( "Invalid bat ("+Main.npc[this.NpcWho]?.ToString()+")" );
 				return;
 			}
 

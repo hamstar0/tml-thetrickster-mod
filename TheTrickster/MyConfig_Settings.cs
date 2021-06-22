@@ -7,6 +7,11 @@ using ModLibsCore.Libraries.Debug;
 
 namespace TheTrickster {
 	public partial class TheTricksterConfig : ModConfig {
+		public bool DebugModeInfo { get; set; } = false;
+
+
+		////
+
 		[Range( 0f, 10f )]
 		[DefaultValue( 0.015f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]

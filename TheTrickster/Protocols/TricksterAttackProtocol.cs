@@ -1,22 +1,23 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Classes.Errors;
-using ModLibsCore.Libraries.Debug;
 using ModLibsCore.Services.Network.SimplePacket;
+using ModLibsCore.Libraries.Debug;
 using TheTrickster.NPCs;
 
 
 namespace TheTrickster.Protocols {
-	class TricksterStateProtocol : SimplePacketPayload {
-		public static void BroadcastToClients( int npcWho, TricksterState state ) {
+	class TricksterAttackProtocol : SimplePacketPayload {
+		public static void BroadcastToClients( int npcWho, Vector2 attackCenter ) {
 			if( Main.netMode != NetmodeID.Server ) {
 				throw new ModLibsException("Not server");
 			}
 
-			var packet = new TricksterStateProtocol( npcWho, (int)state );
-			SimplePacket.SendToClient( packet, -1, -1 );
+			var payload = new TricksterAttackProtocol( npcWho, attackCenter );
+			SimplePacket.SendToClient( payload , - 1, -1 );
 		}
 
 
@@ -24,17 +25,17 @@ namespace TheTrickster.Protocols {
 		////////////////
 
 		public int NpcWho;
-		public int State;
+		public Vector2 AttackCenter;
 
 
 
 		////////////////
 
-		private TricksterStateProtocol() { }
+		private TricksterAttackProtocol() { }
 
-		private TricksterStateProtocol( int npcWho, int state ) {
+		private TricksterAttackProtocol( int npcWho, Vector2 attackCenter ) {
 			this.NpcWho = npcWho;
-			this.State = state;
+			this.AttackCenter = attackCenter;
 		}
 
 
@@ -49,15 +50,11 @@ namespace TheTrickster.Protocols {
 
 			var mynpc = npc.modNPC as TricksterNPC;
 			if( mynpc == null ) {
-				LogLibraries.WarnOnce( "Trickster is not a Trickster... (is "+npc.FullName+")?" );
+				LogLibraries.WarnOnce( "Trickster is not a Trickster... (is " + npc.FullName + ")?" );
 				return;
 			}
 
-			mynpc.SetState(
-				newState: (TricksterState)this.State,
-				syncsIfServer: false,
-				forcedForClient: true
-			);
+			mynpc.LaunchAttack( this.AttackCenter, false, true );
 		}
 
 		public override void ReceiveOnServer( int fromWho ) {

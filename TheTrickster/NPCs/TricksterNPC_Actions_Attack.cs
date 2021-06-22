@@ -4,19 +4,25 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
+using ModLibsCore.Services.Timers;
 using ModLibsUtilityContent.Buffs;
+using TheTrickster.Protocols;
 
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		public void LaunchAttack() {
+		public void LaunchAttack( Vector2 attackCenter, bool syncIfServer, bool forceIfClient ) {
+			if( !forceIfClient && Main.netMode == NetmodeID.MultiplayerClient ) {
+				return;
+			}
+
 			var config = TheTricksterConfig.Instance;
 			int atkRad = config.Get<int>( nameof(TheTricksterConfig.AttackRadius) );
 			int radiusSqr = atkRad * atkRad;
 
 			this.HasAttacked = true;
 
-			this.CreateLaunchedAttackFX( atkRad );
+			this.CreateLaunchedAttackFX( attackCenter, atkRad );
 
 			for( int i=0; i<Main.npc.Length; i++ ) {
 				NPC otherNpc = Main.npc[i];
@@ -26,11 +32,35 @@ namespace TheTrickster.NPCs {
 				if( otherNpc.whoAmI == this.npc.whoAmI || otherNpc.type == this.npc.type ) {
 					continue;
 				}
-				if( Vector2.DistanceSquared(otherNpc.Center, this.npc.Center) >= radiusSqr ) {
+				if( Vector2.DistanceSquared(otherNpc.Center, attackCenter ) >= radiusSqr ) {
 					continue;
 				}
 
 				this.ApplyAttackEffectToNpc( otherNpc );
+
+				//
+
+				if( config.DebugModeInfo ) {
+					Vector2 targPos = otherNpc.Center;
+
+					Timers.RunUntil( () => {
+						Dust.QuickDust( targPos, Color.Green );
+						return true;
+					}, 60 * 5, true );
+				}
+			}
+
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+				TricksterAttackProtocol.BroadcastToClients( this.npc.whoAmI, attackCenter );
+			}
+
+			//
+
+			if( config.DebugModeInfo ) {
+				Timers.RunUntil( () => {
+					Dust.QuickDust( attackCenter, Color.Red );
+					return true;
+				}, 60 * 5, true );
 			}
 		}
 

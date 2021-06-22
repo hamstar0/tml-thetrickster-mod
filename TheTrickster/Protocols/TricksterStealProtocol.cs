@@ -42,12 +42,8 @@ namespace TheTrickster.Protocols {
 
 		public override void ReceiveOnClient() {
 			NPC npc = Main.npc[ this.NpcWho ];
-			if( !npc.active ) {
-				LogLibraries.Warn( "Nonexistent thief (" + this.NpcWho + ")." );
-				return;
-			}
-			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
-				LogLibraries.AlertOnce( "Mismatched NPC type." );
+			if( npc?.active != true || npc.type != ModContent.NPCType<TricksterNPC>() ) {
+				LogLibraries.Alert( "Invalid Trickster NPC ("+Main.npc[this.NpcWho]?.ToString()+")" );
 				return;
 			}
 

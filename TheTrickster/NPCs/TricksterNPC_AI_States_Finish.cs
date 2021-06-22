@@ -48,7 +48,7 @@ namespace TheTrickster.NPCs {
 			int minDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MinDodgeRadius) );
 			int maxDodgeRad = config.Get<int>( nameof(TheTricksterConfig.MaxDodgeRadius) );
 
-			this.DodgeAction( minDodgeRad, maxDodgeRad );
+			this.DodgeAction( minDodgeRad, maxDodgeRad, true );
 
 			this.SetState( TricksterState.PreAttack );
 		}
@@ -79,7 +79,7 @@ namespace TheTrickster.NPCs {
 
 
 		private void FinishAIState_Attack() {
-			this.LaunchAttack();
+			this.LaunchAttack( this.npc.Center, true, false );
 
 			this.SetState( TricksterState.Cooldown );
 		}
@@ -90,7 +90,7 @@ namespace TheTrickster.NPCs {
 			int minDodgeRad = config.Get<int>( nameof(config.MinDodgeRadius) );
 			int maxDodgeRad = config.Get<int>( nameof(config.MaxDodgeRadius) );
 
-			this.DodgeAction( minDodgeRad, maxDodgeRad );
+			this.DodgeAction( minDodgeRad, maxDodgeRad, true );
 
 			this.SetState( TricksterState.PreAttack );
 		}

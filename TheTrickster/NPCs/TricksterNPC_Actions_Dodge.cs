@@ -13,7 +13,7 @@ using ModLibsTiles.Classes.Tiles.TilePattern;
 
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
-		public void DodgeAction( int minDodgeRadius, int maxDodgeRadius ) {
+		public void DodgeAction( int minDodgeRadius, int maxDodgeRadius, bool syncIfServer ) {
 			int plrWho = this.npc.HasPlayerTarget
 					? this.npc.target
 					: this.npc.FindClosestPlayer();
@@ -30,15 +30,21 @@ namespace TheTrickster.NPCs {
 			ParticleFxLibraries.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 
 			if( Main.netMode != NetmodeID.MultiplayerClient ) {
-				this.DodgeActionMotion( player, minDodgeRadius, maxDodgeRadius );
+				this.npc.position = this.GetDodgeDestination( player.Center, minDodgeRadius, maxDodgeRadius );
 
 				// After
 				ParticleFxLibraries.MakeTeleportFx( this.npc.position, 48, this.npc.width, this.npc.height );
 			}
+
+			if( syncIfServer && Main.netMode == NetmodeID.Server ) {
+				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
+			}
 		}
 
 
-		public void DodgeActionMotion( Player player, int minDodgeRadius, int maxDodgeRadius ) {
+		////////////////
+
+		public Vector2 GetDodgeDestination( Vector2 rangeCenter, int minDodgeRadius, int maxDodgeRadius ) {
 			Vector2 dir, testPos, groundPos = default;
 			bool isOnGround;
 			int tileX = 0, tileY = 0;
@@ -61,7 +67,7 @@ namespace TheTrickster.NPCs {
 				dir.Normalize();
 				dir *= minDodgeRadius + ( rand.NextFloat() * (maxDodgeRadius - minDodgeRadius ) );
 
-				testPos = player.Center + dir;
+				testPos = rangeCenter + dir;
 				maxDodgeRadius += 1;
 
 				isOnGround = TileWorldLibraries.DropToGround(
@@ -72,7 +78,7 @@ namespace TheTrickster.NPCs {
 				);
 				if( !isOnGround ) { continue; }
 
-				if( Vector2.DistanceSquared(player.Center, groundPos) < minDistSqr ) {
+				if( Vector2.DistanceSquared(rangeCenter, groundPos) < minDistSqr ) {
 					isOnGround = false;
 					continue;
 				}
@@ -81,11 +87,7 @@ namespace TheTrickster.NPCs {
 				tileY = (int)groundPos.Y / 16;
 			} while( !isOnGround || !validLanding.CheckArea( new Rectangle(tileX-1, tileY-3, 3, 3) ) );
 
-			this.npc.position = groundPos - new Vector2( 0, this.npc.height + 1 );
-
-			if( Main.netMode == NetmodeID.Server ) {
-				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, this.npc.whoAmI );
-			}
+			return groundPos - new Vector2( 0, this.npc.height + 1 );
 		}
 	}
 }

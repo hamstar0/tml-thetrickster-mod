@@ -26,35 +26,35 @@ namespace TheTrickster.NPCs {
 		}
 
 		private void DeployDefenseBat() {
-			int npcWho = NPC.NewNPC( (int)this.npc.position.X, (int)this.npc.position.Y, NPCID.CaveBat, 0, 0f, 0f, 0f, 0f, this.npc.target );
-			NPC npc = Main.npc[npcWho];
-			if( !npc.active ) {
+			int batNpcWho = NPC.NewNPC( (int)this.npc.position.X, (int)this.npc.position.Y, NPCID.CaveBat, 0, 0f, 0f, 0f, 0f, this.npc.target );
+			NPC batNpc = Main.npc[batNpcWho];
+			if( !batNpc.active ) {
 				return;
 			}
 
-			npc.scale = 0.65f;
-			npc.life = 1;
-			npc.lifeMax = 1;
-			npc.defense = 999999;
-			npc.damage = 1;
+			batNpc.scale = 0.65f;
+			batNpc.life = 1;
+			batNpc.lifeMax = 1;
+			batNpc.defense = 999999;
+			batNpc.damage = 1;
 			//npc.color = XNAColorLibraries.Mul( npc.color, Color.Red );
-			npc.value = 0;
-			npc.SpawnedFromStatue = true;	// no loot abuse?
-			npc.velocity = new Vector2(
+			batNpc.value = 0;
+			batNpc.SpawnedFromStatue = true;	// no loot abuse?
+			batNpc.velocity = new Vector2(
 				Main.rand.NextFloat() - 0.5f,
 				Main.rand.NextFloat() - 0.5f
 			) * 8f;
 
 			var config = TheTricksterConfig.Instance;
-			var mynpc = npc.GetGlobalNPC<TheTricksterGlobalNPC>();
+			var mynpc = batNpc.GetGlobalNPC<TheTricksterGlobalNPC>();
 			mynpc.TricksterBatDurationTicks = config.Get<int>( nameof(config.TricksterDefensiveBatTickDuration) );
 
 			if( Main.netMode == NetmodeID.Server ) {
-				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npc.whoAmI );
-				TricksterBatProtocol.BroadcastToClients( npcWho );
+				NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, batNpc.whoAmI );
+				TricksterBatProtocol.BroadcastToClients( batNpcWho );
 			}
 
-			npc.AddBuff( ModContent.BuffType<DegreelessnessBuff>(), 60 );
+			batNpc.AddBuff( ModContent.BuffType<DegreelessnessBuff>(), 60 );
 		}
 	}
 }

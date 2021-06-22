@@ -52,7 +52,7 @@ namespace TheTrickster.NPCs {
 
 				this.DeployDefenseBats();
 
-				this.DodgeAction( minDodgeRad, maxDodgeRad );
+				this.DodgeAction( minDodgeRad, maxDodgeRad, true );
 
 				this.SetState( TricksterState.Idle );
 			} else {

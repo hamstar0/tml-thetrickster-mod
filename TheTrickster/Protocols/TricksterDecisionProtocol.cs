@@ -41,13 +41,9 @@ namespace TheTrickster.Protocols {
 		////////////////
 
 		public override void ReceiveOnClient() {
-			NPC npc = Main.npc[ this.NpcWho ];
-			if( !npc.active ) {
-				LogLibraries.AlertOnce( "Inactive NPC type." );
-				return;
-			}
-			if( npc.type != ModContent.NPCType<TricksterNPC>() ) {
-				LogLibraries.AlertOnce( "Mismatched NPC type (is "+npc.FullName+", idx:"+this.NpcWho+")." );
+			NPC npc = Main.npc[this.NpcWho];
+			if( npc?.active != true || npc.type != ModContent.NPCType<TricksterNPC>() ) {
+				LogLibraries.Alert( "Invalid Trickster NPC (" + Main.npc[this.NpcWho]?.ToString() + ")" );
 				return;
 			}
 

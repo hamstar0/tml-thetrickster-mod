@@ -13,7 +13,7 @@ namespace TheTrickster.NPCs {
 			case TricksterState.Lurk:
 				return this.RunAI_States_Lurk();
 			case TricksterState.AttackChargeup:
-				return this.RunAI_States_Attack();
+				return this.RunAI_States_AttackChargeup();
 			case TricksterState.Cooldown:
 				return this.RunAI_States_Cooldown();
 			default:
@@ -84,7 +84,7 @@ namespace TheTrickster.NPCs {
 				int maxDodgeRad = config.Get<int>( nameof( config.MaxDodgeRadius ) );
 				maxDodgeRad = ( ( maxDodgeRad - minDodgeRad ) / 3 ) + minDodgeRad;
 
-				this.DodgeAction( minDodgeRad, maxDodgeRad );
+				this.DodgeAction( minDodgeRad, maxDodgeRad, true );
 
 				this.EncounterFormal( true );
 
@@ -99,7 +99,7 @@ namespace TheTrickster.NPCs {
 
 		 private int AttackChargingSideEffectCooldown = 0;
 
-		public TricksterDecision RunAI_States_Attack() {
+		public TricksterDecision RunAI_States_AttackChargeup() {
 			if( this.AttackChargingSideEffectCooldown-- <= 0 ) {
 				this.AttackChargingSideEffectCooldown = 10;
 

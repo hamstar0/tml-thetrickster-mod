@@ -99,17 +99,15 @@ namespace TheTrickster.NPCs {
 
 		////
 
-		public void CreateLaunchedAttackFX( int radius ) {
-			Vector2 pos = this.npc.Center;
+		public void CreateLaunchedAttackFX( Vector2 attackCenter, int radius ) {
+			Main.PlaySound( SoundID.Item113, attackCenter );
 
-			Main.PlaySound( SoundID.Item113, pos );
-
-			Task.Run( () => TricksterNPC.AnimateAttackBurstFX( pos, radius, radius / 3 ) );
-			Task.Run( () => TricksterNPC.AnimateAttackBurstFX( pos, radius, radius / 3 ) );
-			Task.Run( () => TricksterNPC.AnimateAttackBurstFX( pos, radius, radius / 3 ) );
+			Task.Run( () => TricksterNPC.AnimateAttackBurstFX( attackCenter, radius, radius / 3 ) );
+			Task.Run( () => TricksterNPC.AnimateAttackBurstFX( attackCenter, radius, radius / 3 ) );
+			Task.Run( () => TricksterNPC.AnimateAttackBurstFX( attackCenter, radius, radius / 3 ) );
 			Task.Run( () => {
-				TricksterNPC.AnimateAttackBurstFX( pos, 64, 64 );
-				TricksterNPC.AnimateAttackBurstFX( pos, 32, 32 );
+				TricksterNPC.AnimateAttackBurstFX( attackCenter, 64, 64 );
+				TricksterNPC.AnimateAttackBurstFX( attackCenter, 32, 32 );
 			} );
 		}
 	}
