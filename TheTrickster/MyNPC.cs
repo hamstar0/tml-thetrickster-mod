@@ -26,7 +26,7 @@ namespace TheTrickster {
 			}
 
 			if( this.TricksterBatDurationTicks == 1 ) {
-				NPCLibraries.RawHurt( npc, 9999 );
+				NPCLibraries.RawHurt( npc, 9999, Main.netMode == NetmodeID.Server );
 			}
 
 			return base.PreAI( npc );
