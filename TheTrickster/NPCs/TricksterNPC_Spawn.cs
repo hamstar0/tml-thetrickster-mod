@@ -15,40 +15,50 @@ namespace TheTrickster.NPCs {
 		}
 
 		public static bool CanSpawn( int tileX, int tileY, Player player ) {
-			if( !TricksterNPC.IsWithinSpawnRange( tileX, tileY ) ) {
-				return false;
-			}
+			var config = TheTricksterConfig.Instance;
 
-			// Should have nearby NPCs
-			if( player.activeNPCs < 3f ) {
-				return false;
-			}
-
-			// "Normal" biomes only
-			/*spawnInfo.player.ZoneJungle ||*/
-			if( player.ZoneHoly || player.ZoneCorrupt || player.ZoneCrimson ) {
-				return false;
-			}
-
-			// No sandstorms
-			if( player.ZoneSandstorm ) {
-				return false;
-			}
-
-			// If on surface, only spawn where there's background walls
-			if( tileY < WorldLocationLibraries.SurfaceLayerBottomTileY ) {
-				if( ( Main.tile[tileX, tileY]?.wall ?? 0 ) == 0 ) {
+			if( !config.DebugModeSpawnsIgnoreRange ) {
+				if( !TricksterNPC.IsWithinSpawnRange( tileX, tileY ) ) {
 					return false;
 				}
 			}
 
-			// Only one at a time
-			if( Main.npc.Any( n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>() ) ) {
-				return false;
+			if( !config.DebugModeSpawnsIgnoreNpcs ) {
+				// Should have nearby NPCs
+				if( player.activeNPCs < config.Get<int>( nameof( config.RequiredNearbyNpcsForSpawn ) ) ) {
+					return false;
+				}
 			}
 
-			if( TricksterNPC.IsNearbyOtherTricksterDefeats( tileX, tileY ) ) {
-				return false;
+			if( !config.DebugModeSpawnsIgnoreLocation ) {
+				// "Normal" biomes only
+				/*spawnInfo.player.ZoneJungle ||*/
+				if( player.ZoneHoly || player.ZoneCorrupt || player.ZoneCrimson ) {
+					return false;
+				}
+
+				// No sandstorms
+				if( player.ZoneSandstorm ) {
+					return false;
+				}
+
+				// If on surface, only spawn where there's background walls
+				if( tileY < WorldLocationLibraries.SurfaceLayerBottomTileY ) {
+					if( ( Main.tile[tileX, tileY]?.wall ?? 0 ) == 0 ) {
+						return false;
+					}
+				}
+			}
+			
+			if( !config.DebugModeSpawnsIgnoreTricksters ) {
+				// Only one at a time
+				if( Main.npc.Any( n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>() ) ) {
+					return false;
+				}
+
+				if( TricksterNPC.IsNearbyOtherTricksterDefeats( tileX, tileY ) ) {
+					return false;
+				}
 			}
 
 			return true;
@@ -78,7 +88,7 @@ namespace TheTrickster.NPCs {
 		public override int SpawnNPC( int tileX, int tileY ) {
 			int npcWho = base.SpawnNPC( tileX, tileY );
 			NPC myNpc = Main.npc[npcWho];
-			if( !myNpc?.active != true || myNpc.type != ModContent.NPCType<TricksterNPC>() ) {
+			if( myNpc?.active != true || myNpc.type != ModContent.NPCType<TricksterNPC>() ) {
 				LogLibraries.Alert( "Could not spawn Trickster." );
 				return npcWho;
 			}

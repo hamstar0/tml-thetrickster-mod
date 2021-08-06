@@ -9,6 +9,14 @@ namespace TheTrickster {
 	public partial class TheTricksterConfig : ModConfig {
 		public bool DebugModeInfo { get; set; } = false;
 
+		public bool DebugModeSpawnsIgnoreRange { get; set; } = false;
+
+		public bool DebugModeSpawnsIgnoreLocation { get; set; } = false;
+
+		public bool DebugModeSpawnsIgnoreNpcs { get; set; } = false;
+
+		public bool DebugModeSpawnsIgnoreTricksters { get; set; } = false;
+
 
 		////
 
@@ -20,14 +28,20 @@ namespace TheTrickster {
 		[Range( 0f, 10f )]
 		[DefaultValue( 0.025f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float SpawnChanceUnderGround { get; set; } = 0.025f;	// 0.03?
+		public float SpawnChanceUnderGround { get; set; } = 0.025f; // 0.03?
 
 		//
-		
+
+		[Range( 0, 100 )]
+		[DefaultValue( 3 )]
+		public int RequiredNearbyNpcsForSpawn { get; set; } = 3;
+
+		//
+
 		[Range( 0f, 1f )]
 		[DefaultValue( 1f / 3f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float OnSpawnPassivePercentChance { get; set; } = 1f / 3f;
+		public float OnSpawnIsPassivePercentChance { get; set; } = 1f / 3f;
 
 		//
 

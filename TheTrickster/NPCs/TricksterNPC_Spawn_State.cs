@@ -13,7 +13,9 @@ namespace TheTrickster.NPCs {
 			}
 
 			var config = TheTricksterConfig.Instance;
-			if( Main.rand.NextFloat() < config.Get<float>(nameof(config.OnSpawnPassivePercentChance)) ) {
+			float passivePerc = config.Get<float>( nameof(config.OnSpawnIsPassivePercentChance) );
+
+			if( Main.rand.NextFloat() < passivePerc ) {
 				return TricksterState.Mock;
 			}
 
