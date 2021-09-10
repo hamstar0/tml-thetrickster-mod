@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.World;
@@ -13,6 +13,8 @@ namespace TheTrickster.NPCs {
 			//return tileY >= WorldLibraries.RockLayerTopTileY; // Underground and underworld only
 			return true;
 		}
+
+		////
 
 		public static bool CanSpawn( int tileX, int tileY, Player player ) {
 			var config = TheTricksterConfig.Instance;
@@ -64,6 +66,25 @@ namespace TheTrickster.NPCs {
 			return true;
 		}
 
+		public static bool CanSpawn_WorldGates_WeakRef( int tileX, int tileY ) {
+			foreach( WorldGates.GateBarrier barrer in WorldGates.WorldGatesAPI.GetGateBarriers() ) {
+				if( !barrer.IsActive ) {
+					continue;
+				}
+
+				Rectangle area = barrer.WorldArea;
+				area.X -= 3;
+				area.Y -= 3;
+				area.Width += 6;
+				area.Height += 6;
+
+				if( area.Contains(tileX, tileY) ) {
+					return false;
+				}
+			}
+			return true;
+		}
+
 
 
 		////////////////
@@ -73,6 +94,12 @@ namespace TheTrickster.NPCs {
 			int tileY = spawnInfo.spawnTileY;
 			if( !TricksterNPC.CanSpawn(tileX, tileY, spawnInfo.player) ) {
 				return 0f;
+			}
+
+			if( TheTricksterMod.Instance.IsWorldGatesLoaded ) {
+				if( !TricksterNPC.CanSpawn_WorldGates_WeakRef( tileX, tileY ) ) {
+					return 0f;
+				}
 			}
 
 			if( tileY < WorldLocationLibraries.SurfaceLayerBottomTileY ) {

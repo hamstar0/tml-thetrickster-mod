@@ -93,7 +93,7 @@ namespace TheTrickster.NPCs {
 		public override bool CheckDead() {
 			if( !this.IsDefeated ) {
 				this.IsDefeated = true;
-				this.Defeat();
+				this.Defeat( false );
 			}
 			return base.CheckDead();
 		}

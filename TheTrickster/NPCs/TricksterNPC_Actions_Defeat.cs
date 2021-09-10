@@ -36,32 +36,35 @@ namespace TheTrickster.NPCs {
 
 		////////////////
 
-		public void Defeat() {
-			UnifiedRandom rand = TmlLibraries.SafelyGetRand();
-
-			FX.TricksterLaughFX( this.npc.Center );
+		public void Defeat( bool quiet ) {
 			ParticleFxLibraries.MakeTeleportFx( this.npc.position, 72, this.npc.width, this.npc.height );
 
-			if( this.npc.target == Main.myPlayer ) {
-				switch( rand.Next(6) ) {
-				case 0:
-					Main.NewText( "I'll be back!", Color.DarkMagenta );
-					break;
-				case 1:
-					Main.NewText( "Ta ta!", Color.DarkMagenta );
-					break;
-				case 2:
-					Main.NewText( "This isn't over!", Color.DarkMagenta );
-					break;
-				case 3:
-					Main.NewText( "Hahahaha!", Color.DarkMagenta );
-					break;
-				case 4:
-					Main.NewText( "Nice try!", Color.DarkMagenta );
-					break;
-				case 5:
-					Main.NewText( "Whoops!", Color.DarkMagenta );
-					break;
+			if( !quiet ) {
+				UnifiedRandom rand = TmlLibraries.SafelyGetRand();
+
+				FX.TricksterLaughFX( this.npc.Center );
+
+				if( this.npc.target == Main.myPlayer ) {
+					switch( rand.Next(6) ) {
+					case 0:
+						Main.NewText( "I'll be back!", Color.DarkMagenta );
+						break;
+					case 1:
+						Main.NewText( "Ta ta!", Color.DarkMagenta );
+						break;
+					case 2:
+						Main.NewText( "This isn't over!", Color.DarkMagenta );
+						break;
+					case 3:
+						Main.NewText( "Hahahaha!", Color.DarkMagenta );
+						break;
+					case 4:
+						Main.NewText( "Nice try!", Color.DarkMagenta );
+						break;
+					case 5:
+						Main.NewText( "Whoops!", Color.DarkMagenta );
+						break;
+					}
 				}
 			}
 

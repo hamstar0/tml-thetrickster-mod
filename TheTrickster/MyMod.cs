@@ -27,17 +27,17 @@ namespace TheTrickster {
 
 		private float FlashPercent = 0f;
 
+		internal bool IsWorldGatesLoaded = false;
+
 
 
 		////////////////
 
-		public TheTricksterMod() {
-			TheTricksterMod.Instance = this;
-		}
-
-		////
-
 		public override void Load() {
+			TheTricksterMod.Instance = this;
+
+			this.IsWorldGatesLoaded = ModLoader.GetMod("WorldGates") != null;
+
 			if( Main.netMode != NetmodeID.Server && !Main.dedServ ) {
 				this.MapIcon = ModContent.GetTexture( "TheTrickster/NPCs/TricksterIcon" );
 			}

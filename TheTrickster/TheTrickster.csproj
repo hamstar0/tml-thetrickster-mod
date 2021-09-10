@@ -36,5 +36,11 @@
     <Reference Include="PKEMeter">
       <HintPath>..\..\..\PKE Meter\Project\PKEMeter\bin\Release\net452\PKEMeter.dll</HintPath>
     </Reference>
+    <Reference Include="SoulBarriers">
+      <HintPath>..\..\..\Soul Barriers\Project\SoulBarriers\bin\Release\net452\SoulBarriers.dll</HintPath>
+    </Reference>
+    <Reference Include="WorldGates">
+      <HintPath>..\..\..\World Gates\Project\WorldGates\bin\Release\net452\WorldGates.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
