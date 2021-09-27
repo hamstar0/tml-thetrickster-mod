@@ -37,8 +37,8 @@ namespace TheTrickster {
 
 
 		[Range( 4 * 16, 1000 * 16 )]
-		[DefaultValue( 48 * 16 )]
-		public int AttackRadius { get; set; } = 48 * 16;
+		[DefaultValue( 40 * 16 )]	// was 48
+		public int AttackRadius { get; set; } = 40 * 16;
 
 		[Range( 4 * 16, 1000 * 16 )]
 		[DefaultValue( 16 * 16 )]
@@ -49,8 +49,8 @@ namespace TheTrickster {
 		public int MaxDodgeRadius { get; set; } = 44 * 16;
 
 		[Range( 60, 60 * 60 * 60 )]
-		[DefaultValue( 60 * 10 )]
-		public int InvulnTickDuration { get; set; } = 60 * 10;
+		[DefaultValue( 60 * 8 )]	// was 10
+		public int InvulnTickDuration { get; set; } = 60 * 8;
 
 		[Range( 0f, 10f )]
 		[DefaultValue( 1f / 2f )]

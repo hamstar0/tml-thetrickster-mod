@@ -2,6 +2,7 @@
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using ModLibsCore.Libraries.Debug;
 using ModLibsGeneral.Libraries.World;
@@ -20,14 +21,14 @@ namespace TheTrickster.NPCs {
 			var config = TheTricksterConfig.Instance;
 
 			if( !config.DebugModeSpawnsIgnoreRange ) {
-				if( !TricksterNPC.IsWithinSpawnRange( tileX, tileY ) ) {
+				if( !TricksterNPC.IsWithinSpawnRange(tileX, tileY) ) {
 					return false;
 				}
 			}
 
 			if( !config.DebugModeSpawnsIgnoreNpcs ) {
 				// Should have nearby NPCs
-				if( player.activeNPCs < config.Get<int>( nameof( config.RequiredNearbyNpcsForSpawn ) ) ) {
+				if( player.activeNPCs < config.Get<int>( nameof(config.RequiredNearbyNpcsForSpawn) ) ) {
 					return false;
 				}
 			}
@@ -54,7 +55,7 @@ namespace TheTrickster.NPCs {
 			
 			if( !config.DebugModeSpawnsIgnoreTricksters ) {
 				// Only one at a time
-				if( Main.npc.Any( n => n?.active == true && n.netID == ModContent.NPCType<TricksterNPC>() ) ) {
+				if( Main.npc.Any(n => n?.active == true && n.type == ModContent.NPCType<TricksterNPC>()) ) {
 					return false;
 				}
 
@@ -115,20 +116,22 @@ namespace TheTrickster.NPCs {
 		public override int SpawnNPC( int tileX, int tileY ) {
 			int npcWho = base.SpawnNPC( tileX, tileY );
 			NPC myNpc = Main.npc[npcWho];
+
 			if( myNpc?.active != true || myNpc.type != ModContent.NPCType<TricksterNPC>() ) {
 				LogLibraries.Alert( "Could not spawn Trickster." );
+
 				return npcWho;
 			}
+
+			//
 
 			int nearPlrWho = myNpc.FindClosestPlayer();
 			myNpc.target = nearPlrWho;
 
 			var mynpc = myNpc.modNPC as TricksterNPC;
 			TricksterState state = this.DecideOnSpawnState();
-			
-			//if( Main.netMode == NetmodeID.Server ) {
-			//	NetMessage.SendData( MessageID.SyncNPC, -1, -1, null, npcWho );    < -Is this handled by SendExtraAI?
-			//}
+
+			//
 
 			mynpc.SetState( state );
 
