@@ -73,13 +73,13 @@ namespace TheTrickster.NPCs {
 					continue;
 				}
 
-				Rectangle area = barrer.WorldArea;
+				Rectangle area = barrer.TileArea;
 				area.X -= 3;
 				area.Y -= 3;
 				area.Width += 6;
 				area.Height += 6;
 
-				if( area.Contains(tileX, tileY) ) {
+				if( area.Contains(tileX, tileY+1) ) {
 					return false;
 				}
 			}
@@ -98,7 +98,7 @@ namespace TheTrickster.NPCs {
 			}
 
 			if( TheTricksterMod.Instance.IsWorldGatesLoaded ) {
-				if( !TricksterNPC.CanSpawn_WorldGates_WeakRef( tileX, tileY ) ) {
+				if( !TricksterNPC.CanSpawn_WorldGates_WeakRef(tileX, tileY) ) {
 					return 0f;
 				}
 			}
@@ -117,7 +117,7 @@ namespace TheTrickster.NPCs {
 			int npcWho = base.SpawnNPC( tileX, tileY );
 			NPC myNpc = Main.npc[npcWho];
 
-			if( myNpc?.active != true || myNpc.type != ModContent.NPCType<TricksterNPC>() ) {
+			if( myNpc?.active != true || myNpc.type != ModContent.NPCType<TricksterNPC>() ) {	// Does this happen?
 				LogLibraries.Alert( "Could not spawn Trickster." );
 
 				return npcWho;
