@@ -148,7 +148,7 @@ namespace TheTrickster {
 
 		private void AddTricksterDefeatToMap( int tileX, int tileY ) {
 			if( Main.netMode != NetmodeID.Server ) {
-				MapMarkers.SetFullScreenMapMarker(
+				MapMarkersAPI.SetFullScreenMapMarker(
 					id: "Trickster Defeat " + this.TricksterDefeatLocations.Count,
 					tileX: tileX,
 					tileY: tileY,

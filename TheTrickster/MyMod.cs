@@ -32,7 +32,7 @@ namespace TheTrickster {
 
 
 		////////////////
-
+		
 		public override void Load() {
 			TheTricksterMod.Instance = this;
 
