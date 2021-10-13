@@ -1,7 +1,7 @@
 displayName = The Trickster
 author = hamstar
 version = 1.7.5.2
-modReferences = ModLibsCore@1.2.0, ModLibsGeneral@1.2.0, ModLibsTiles@1.1.0, ModLibsMaps@1.0.0, ModLibsUtilityContent@1.0.0
+modReferences = ModLibsCore@1.2.0, ModLibsGeneral@1.2.0, ModLibsTiles@1.1.0, ModLibsMaps@2.0.0, ModLibsUtilityContent@1.0.0
 weakReferences = PKEMeter@1.6.0, SoulBarriers@1.0.0, WorldGates@1.2.4
 buildIgnore = *.csproj, *.user, *.bat, obj\*, bin\*, .vs\*, .git\*
 homepage = https://github.com/hamstar0/tml-thetrickster-mod
