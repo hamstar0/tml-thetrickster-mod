@@ -21,14 +21,14 @@ namespace TheTrickster {
 		////
 
 		[Range( 0f, 10f )]
-		[DefaultValue( 0.015f )]
+		[DefaultValue( 0.05f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float SpawnChanceAboveGround { get; set; } = 0.015f;
-		
+		public float SpawnChanceAboveGround { get; set; } = 0.05f; // was 0.015
+
 		[Range( 0f, 10f )]
-		[DefaultValue( 0.03f )]
+		[DefaultValue( 0.1f )]
 		[CustomModConfigItem( typeof( MyFloatInputElement ) )]
-		public float SpawnChanceUnderGround { get; set; } = 0.03f;
+		public float SpawnChanceUnderGround { get; set; } = 0.1f;	// was 0.03
 
 		//
 
