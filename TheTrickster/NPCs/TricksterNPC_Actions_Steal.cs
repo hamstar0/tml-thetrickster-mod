@@ -11,7 +11,7 @@ using TheTrickster.Packets;
 namespace TheTrickster.NPCs {
 	public partial class TricksterNPC : ModNPC {
 		public bool StealFromPlayer( Player player ) {
-			if( Main.netMode == 1 ) {
+			if( Main.netMode == NetmodeID.MultiplayerClient ) {
 				return true;
 			}
 
