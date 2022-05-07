@@ -30,7 +30,8 @@ namespace TheTrickster {
 				}
 
 				// Yellow channel
-				existingGauge.YellowPercent = TheTricksterMod.GetFluctuatedGaugeAmount(
+				existingGauge.YellowRealPercent = lastGaugedTricksterPercent;
+				existingGauge.YellowSeenPercent = TheTricksterMod.GetFluctuatedGaugeAmount(
 					lastGaugedTricksterPercent,
 					lastFluctuationRate
 				);
