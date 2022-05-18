@@ -41,7 +41,7 @@ namespace TheTrickster {
 
 			//
 
-			PKEMeter.PKEMeterAPI.SetMeterText( "Trickster", ( plr, pos, gauges ) => {
+			PKEMeter.PKEMeterAPI.SetMeterText( PKEMeter.Logic.PKEGaugeType.Yellow, ( plr, pos, gauges ) => {
 				string text = "";
 				Color color = Color.White;
 				float priority = 0f;
