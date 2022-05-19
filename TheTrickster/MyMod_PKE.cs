@@ -41,13 +41,13 @@ namespace TheTrickster {
 
 			//
 
-			PKEMeter.PKEMeterAPI.SetMeterText( PKEMeter.Logic.PKEGaugeType.Yellow, ( plr, pos, gauges ) => {
-				string text = "";
-				Color color = Color.White;
+			PKEMeter.PKEMeterAPI.SetMeterText( PKEMeter.Logic.PKEGaugeType.Yellow, (plr, pos, gauges) => {
+				string text = "UNKNOWN";
+				Color color = Color.Yellow;
 				float priority = 0f;
 
 				if( lastGaugedTricksterPercent > 0f ) {
-					color = Color.Yellow * ( 0.5f + ( Main.rand.NextFloat() * 0.5f ) );
+					color = Color.Yellow * (0.5f + (Main.rand.NextFloat() * 0.5f));
 					priority = 0.6f;
 
 					if( Main.rand.NextFloat() < 0.9f ) {
